@@ -1,0 +1,21 @@
+{{> fragments/public/base}}
+
+  {{#> head-block}}
+      <title> Salas | PAW Cine </title>
+      <script src="/scripts/public/room-types.script.js"></script>
+      <link href="/styles/public/pages/room-types.style.css" rel="stylesheet" type="text/css">
+      <link href="/styles/public/fragments/room-type-card.style.css" rel="stylesheet" type="text/css">
+  {{/head-block}}
+
+  {{#*inline "main-block"}}
+
+    <h1>Salas</h1>
+
+    {{#each roomTypes}}
+      {{> fragments/public/roomTypeCard roomType=this}}
+    {{/each}}
+
+
+  {{/inline}}
+
+{{fragments/public/base}}
