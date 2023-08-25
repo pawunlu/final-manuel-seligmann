@@ -1,0 +1,54 @@
+.movie-displayer {
+  margin: 0;
+  display: inline-block;
+  position: relative;
+  width: 230px;
+}
+
+.movie-displayer > figure {
+  position: relative;
+}
+
+.movie-displayer img {
+  height: 350px;
+  width: 100%;
+  border-radius: 20px;
+  transition: 70ms;
+}
+
+.movie-displayer figcaption {
+  text-align: center;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  color: white;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.ribbon-container {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  overflow: hidden;
+}
+
+.ribbon {
+  display: inline-block;
+  width: 85px;
+  height: 22px;
+  position: absolute;
+  font-size: 20px;
+  padding: 5px 30px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  top: 12px;
+  left: -33px;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 1);
+}
+
+.ribbon-premiere {
+  background-color: #FFC56E;
+}

@@ -9,7 +9,11 @@ export class PublicViewsController {
   @Render('public/home')
   handleHomeView() {} // Inicio
 
-  handleMovieScheduleView() {} // Cartelera
+  @Get('cartelera')
+  @Render('public/movies')
+  handleMovieScheduleView() {
+    return this.publicViewsService.handleMovieScheduleViewData();
+  }
 
   handleMovieInformationView() {} // Mas informacion de una pelicula
 

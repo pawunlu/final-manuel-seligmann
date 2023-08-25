@@ -1,0 +1,13 @@
+<section class="movie-displayer">
+  <figure>
+    {{#if movie.showRibbon}}
+      <section class="ribbon-container">
+        {{#if movie.isPremiere}}
+          <section class="ribbon ribbon-premiere">Estreno</section>
+        {{/if}}
+      </section>
+    {{/if}}
+    <img src="{{movie.imageUrl}}" alt="{{movie.id}}-poster"/>
+    <figcaption>{{movie.name}}</figcaption>
+  </figure>
+</section>

@@ -1,3 +1,27 @@
-<h1>
-  Esto es "Carteleras"
-</h1>
+{{> fragments/public/base}}
+
+  {{#> head-block}}
+      <title> Cartelera | PAW Cine </title>
+      <script src="/scripts/public/movies.script.js"></script>
+      <link href="/styles/public/fragments/movie-displayer.style.css" rel="stylesheet" type="text/css">
+      <link href="/styles/public/pages/movies.style.css" rel="stylesheet" type="text/css">
+  {{/head-block}}
+
+  {{#*inline "main-block"}}
+
+    <h1>Cartelera</h1>
+
+    <section class="movies-container">
+      {{#if movies.length}}
+        {{#each movies}}
+          {{> fragments/public/movieDisplayer movie=this}}
+        {{/each}}
+      {{ else }}
+        <p>No hay peliculas para mostrar</p>
+      {{/if}}
+    </section>
+
+
+  {{/inline}}
+
+{{fragments/public/base}}

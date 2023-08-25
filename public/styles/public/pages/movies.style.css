@@ -1,0 +1,35 @@
+h1 {
+  text-align: center;
+  font-size: 35px;
+  padding: 10px 0;
+  color: white;
+  font-weight: bold;
+}
+
+.movies-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.movie-displayer {
+  margin: 10px;
+}
+
+.movie-displayer:hover {
+  cursor: pointer;
+}
+
+.movie-displayer:hover img {
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
+  transition: 70ms;
+}
+
+.movie-displayer:hover figcaption {
+  color: #FFC56E;
+  transition: 70ms;
+}
+
+.movie-displayer figcaption {
+  transition: 70ms;
+}
