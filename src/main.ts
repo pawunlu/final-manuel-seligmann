@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, 'templates', 'pages'));
-  hbs.registerPartials(join(__dirname, 'templates'));
+  app.setBaseViewsDir(join(__dirname, '..', 'templates', 'pages'));
+  hbs.registerPartials(join(__dirname, '..', 'templates'));
   app.setViewEngine('hbs');
 
   await app.listen(3000);
