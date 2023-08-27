@@ -1,0 +1,30 @@
+{{> fragments/public/base}}
+
+  {{#> head-block}}
+      <title> Reservar | PAW Cine </title>
+      <script src="/view-assets/reservation-views/components/step-info/reservation-step-info.component.js"></script>
+      <script src="/view-assets/reservation-views/reservations.script.js"></script>
+      <link href="/view-assets/reservation-views/reservations.style.css" rel="stylesheet" type="text/css">
+  {{/head-block}}
+
+  {{#*inline "main-block"}}
+
+    <h1>Reserva tu entrada</h1>
+
+    <section id="step-info"></section>
+
+    <section class="movie-selector-step">
+      <section id="movie-selector"></section>
+
+      <section id="reservation-navigation-buttons">
+        <section class="reservation-navigation-buttons">
+          <button>Volver</button>
+          <button>Siguiente</button>
+        </section>
+      </section>
+    </section>
+
+
+  {{/inline}}
+
+{{fragments/public/base}}
