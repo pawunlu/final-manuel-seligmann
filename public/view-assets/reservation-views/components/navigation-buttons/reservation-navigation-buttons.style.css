@@ -1,0 +1,38 @@
+.reservation-navigation-buttons {
+  background-color: rgba(25, 48, 129, 1);
+  width: 400px;
+  display: inline-flex;
+  justify-content: space-between;
+  border-radius: 40px;
+  position: fixed;
+  top: 90%;
+  left: calc(50% - 200px);
+  padding: 10px;
+  z-index: 1;
+}
+
+.reservation-navigation-buttons > button {
+  width: 40%;
+  border-radius: 50px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+}
+
+.next-button {
+  background-color: rgba(0, 122, 255, 1);
+  color: white;
+}
+
+.previous-button {
+  background-color: white;
+  color: black;
+}
+
+.disabled-button {
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
+}

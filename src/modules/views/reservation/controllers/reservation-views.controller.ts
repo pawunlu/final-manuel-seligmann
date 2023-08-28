@@ -7,5 +7,7 @@ export class ReservationViewsController {
 
   @Get('reservar')
   @Render('reservation/reservation')
-  handleReservationView() {}
+  handleReservationView() {
+    return this.reservationViewsService.handleReservationViewData();
+  }
 }

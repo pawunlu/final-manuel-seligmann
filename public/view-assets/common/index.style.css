@@ -5,4 +5,5 @@ body {
 
 body > main {
   background-color: #3B5ACA;
+  position: relative;
 }

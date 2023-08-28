@@ -9,7 +9,7 @@ const RESERVATION_STEPS = {
 const RESERVATION_STEPS_NAMES = {
   'movie-selection': 'Película',
   'movie-screening-selection': 'Función',
-  'room-seats-selection': 'Butacas',
+  'room-seats-selection': 'Asientos',
   'user-data-form': 'Datos',
   'reservation-summary': 'Resumen',
 };
@@ -52,7 +52,6 @@ class ReservationStepInfo {
 
   render() {
     const stepInfoElement = this.#createStepInfoElement();
-    console.log(stepInfoElement);
     this.#parentContainerHTMLComponent.replaceChildren(stepInfoElement);
   }
 

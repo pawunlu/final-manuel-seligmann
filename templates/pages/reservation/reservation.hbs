@@ -2,7 +2,17 @@
 
   {{#> head-block}}
       <title> Reservar | PAW Cine </title>
+      {{!-- Reservation Step Info Component & Style --}}
       <script src="/view-assets/reservation-views/components/step-info/reservation-step-info.component.js"></script>
+      <link href="/view-assets/reservation-views/components/step-info/reservation-step-info.style.css" rel="stylesheet" type="text/css">
+      {{!-- Reservation Navigation Buttons Component & Style --}}
+      <script src="/view-assets/reservation-views/components/navigation-buttons/reservation-navigation-buttons.component.js"></script>
+      <link href="/view-assets/reservation-views/components/navigation-buttons/reservation-navigation-buttons.style.css" rel="stylesheet" type="text/css">
+      {{!-- Movie Displayer Card Style --}}
+      <link href="/view-assets/public-views/movies/fragments/movie-displayer/movie-displayer.style.css" rel="stylesheet" type="text/css">
+      {{!-- Movies View Style --}}
+      <link href="/view-assets/public-views/movies/movies.style.css" rel="stylesheet" type="text/css">
+      {{!-- Reservation View Script & Style --}}
       <script src="/view-assets/reservation-views/reservations.script.js"></script>
       <link href="/view-assets/reservation-views/reservations.style.css" rel="stylesheet" type="text/css">
   {{/head-block}}
@@ -11,19 +21,41 @@
 
     <h1>Reserva tu entrada</h1>
 
+    {{!-- Step info Component --}}
     <section id="step-info"></section>
 
-    <section class="movie-selector-step">
-      <section id="movie-selector"></section>
+    {{!-- Navigation buttons --}}
+    <section id="navigation-buttons"></section>
 
-      <section id="reservation-navigation-buttons">
-        <section class="reservation-navigation-buttons">
-          <button>Volver</button>
-          <button>Siguiente</button>
-        </section>
+    {{!-- Movie selector --}}
+    <section id="movie-selection-step" class="reservation-step movie-selection-step">
+      <h2>Selecciona una película</h2>
+      <section class="movies-container">
+        {{#if movies.length}}
+          {{#each movies}}
+            {{> fragments/public/movieDisplayer movie=this}}
+          {{/each}}
+        {{ else }}
+          <p>No hay peliculas para mostrar</p>
+        {{/if}}
       </section>
     </section>
 
+    <section id="movie-screening-selection-step" class="reservation-step movie-screening-selection-step">
+      <h2>Selecciona una función</h2>
+    </section>
+
+    <section id="room-seats-selection-step" class="reservation-step room-seats-selection-step">
+      <h2>Selecciona los asientos</h2>
+    </section>
+
+    <section id="user-data-form-step" class="reservation-step user-data-form-step">
+      <h2>Datos personales</h2>
+    </section>
+
+    <section id="reservation-summary-step" class="reservation-step reservation-summary-step">
+      <h2>Resumen</h2>
+    </section>
 
   {{/inline}}
 
