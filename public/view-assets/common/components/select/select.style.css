@@ -1,0 +1,37 @@
+.select-component {
+  position: relative;
+}
+
+.select-options-container {
+  background-color: rgb(25, 48, 129);
+  border-radius: 10px;
+  position: absolute;
+  z-index: 1;
+}
+
+.select-option {
+  color: white;
+  padding: 0.5px 10px;
+}
+
+.select-option:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.select-option:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+.select-option:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.select-option p {
+  margin: 10px 0;
+}
+
+.selected-option {
+  color: rgb(255, 197, 110);
+}

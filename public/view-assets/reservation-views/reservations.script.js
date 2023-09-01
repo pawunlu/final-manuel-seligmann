@@ -1,3 +1,6 @@
+import { DatePickerComponent } from '../common/components/date-picker/DatePicker.component.js';
+import { SelectComponent } from '../common/components/select/select.component.js';
+
 let selectedMovieId = null;
 let selectedMovieScreeningId = null;
 let selectedRoomSeats = [];
@@ -5,6 +8,8 @@ let clientName = null;
 let clientEmail = null;
 let clientPhone = null;
 
+let movieLanguages = [];
+let movieRoomTypes = [];
 let movieScreenings = [];
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -20,6 +25,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // Load And Reder Components (e.g. Step-Info & Navigation Componenets)
   loadAndRenderComponents();
 
+  // Display the corresponding reservation step based on the loaded url params
   displayCurrentReservationStep();
 });
 
@@ -40,9 +46,10 @@ function fetchAndLoadURLParams() {
 
   if (movieId) {
     try {
-      selectMovieCard(movieId);
-      // movieScreenings = getMovieScreenings(movieId);
-      selectedMovieId = movieId;
+      fetchAndLoadMovieId(movieId);
+      fetchAndLoadMovieAvailableLanguages(language);
+      fetchAndLoadMovieAvailableRoomTypes(roomTypeId);
+      fetchAndLoadMovieScreening(movieId, language, roomTypeId, date);
     } catch (error) {
       console.error(
         'Some given values are not valid. Reseting reservation flow',
@@ -51,9 +58,173 @@ function fetchAndLoadURLParams() {
   }
 }
 
+function fetchAndLoadMovieId(movieId) {
+  selectMovieCard(movieId);
+  selectedMovieId = movieId;
+}
+
+function fetchAndLoadMovieAvailableLanguages(languange) {
+  console.log('Movie screenings fetched and loaded');
+  const languages = [
+    {
+      id: null,
+      key: 'todos',
+      name: 'Todos',
+    },
+    {
+      id: 1,
+      key: 'espanol',
+      name: 'Español',
+    },
+    {
+      id: 2,
+      key: 'ingles',
+      name: 'Ingles',
+    },
+    {
+      id: 3,
+      key: 'portugues',
+      name: 'Portugues',
+    },
+  ];
+
+  movieLanguages = languages;
+}
+
+function fetchAndLoadMovieAvailableRoomTypes(roomTypeId) {
+  console.log('Movie screenings fetched and loaded');
+
+  const roomTypes = [
+    {
+      id: null,
+      key: 'todas',
+      name: 'Todas',
+    },
+    {
+      id: 1,
+      key: '2d',
+      name: '2D',
+    },
+    {
+      id: 2,
+      key: '3d',
+      name: '3D',
+    },
+    {
+      id: 3,
+      key: '3dx',
+      name: '3D Extreme',
+    },
+    {
+      id: 4,
+      key: '4d',
+      name: '4D',
+    },
+    {
+      id: 5,
+      key: 'monster',
+      name: 'Monter Screen',
+    },
+  ];
+
+  movieRoomTypes = roomTypes;
+}
+
+function fetchAndLoadMovieScreening(movieId, language, roomTypeId, date) {
+  console.log('Movie screenings fetched and loaded');
+  // TODO: Replace this function's code by calling the Server's API
+  const mockedScreenings = [
+    {
+      id: 1,
+      language: {
+        id: 1,
+        name: 'Español',
+        createdAt: new Date(),
+      },
+      roomType: {
+        id: 1,
+        name: '2D',
+      },
+      date: new Date(),
+      remainingSeats: 4,
+      createdAt: new Date(),
+    },
+    {
+      id: 2,
+      language: {
+        id: 1,
+        name: 'Español',
+        createdAt: new Date(),
+      },
+      roomType: {
+        id: 1,
+        name: '2D',
+      },
+      date: new Date(),
+      remainingSeats: 4,
+      createdAt: new Date(),
+    },
+    {
+      id: 3,
+      language: {
+        id: 1,
+        name: 'Español',
+        createdAt: new Date(),
+      },
+      roomType: {
+        id: 1,
+        name: '2D',
+      },
+      date: new Date(),
+      remainingSeats: 4,
+      createdAt: new Date(),
+    },
+    {
+      id: 4,
+      language: {
+        id: 1,
+        name: 'Español',
+        createdAt: new Date(),
+      },
+      roomType: {
+        id: 1,
+        name: '2D',
+      },
+      date: new Date(),
+      remainingSeats: 4,
+      createdAt: new Date(),
+    },
+  ];
+  movieScreenings = mockedScreenings;
+}
+
 function loadAndRenderComponents() {
   const stepInfo = new ReservationStepInfo('step-info');
   stepInfo.render();
+
+  const languageSelect = new SelectComponent('language-selector');
+  languageSelect.options = movieLanguages;
+  languageSelect.selectedOption = movieLanguages.find(
+    (language) => language.id === null,
+  );
+  languageSelect.placeholder = 'Idioma';
+  languageSelect.backgroundColor = 'rgba(25, 48, 129, 0.25)';
+  languageSelect.placeholderColor = 'rgba(255, 197, 110, 1)';
+  languageSelect.render();
+
+  const roomTypesSelect = new SelectComponent('room-type-selector');
+  roomTypesSelect.options = movieRoomTypes;
+  roomTypesSelect.selectedOption = movieRoomTypes.find(
+    (language) => language.id === null,
+  );
+  roomTypesSelect.placeholder = 'Sala';
+  roomTypesSelect.backgroundColor = 'rgba(25, 48, 129, 0.25)';
+  roomTypesSelect.placeholderColor = 'rgba(255, 197, 110, 1)';
+  roomTypesSelect.render();
+
+  const datePicker = new DatePickerComponent('date-selector');
+  datePicker.emptyDateText = 'Todos los días';
+  datePicker.render();
 
   const navigationButtons = new ReservationNavigationButtons(
     'navigation-buttons',
@@ -63,7 +234,6 @@ function loadAndRenderComponents() {
 
 function displayCurrentReservationStep() {
   const currentReservationStep = getCurrentReservationStep();
-  console.log(currentReservationStep);
   const reservationStepElement = document.getElementById(
     `${currentReservationStep}-step`,
   );

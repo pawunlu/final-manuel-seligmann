@@ -1,0 +1,122 @@
+.date-picker {
+  position: relative;
+}
+
+.date-picker > input {
+  width: 100%;
+  box-sizing: border-box;
+  width: 100%;
+
+  box-sizing: border-box;
+  font-family: inherit;
+  border: 0;
+  border-radius: 10px;
+  outline: 0;
+  font-size: 1.3rem;
+  padding: 7px 20px;
+  background: transparent;
+  background-color: transparent;
+  transition: border-color 0.2s;
+  background-color: rgba(25, 48, 129, 0.25);
+  color: white;
+}
+
+.calendar-container {
+  display: inline-flex;
+  flex-flow: column;
+  margin-top: 10px;
+  padding: 15px;
+  border-radius: 15px;
+  background-color: rgb(25, 48, 129);
+  width: max-content;
+  box-shadow: 0px 0px 14px 1px rgba(0,0,0,0.6);
+  position: absolute;
+  z-index: 1;
+}
+
+.calendar-container .previous-month-button, .calendar-container .next-month-button {
+  width: 25px;
+  height: 25px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.calendar-container .previous-month-button {
+  background-image: url("/src/public/svg/left-arrow-with-circle.svg");
+}
+
+.calendar-container .next-month-button {
+  background-image: url("/src/public/svg/right-arrow-with-circle.svg");
+}
+
+.calendar-header {
+  color: white;
+  font-weight: bold;
+}
+
+.calendar-header, .calendar-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.calendar-body {
+  margin: 10px 0
+}
+
+.calendar-container table {
+  text-align: center;
+}
+
+.calendar-container thead {
+  color: white
+}
+
+.calendar-container tbody button {
+  background-color: rgb(59, 90, 202);
+  color: #fff;
+  border: none;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+}
+
+.calendar-container tbody button:not(.disabled-date) {
+  cursor: pointer;
+}
+
+.calendar-container .selected-date {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+
+.calendar-container .not-current-month {
+  background-color: #3b5aca33;;
+}
+
+.calendar-container .disabled-date {
+  background-color: transparent;
+}
+
+.calendar-footer .today-button, .calendar-footer .clear-button {
+  background-color: rgb(59, 90, 202);
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+  height: 30px;
+  width: 70px;
+  cursor: pointer;
+}
+
+.calendar-container tbody button:not(.disabled-date):hover,
+.calendar-footer .today-button:hover,
+.calendar-footer .clear-button:hover {
+  background-color: white;
+  color: black
+}
