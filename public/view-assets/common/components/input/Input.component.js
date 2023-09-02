@@ -25,7 +25,7 @@ export class InputComponent {
   set text(text) {
     this.#text = text;
     this.#inputHTMLComponent.value = text;
-    this.#text ? this.#displayResetButton() : this.#hideResetButton();
+    this.#displayResetButtonIfNecessary();
 
     if (this.#validationRegex && this.#text) {
       this.#isTextValid(text)
@@ -63,9 +63,7 @@ export class InputComponent {
 
   set showResetButton(newWithResetButton) {
     this.#showResetButton = newWithResetButton;
-    this.#resetButtonHTMLComponent.style.display = newWithResetButton
-      ? 'block'
-      : 'none';
+    this.#displayResetButtonIfNecessary();
   }
 
   /** @type {string} */
@@ -229,6 +227,14 @@ export class InputComponent {
 
   #isTextValid(text) {
     return this.#validationRegex.test(text);
+  }
+
+  #displayResetButtonIfNecessary() {
+    if (this.#showResetButton && this.#text) {
+      this.#displayResetButton();
+    } else {
+      this.#hideResetButton();
+    }
   }
 
   #hideResetButton() {
