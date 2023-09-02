@@ -14,7 +14,7 @@ const RESERVATION_STEPS_NAMES = {
   'reservation-summary': 'Resumen',
 };
 
-class ReservationStepInfo {
+export class ReservationStepInfo {
   /** @type {HTMLElement} */
   #parentContainerHTMLComponent = null;
 

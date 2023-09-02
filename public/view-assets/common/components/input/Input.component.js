@@ -22,6 +22,7 @@ export class InputComponent {
   get text() {
     return this.#text;
   }
+
   set text(text) {
     this.#text = text;
     this.#inputHTMLComponent.value = text;

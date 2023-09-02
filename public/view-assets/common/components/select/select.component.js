@@ -19,6 +19,9 @@ export class SelectComponent {
 
   #displayingOptions = false;
 
+  /** @type {Function} */
+  #onSelectCallbackFn = null;
+
   get selectedOption() {
     return this.#selectedOption;
   }
@@ -58,6 +61,10 @@ export class SelectComponent {
 
   set placeholderColor(placeholderColor) {
     this.#inputComponent.placeholderColor = placeholderColor;
+  }
+
+  set onSelect(callbackFn) {
+    this.#onSelectCallbackFn = callbackFn;
   }
 
   constructor(parentContainerId) {
@@ -189,16 +196,10 @@ export class SelectComponent {
     return true;
   }
 
-  #isOptionsContainerChild(htmlElement) {
-    if (htmlElement === this.#optionsContainerHTMLComponent) return true;
-    if (!htmlElement.parentElement) return false;
-
-    return this.#isOptionsContainerChild(htmlElement.parentElement);
-  }
-
   #setSelectedOption(option) {
     this.#selectedOption = option;
     this.#inputComponent.text = option.name;
     this.#appendOptionsToContainer(this.#options);
+    if (this.#onSelectCallbackFn) this.#onSelectCallbackFn(option);
   }
 }

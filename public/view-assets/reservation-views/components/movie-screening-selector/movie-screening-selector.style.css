@@ -1,0 +1,49 @@
+.movie-screenings-container {
+
+}
+
+.date-screenings-container {
+
+}
+
+.date-screenings-container h3{
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+.date-screenings-table {
+  padding: 10px;
+}
+
+.screening-row {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(25, 48, 129, 0.25);
+  padding: 5px;
+  border-radius: 30px;
+  margin: 10px 0;
+  color: white;
+}
+
+.screening-row button {
+  color: white;
+  background-color: rgba(25, 48, 129, 1);
+  border: none;
+  padding: 4px 20px;
+  border-radius: 20px;
+  width: 150px;
+}
+
+.screening-row button:hover {
+  cursor: pointer;
+  color: rgba(255, 197, 110, 1);
+}
+
+.selected-screening-row {
+  background-color: rgba(2, 8, 28, 0.81);
+  color: rgba(255, 197, 110, 1);
+}
+
+.selected-screening-row button {
+  color: rgba(255, 197, 110, 1);
+}

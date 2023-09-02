@@ -55,6 +55,12 @@ export class DatePickerComponent {
     if (!this.#selectedDate) this.#inputComponent.text = text;
   }
 
+  /** @type {Function} */
+  #onSelectCallbackFn = null;
+  set onSelect(callbackFn) {
+    this.#onSelectCallbackFn = callbackFn;
+  }
+
   constructor(parentContainerId) {
     this.#parentContainerHTMLComponent =
       document.getElementById(parentContainerId);
@@ -227,6 +233,7 @@ export class DatePickerComponent {
     todayButton.onclick = () => {
       this.selectedDate = new Date();
       this.#hideCalendar();
+      if (this.#onSelectCallbackFn) this.#onSelectCallbackFn(this.selectedDate);
     };
     todayButtonContainer.appendChild(todayButton);
     calendarFooter.appendChild(todayButtonContainer);
@@ -238,6 +245,7 @@ export class DatePickerComponent {
     clearButton.onclick = () => {
       this.selectedDate = null;
       this.#hideCalendar();
+      if (this.#onSelectCallbackFn) this.#onSelectCallbackFn(this.selectedDate);
     };
     clearButtonContainer.appendChild(clearButton);
     calendarFooter.appendChild(clearButtonContainer);
@@ -311,6 +319,8 @@ export class DatePickerComponent {
         tableDayElement.onclick = () => {
           this.selectedDate = weekDay;
           this.#hideCalendar();
+          if (this.#onSelectCallbackFn)
+            this.#onSelectCallbackFn(this.selectedDate);
         };
         tableDataElement.appendChild(tableDayElement);
         tableRowElement.appendChild(tableDataElement);

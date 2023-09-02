@@ -1,4 +1,4 @@
-class ReservationNavigationButtons {
+export class ReservationNavigationButtons {
   /** @type {HTMLElement} */
   #parentContainerHTMLComponent = null;
 

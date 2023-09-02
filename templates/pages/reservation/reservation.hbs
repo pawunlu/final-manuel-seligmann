@@ -3,10 +3,10 @@
   {{#> head-block}}
       <title> Reservar | PAW Cine </title>
       {{!-- Reservation Step Info Component & Style --}}
-      <script src="/view-assets/reservation-views/components/step-info/reservation-step-info.component.js"></script>
+      <script src="/view-assets/reservation-views/components/step-info/reservation-step-info.component.js" type="module"></script>
       <link href="/view-assets/reservation-views/components/step-info/reservation-step-info.style.css" rel="stylesheet" type="text/css">
       {{!-- Reservation Navigation Buttons Component & Style --}}
-      <script src="/view-assets/reservation-views/components/navigation-buttons/reservation-navigation-buttons.component.js"></script>
+      <script src="/view-assets/reservation-views/components/navigation-buttons/reservation-navigation-buttons.component.js" type="module"></script>
       <link href="/view-assets/reservation-views/components/navigation-buttons/reservation-navigation-buttons.style.css" rel="stylesheet" type="text/css">
       {{!-- Movie Displayer Card Style --}}
       <link href="/view-assets/public-views/movies/fragments/movie-displayer/movie-displayer.style.css" rel="stylesheet" type="text/css">
@@ -21,6 +21,9 @@
       {{!-- Date-picker Component & Style  --}}
       <script src="/view-assets/common/components/date-picker/date-picker.component.js" type="module"></script>
       <link href="/view-assets/common/components/date-picker/date-picker.style.css" rel="stylesheet" type="text/css">
+      {{!-- Movie Screenings Selector Component & Style  --}}
+      <script src="/view-assets/reservation-views/components/movie-screening-selector/movie-screening-selector.component.js" type="module"></script>
+      <link href="/view-assets/reservation-views/components/movie-screening-selector/movie-screening-selector.style.css" rel="stylesheet" type="text/css">
       {{!-- Reservation View Script & Style --}}
       <script src="/view-assets/reservation-views/reservations.script.js" type="module"></script>
       <link href="/view-assets/reservation-views/reservations.style.css" rel="stylesheet" type="text/css">
@@ -56,7 +59,7 @@
       </section>
 
       <section id="movie-screening-selection">
-        <section class="movie-screenings-container">
+        {{!-- <section class="movie-screenings-container">
           <section class="date-screenings-container">
             <h3>Hoy</h3>
             <section class="date-screenings-table">
@@ -126,7 +129,7 @@
               </section>
             </section>
           </section>
-        </section>
+        </section> --}}
       </section>
     </section>
 
