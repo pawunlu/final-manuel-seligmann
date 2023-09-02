@@ -89,7 +89,7 @@ export class DatePickerComponent {
     inputComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
     inputComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
     inputComponent.placeholder = 'Fecha';
-    inputComponent.showResetButton = true;
+    inputComponent.showResetButton = false;
     inputComponent.render();
     this.#inputComponent = inputComponent;
 
