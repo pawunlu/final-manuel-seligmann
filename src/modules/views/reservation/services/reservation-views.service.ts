@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ReservationViewsService {
-  constructor() {}
-
   handleReservationViewData() {
     return {
       movies: [
