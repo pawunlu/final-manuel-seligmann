@@ -5,9 +5,6 @@ export class MovieScreeningSelectorComponent {
   /** @type {HTMLElement} */
   #movieScreeningsSelectorHTMLContainer = null;
 
-  /** @type {boolean} */
-  #groupByDates = true;
-
   /** @type {object[]} */
   #movieScreenings = [];
 
@@ -16,15 +13,6 @@ export class MovieScreeningSelectorComponent {
 
   /** @type {Function} */
   #onScreeningSelectCallbackFn = null;
-
-  get groupByDates() {
-    return this.#groupByDates;
-  }
-
-  set groupByDates(groupByDates) {
-    this.#groupByDates = groupByDates;
-    this.#createAndAppendMovieScreeningsListContainer();
-  }
 
   get movieScreenings() {
     return this.#movieScreenings;
@@ -69,13 +57,10 @@ export class MovieScreeningSelectorComponent {
   #createAndAppendMovieScreeningsListContainer() {
     // remove existing content
     this.#movieScreeningsSelectorHTMLContainer.innerHTML = '';
-
-    this.#groupByDates
-      ? this.#buildAndAppendListByDates()
-      : this.#buildAndAppendList();
+    this.#buildAndAppendList();
   }
 
-  #buildAndAppendListByDates() {
+  #buildAndAppendList() {
     const datesList = this.#getDifferentDatesFromMovieScreenings();
     for (const date of datesList) {
       const dateScreeningsContainer = document.createElement('section');
@@ -98,8 +83,6 @@ export class MovieScreeningSelectorComponent {
       }
     }
   }
-
-  #buildAndAppendList() {}
 
   #getDifferentDatesFromMovieScreenings() {
     const dates = [];
@@ -130,9 +113,13 @@ export class MovieScreeningSelectorComponent {
     });
   }
 
-  #createScreeningHTMLRow(screeningData, showDate = false) {
+  #createScreeningHTMLRow(screeningData) {
     const rowHTMLContainer = document.createElement('section');
-    rowHTMLContainer.className = 'screening-row';
+    rowHTMLContainer.className = `screening-row ${
+      this.#selectedScreening?.id === screeningData.id
+        ? 'selected-screening-row'
+        : ''
+    }`;
     rowHTMLContainer.setAttribute('screening-id', screeningData.id);
 
     const movieLanguageHTML = document.createElement('p');
@@ -151,7 +138,10 @@ export class MovieScreeningSelectorComponent {
 
     const selectButtonHTML = document.createElement('button');
     rowHTMLContainer.appendChild(selectButtonHTML);
-    selectButtonHTML.innerHTML = 'Seleccionar';
+    selectButtonHTML.innerHTML =
+      this.#selectedScreening?.id === screeningData.id
+        ? 'Seleccionado'
+        : 'Seleccionar';
     selectButtonHTML.addEventListener('click', () => {
       this.#onScreeningRowButtonClick(screeningData);
     });
@@ -191,6 +181,6 @@ export class MovieScreeningSelectorComponent {
   #selectScreening(screening) {
     this.#selectedScreening = screening;
     if (this.#onScreeningSelectCallbackFn)
-      onScreeningSelectCallbackFn(screening);
+      this.#onScreeningSelectCallbackFn(screening);
   }
 }

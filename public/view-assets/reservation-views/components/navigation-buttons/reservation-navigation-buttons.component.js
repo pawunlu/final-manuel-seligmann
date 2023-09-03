@@ -7,6 +7,20 @@ export class ReservationNavigationButtons {
   /** @type {boolean} */
   #enableNextButton = true;
 
+  /** @type {Function} */
+  #onPreviousButtonClickCallbackFn = null;
+
+  /** @type {Function} */
+  #onNextButtonClickCallbackFn = null;
+
+  set onPreviousButtonClick(callbackFn) {
+    this.#onPreviousButtonClickCallbackFn = callbackFn;
+  }
+
+  set onNextButtonClick(callbackFn) {
+    this.#onNextButtonClickCallbackFn = callbackFn;
+  }
+
   constructor(parentContainerId) {
     this.#parentContainerHTMLComponent =
       document.getElementById(parentContainerId);
@@ -22,7 +36,7 @@ export class ReservationNavigationButtons {
   }
 
   disablePreviousButton() {
-    this.#enablePreviousButton = true;
+    this.#enablePreviousButton = false;
     this.render();
   }
 
@@ -46,18 +60,26 @@ export class ReservationNavigationButtons {
     buttonsContainer.className = 'reservation-navigation-buttons';
 
     const previousButton = document.createElement('button');
+    buttonsContainer.appendChild(previousButton);
     previousButton.innerHTML = 'Volver';
     previousButton.className = `previous-button ${
-      this.enablePreviousButton ? '' : 'disabled-button'
+      this.#enablePreviousButton ? '' : 'disabled-button'
     }`;
-    buttonsContainer.appendChild(previousButton);
+    previousButton.addEventListener('click', () => {
+      if (this.#onPreviousButtonClickCallbackFn && this.#enablePreviousButton)
+        this.#onPreviousButtonClickCallbackFn();
+    });
 
     const nextButton = document.createElement('button');
+    buttonsContainer.appendChild(nextButton);
     nextButton.innerHTML = 'Siguiente';
     nextButton.className = `next-button ${
-      this.enableNextButton ? '' : 'disabled-button'
+      this.#enableNextButton ? '' : 'disabled-button'
     }`;
-    buttonsContainer.appendChild(nextButton);
+    nextButton.addEventListener('click', () => {
+      if (this.#onNextButtonClickCallbackFn && this.#enableNextButton)
+        this.#onNextButtonClickCallbackFn();
+    });
 
     return buttonsContainer;
   }

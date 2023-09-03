@@ -33,6 +33,17 @@ import { MovieScreeningSelectorComponent } from '../reservation-views/components
  * @property {Date} createdAt - The date the screening was created
  */
 
+const RESERVATION_STEPS = [
+  'movie-selection',
+  'movie-screening-selection',
+  'room-seats-selection',
+  'user-data-form',
+  'reservation-summary',
+];
+
+/** @type {string[]} */
+const loadedReservationSteps = [];
+
 /** @type {string} */
 let currentDisplayingReservationStep = null;
 
@@ -97,17 +108,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // Hide all reservation steps by default
   hideReservationsSteps();
 
-  // Load event listeners
-  loadEventListeners();
-
   // get and load URL params
-  fetchAndLoadURLParams();
+  // fetchAndLoadURLParams();
 
   // Determine current reservation step based on the loaded url params
-  determineCurrentReservationStepToDisplay();
+  determineInitialReservationStepToDisplay();
 
   // Load And Reder Components (e.g. Step-Info & Navigation Componenets)
   loadAndRenderComponents();
+
+  // Load event listeners
+  loadEventListeners();
 
   // Display the corresponding reservation step based on the loaded url params
   displayCurrentReservationStep();
@@ -123,6 +134,9 @@ function hideReservationsSteps() {
 function loadEventListeners() {
   // Add event to all the movies displayed
   addEventListenerToMovieCards();
+
+  // Add events to the "previous" and "next" buttons
+  addEventListenersToNavigationButtons();
 }
 
 function fetchAndLoadURLParams() {
@@ -142,9 +156,24 @@ function fetchAndLoadURLParams() {
   }
 }
 
-function fetchAndLoadMovieId(movieId) {
-  selectMovieCard(movieId);
+function selectMovie(movieId) {
+  // Setear la variable global al movie id seleccionado
   selectedMovieId = movieId;
+  // Seleccionar la html card
+  selectMovieHTMLCard(movieId);
+  // Checkear el navigation buttons
+  enableOrDisableNavigationButtons();
+}
+
+function fetchAndLoadMovieId(movieId) {
+  selectMovieHTMLCard(movieId);
+  selectedMovieId = movieId;
+}
+
+function fetchAndLoadMovieData(movieId) {
+  fetchAndLoadMovieAvailableLanguages(movieId);
+  fetchAndLoadMovieAvailableRoomTypes(movieId);
+  fetchAndLoadMovieScreening(movieId);
 }
 
 function fetchAndLoadMovieAvailableLanguages(movieId, languageKey) {
@@ -172,13 +201,13 @@ function fetchAndLoadMovieAvailableLanguages(movieId, languageKey) {
     },
   ];
 
-  const languageExists = languages.find(
-    (language) => language.key === languageKey,
-  );
-  if (!languageExists)
-    throw new Error(
-      `Language key "${languageKey}" doesn't belong to any available language`,
-    );
+  // const languageExists = languages.find(
+  //   (language) => language.key === languageKey,
+  // );
+  // if (!languageExists)
+  //   throw new Error(
+  //     `Language key "${languageKey}" doesn't belong to any available language`,
+  //   );
   movieLanguages = languages;
 }
 
@@ -218,13 +247,13 @@ function fetchAndLoadMovieAvailableRoomTypes(movieId, roomTypeKey) {
     },
   ];
 
-  const roomTypeExists = roomTypes.find(
-    (roomType) => roomType.key === roomTypeKey,
-  );
-  if (!roomTypeExists)
-    throw new Error(
-      `Room Type key "${languageKey}" doesn't belong to any available Room Type`,
-    );
+  // const roomTypeExists = roomTypes.find(
+  //   (roomType) => roomType.key === roomTypeKey,
+  // );
+  // if (!roomTypeExists)
+  //   throw new Error(
+  //     `Room Type key "${languageKey}" doesn't belong to any available Room Type`,
+  //   );
 
   movieRoomTypes = roomTypes;
 }
@@ -320,8 +349,18 @@ function fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date) {
   });
 }
 
-function determineCurrentReservationStepToDisplay() {
-  currentDisplayingReservationStep = getCurrentReservationStep();
+function loadMovieLanguagesIntoSelectInput() {
+  languageSelectComponent.options = movieLanguages;
+  languageSelectComponent.selectedOption = movieLanguages[0];
+}
+
+function loadMovieRoomTypesIntoSelectInput() {
+  roomTypeSelectComponent.options = movieRoomTypes;
+  roomTypeSelectComponent.selectedOption = movieRoomTypes[0];
+}
+
+function determineInitialReservationStepToDisplay() {
+  currentDisplayingReservationStep = getInitialCurrentReservationStep();
 }
 
 function loadAndRenderComponents() {
@@ -348,7 +387,6 @@ function loadAndRenderLanguageSelectComponent() {
     languageSelectComponent.selectedOption = movieLanguages.find(
       (language) => language.id === null,
     );
-    languageSelectComponent.render();
   }
   languageSelectComponent.onSelect = (language) => {
     selectedLanguage = language;
@@ -360,6 +398,7 @@ function loadAndRenderLanguageSelectComponent() {
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
   };
+  languageSelectComponent.render();
 }
 
 function loadAndRenderRoomTypesSelectComponent() {
@@ -406,11 +445,12 @@ function loadAndRenderMovieScreeningSelectorComponent() {
   movieScreeningSelectorComponent = new MovieScreeningSelectorComponent(
     'movie-screening-selection',
   );
-  // If no date is selected, then display the screenings grouped by date
-  const shouldGroupByDate = Boolean(!datePickerComponent?.selectedDate);
 
-  movieScreeningSelectorComponent.groupByDates = shouldGroupByDate;
   movieScreeningSelectorComponent.movieScreenings = movieScreenings;
+  movieScreeningSelectorComponent.onScreeningSelect = (screening) => {
+    selectedMovieScreening = screening;
+    enableOrDisableNavigationButtons();
+  };
   movieScreeningSelectorComponent.render();
 }
 
@@ -422,19 +462,62 @@ function loadAndRenderNavigationButtonsComponent() {
 }
 
 function displayCurrentReservationStep() {
-  const currentReservationStep = getCurrentReservationStep();
+  console.log('current reservation step:', currentDisplayingReservationStep);
+  const stepLoadedActions = getActionsForStepWhenLoaded(
+    currentDisplayingReservationStep,
+  );
+  const hasStepAlreadyBeingLoaded = loadedReservationSteps.find(
+    (loadedReservationStep) =>
+      loadedReservationStep === currentDisplayingReservationStep,
+  );
+  if (!hasStepAlreadyBeingLoaded) stepLoadedActions();
+
   const reservationStepElement = document.getElementById(
-    `${currentReservationStep}-step`,
+    `${currentDisplayingReservationStep}-step`,
   );
   reservationStepElement.style.display = 'block';
+
+  enableOrDisableNavigationButtons();
 }
 
 function addEventListenerToMovieCards() {
   const movies = document.getElementsByClassName('movie-displayer');
   for (const movie of movies) {
     const movieId = movie.getAttribute('movie-id');
-    movie.addEventListener('click', () => selectMovieCard(movieId));
+    movie.addEventListener('click', () => selectMovie(movieId));
   }
+}
+
+function addEventListenersToNavigationButtons() {
+  navigationButtonsComponent.onPreviousButtonClick = () => {
+    const currentStepIndex = RESERVATION_STEPS.findIndex(
+      (reservationStep) => reservationStep === currentDisplayingReservationStep,
+    );
+    const previousStepIndex = currentStepIndex === 0 ? 0 : currentStepIndex - 1;
+    currentDisplayingReservationStep = RESERVATION_STEPS[previousStepIndex];
+
+    hideReservationsSteps();
+    displayCurrentReservationStep();
+  };
+
+  navigationButtonsComponent.onNextButtonClick = () => {
+    // TODO: Completar
+    // - Obtener el string del siguiente step
+    const currentStepIndex = RESERVATION_STEPS.findIndex(
+      (reservationStep) => reservationStep === currentDisplayingReservationStep,
+    );
+    const nextStepIndex =
+      currentStepIndex === RESERVATION_STEPS.length - 1
+        ? RESERVATION_STEPS.length - 1
+        : currentStepIndex + 1;
+
+    // - Setear el siguient step en la variable global
+    currentDisplayingReservationStep = RESERVATION_STEPS[nextStepIndex];
+
+    // - Renderizar el next step con la function "displayCurrentReservationStep"
+    hideReservationsSteps();
+    displayCurrentReservationStep();
+  };
 }
 
 function getUrlParams() {
@@ -453,10 +536,9 @@ function getUrlParams() {
   };
 }
 
-function selectMovieCard(movieId) {
+function selectMovieHTMLCard(movieId) {
   // unselect existing movie-card by removing it's class
-  const currentMovieId = selectedMovieId;
-  if (currentMovieId) unselectMovieCard(currentMovieId);
+  unselectMovieCard();
 
   // Search for the new selected movie card
   const movieCard = document.querySelector(`[movie-id="${movieId}"]`);
@@ -465,23 +547,27 @@ function selectMovieCard(movieId) {
   selectedMovieId = movieId;
 }
 
-function unselectMovieCard(movieId) {
-  const selectedMovieCard = document.querySelector(`[movie-id="${movieId}"]`);
-  selectedMovieCard.className = selectedMovieCard.className.replace(
-    'selected-movie',
-    '',
-  );
+function unselectMovieCard() {
+  const selectedMovieCards = document.getElementsByClassName('selected-movie');
+  for (const selectedMovieCard of selectedMovieCards) {
+    selectedMovieCard.className = selectedMovieCard.className.replace(
+      'selected-movie',
+      '',
+    );
+  }
 }
 
 function enableOrDisableNavigationButtons() {
-  const shouldPreviousButtonBeActive = shouldPreviousButtonBeActive();
-  const shouldNextButtonBeActive = shouldNextButtonBeActive();
+  const isPreviousButtonBeActive = shouldPreviousButtonBeActive();
+  const isNextButtonBeActive = shouldNextButtonBeActive();
+  console.log('isPreviousButtonBeActive', isPreviousButtonBeActive);
+  console.log('isNextButtonBeActive', isNextButtonBeActive);
 
-  shouldPreviousButtonBeActive
+  isPreviousButtonBeActive
     ? navigationButtonsComponent.enablePreviousButton()
     : navigationButtonsComponent.disablePreviousButton();
 
-  shouldNextButtonBeActive
+  isNextButtonBeActive
     ? navigationButtonsComponent.enableNextButton()
     : navigationButtonsComponent.disableNextButton();
 }
@@ -493,13 +579,94 @@ function shouldPreviousButtonBeActive() {
 }
 
 function shouldNextButtonBeActive() {
-  return true;
+  const checkValidationStepFunction = getNextButtonValidationFunctionForStep(
+    currentDisplayingReservationStep,
+  );
+  console.log(checkValidationStepFunction);
+
+  return checkValidationStepFunction();
 }
 
-function getCurrentReservationStep() {
+function getInitialCurrentReservationStep() {
   if (!selectedMovieId) return 'movie-selection';
   if (!selectedMovieScreening) return 'movie-screening-selection';
   if (!selectedRoomSeats.length) return 'room-seats-selection';
   if (!clientName || clientEmail || clientPhone) return 'user-data-form';
   return 'reservation-summary';
+}
+
+function getNextButtonValidationFunctionForStep(step) {
+  const stepsAndValidationFunctions = {
+    'movie-selection': nextButtonValidationForMovieSelectionStep,
+    'movie-screening-selection':
+      nextButtonValidationForMovieScreeningSelectionStep,
+    'room-seats-selection': nextButtonValidationForMovieSeatsSelectionStep,
+    'user-data-form': nextButtonValidationForUserDataFormStep,
+    'reservation-summary': nextButtonValidationForReservationSummaryStep,
+  };
+
+  return stepsAndValidationFunctions[step];
+}
+
+function nextButtonValidationForMovieSelectionStep() {
+  return Boolean(selectedMovieId);
+}
+
+function nextButtonValidationForMovieScreeningSelectionStep() {
+  return Boolean(selectedMovieScreening);
+}
+
+function nextButtonValidationForMovieSeatsSelectionStep() {
+  // TODO: Checkear que sean validos tambien
+  return clientName && clientEmail && clientPhone;
+}
+
+function nextButtonValidationForUserDataFormStep() {
+  return false;
+}
+
+function nextButtonValidationForReservationSummaryStep() {
+  return false;
+}
+
+function getActionsForStepWhenLoaded(step) {
+  const actions = {
+    'movie-selection': onMovieSelectionStepLoads,
+    'movie-screening-selection': onMovieScreeningSelectionStepLoads,
+    'room-seats-selection': onRoomSeatsSelectionStepLoads,
+    'user-data-form': onUserDataFromStepLoads,
+    'reservation-summary': onReservationSummaryStepLoads,
+  };
+
+  return actions[step];
+}
+
+function onMovieSelectionStepLoads() {
+  console.log('movie-selection step loaded');
+}
+
+function onMovieScreeningSelectionStepLoads() {
+  console.log('movie-screening-selection step loaded');
+  // Fetchear y cargar toda la data de esa pelicula.
+  fetchAndLoadMovieData(selectedMovieId);
+  loadMovieLanguagesIntoSelectInput();
+  loadMovieRoomTypesIntoSelectInput();
+  fetchAndLoadMovieScreening(
+    selectedMovieId,
+    selectedLanguage?.key,
+    selectedRoomType?.key,
+    selectedDate,
+  );
+}
+
+function onRoomSeatsSelectionStepLoads() {
+  console.log('room-seats-selection step loaded');
+}
+
+function onUserDataFromStepLoads() {
+  console.log('user-data-form step loaded');
+}
+
+function onReservationSummaryStepLoads() {
+  console.log('user-data-form step loaded');
 }
