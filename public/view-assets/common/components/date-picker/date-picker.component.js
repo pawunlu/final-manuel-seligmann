@@ -32,17 +32,21 @@ export class DatePickerComponent {
   }
   set selectedDate(date) {
     this.#selectedDate = date;
-    if (!date) {
+    if (date) {
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
+      this.#inputComponent.text = `${day}/${month + 1}/${year}`;
+      this.#changeCalendarDate(year, month);
+    } else {
       this.#inputComponent.text = this.#emptyDateText
         ? this.#emptyDateText
         : '';
-      return;
+      const currentDate = new Date();
+      const month = date?.getMonth() ?? currentDate.getMonth();
+      const year = date?.getFullYear() ?? currentDate.getFullYear();
+      this.#changeCalendarDate(year, month);
     }
-    const day = date.getDate();
-    const month = date.getMonth();
-    const year = date.getFullYear();
-    this.#inputComponent.text = `${day}/${month + 1}/${year}`;
-    this.#changeCalendarDate(year, month);
   }
 
   /** @type {string} */
