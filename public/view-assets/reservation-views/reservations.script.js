@@ -47,6 +47,15 @@ const loadedReservationSteps = [];
 /** @type {string} */
 let currentDisplayingReservationStep = null;
 
+/** @type {string} */
+let urlLanguageKey = null;
+
+/** @type {string} */
+let urlRoomTypeKey = null;
+
+/** @type {Date} */
+let urlDate = null;
+
 /** @type {number} */
 let selectedMovieId = null;
 
@@ -109,7 +118,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   hideReservationsSteps();
 
   // get and load URL params
-  // fetchAndLoadURLParams();
+  fetchAndLoadURLParams();
 
   // Determine current reservation step based on the loaded url params
   determineInitialReservationStepToDisplay();
@@ -141,36 +150,39 @@ function loadEventListeners() {
 
 function fetchAndLoadURLParams() {
   const { movieId, languageKey, roomTypeKey, date } = getUrlParams();
+  console.log(`Reservation flow started with the following params:`, {
+    movieId,
+    languageKey,
+    roomTypeKey,
+    date,
+  });
 
-  if (movieId) {
-    try {
-      fetchAndLoadMovieId(movieId);
-      fetchAndLoadMovieAvailableLanguages(movieId, languageKey);
-      fetchAndLoadMovieAvailableRoomTypes(movieId, roomTypeKey);
-      fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date);
-    } catch (error) {
-      console.error(
-        'Some given values are not valid. Reseting reservation flow',
-      );
-    }
-  }
+  urlLanguageKey = languageKey;
+  urlRoomTypeKey = roomTypeKey;
+  urlDate = date;
+
+  selectedMovieId = movieId || null;
 }
 
 function selectMovie(movieId) {
-  if (selectedMovieId === movieId) return;
+  // Seleccionar la html card
+  selectMovieHTMLCard(movieId);
 
-  resetSelectedAttributes();
+  if (selectedMovieId !== movieId) resetSelectedAttributes();
 
   // Setear la variable global al movie id seleccionado
   selectedMovieId = movieId;
 
-  // Seleccionar la html card
-  selectMovieHTMLCard(movieId);
   // Checkear el navigation buttons
   enableOrDisableNavigationButtons();
 }
 
 function resetSelectedAttributes() {
+  urlMovieId = null;
+  urlLanguageKey = null;
+  urlRoomTypeKey = null;
+  urlDate = null;
+
   selectedMovieId = null;
   selectedLanguage = null;
   selectedRoomType = null;
@@ -180,18 +192,19 @@ function resetSelectedAttributes() {
   selectedRoomSeats = null;
 }
 
-function fetchAndLoadMovieId(movieId) {
-  selectMovieHTMLCard(movieId);
-  selectedMovieId = movieId;
-}
-
 function fetchAndLoadMovieData(movieId) {
   fetchAndLoadMovieAvailableLanguages(movieId);
   fetchAndLoadMovieAvailableRoomTypes(movieId);
-  fetchAndLoadMovieScreening(movieId);
+  loadDate();
+  fetchAndLoadMovieScreening(
+    movieId,
+    selectedLanguage?.key,
+    selectedRoomType?.key,
+    selectedDate,
+  );
 }
 
-function fetchAndLoadMovieAvailableLanguages(movieId, languageKey) {
+function fetchAndLoadMovieAvailableLanguages(movieId) {
   console.log('Movie available languages fetched and loaded');
   const languages = [
     {
@@ -216,17 +229,14 @@ function fetchAndLoadMovieAvailableLanguages(movieId, languageKey) {
     },
   ];
 
-  // const languageExists = languages.find(
-  //   (language) => language.key === languageKey,
-  // );
-  // if (!languageExists)
-  //   throw new Error(
-  //     `Language key "${languageKey}" doesn't belong to any available language`,
-  //   );
   movieLanguages = languages;
+
+  selectedLanguage = movieLanguages.find(
+    (language) => language.key === urlLanguageKey,
+  );
 }
 
-function fetchAndLoadMovieAvailableRoomTypes(movieId, roomTypeKey) {
+function fetchAndLoadMovieAvailableRoomTypes(movieId) {
   console.log('Room Types fetched and loaded');
 
   const roomTypes = [
@@ -262,15 +272,15 @@ function fetchAndLoadMovieAvailableRoomTypes(movieId, roomTypeKey) {
     },
   ];
 
-  // const roomTypeExists = roomTypes.find(
-  //   (roomType) => roomType.key === roomTypeKey,
-  // );
-  // if (!roomTypeExists)
-  //   throw new Error(
-  //     `Room Type key "${languageKey}" doesn't belong to any available Room Type`,
-  //   );
-
   movieRoomTypes = roomTypes;
+
+  selectedRoomType = movieRoomTypes.find(
+    (roomType) => roomType.key === urlRoomTypeKey,
+  );
+}
+
+function loadDate() {
+  selectedDate = urlDate;
 }
 
 function fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date) {
@@ -366,12 +376,26 @@ function fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date) {
 
 function loadMovieLanguagesIntoSelectInput() {
   languageSelectComponent.options = movieLanguages;
-  languageSelectComponent.selectedOption = movieLanguages[0];
+
+  const defaultOption = movieLanguages.find(
+    (language) => language.key === null,
+  );
+
+  languageSelectComponent.selectedOption = selectedLanguage || defaultOption;
 }
 
 function loadMovieRoomTypesIntoSelectInput() {
   roomTypeSelectComponent.options = movieRoomTypes;
-  roomTypeSelectComponent.selectedOption = movieRoomTypes[0];
+
+  const defaultOption = movieRoomTypes.find(
+    (roomType) => roomType.key === null,
+  );
+
+  roomTypeSelectComponent.selectedOption = selectedRoomType || defaultOption;
+}
+
+function loadDateIntoDatePickerInput() {
+  datePickerComponent.selectedDate = selectedDate;
 }
 
 function loadAndRenderMovieScreeningIntoComponent() {
@@ -546,13 +570,21 @@ function getUrlParams() {
   const movieId = urlParams.get('movieId');
   const languageKey = urlParams.get('languageKey');
   const roomTypeKey = urlParams.get('roomTypeKey');
-  const date = urlParams.get('date');
+  const dateString = urlParams.get('date'); // Format YYYY-MM-DD
+  let finalDate = null;
+  if (dateString) {
+    const [year, month, day] = dateString.split('-');
+    if (year && month && day) {
+      const date = new Date(Number(year), Number(month) - 1, Number(day));
+      if (!isNaN(date.valueOf())) finalDate = date;
+    }
+  }
 
   return {
     movieId,
     languageKey,
     roomTypeKey,
-    date,
+    date: finalDate,
   };
 }
 
@@ -564,7 +596,6 @@ function selectMovieHTMLCard(movieId) {
   const movieCard = document.querySelector(`[movie-id="${movieId}"]`);
   if (!movieCard) throw new Error(`movieId "${movieId}" does not exists`);
   movieCard.className = `${movieCard.className} selected-movie`;
-  selectedMovieId = movieId;
 }
 
 function unselectMovieCard() {
@@ -663,20 +694,15 @@ function getActionsForStepWhenLoaded(step) {
 
 function onMovieSelectionStepLoads() {
   console.log('movie-selection step loaded');
+  if (selectedMovieId) selectMovie(selectedMovieId);
 }
 
 function onMovieScreeningSelectionStepLoads() {
   console.log('movie-screening-selection step loaded');
-  // Fetchear y cargar toda la data de esa pelicula.
   fetchAndLoadMovieData(selectedMovieId);
   loadMovieLanguagesIntoSelectInput();
   loadMovieRoomTypesIntoSelectInput();
-  fetchAndLoadMovieScreening(
-    selectedMovieId,
-    selectedLanguage?.key,
-    selectedRoomType?.key,
-    selectedDate,
-  );
+  loadDateIntoDatePickerInput();
   loadAndRenderMovieScreeningIntoComponent();
 }
 
