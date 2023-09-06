@@ -27,7 +27,7 @@ export class SelectComponent {
   }
 
   set selectedOption(option) {
-    this.#setSelectedOption(option);
+    this.#setSelectedOption(option, false);
   }
 
   get options() {
@@ -196,10 +196,11 @@ export class SelectComponent {
     return true;
   }
 
-  #setSelectedOption(option) {
+  #setSelectedOption(option, executeCallback = true) {
     this.#selectedOption = option;
-    this.#inputComponent.text = option.name;
+    this.#inputComponent.text = option?.name;
     this.#appendOptionsToContainer(this.#options);
-    if (this.#onSelectCallbackFn) this.#onSelectCallbackFn(option);
+    if (executeCallback && this.#onSelectCallbackFn)
+      this.#onSelectCallbackFn(option);
   }
 }
