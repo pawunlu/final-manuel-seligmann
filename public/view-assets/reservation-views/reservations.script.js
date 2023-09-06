@@ -157,12 +157,27 @@ function fetchAndLoadURLParams() {
 }
 
 function selectMovie(movieId) {
+  if (selectedMovieId === movieId) return;
+
+  resetSelectedAttributes();
+
   // Setear la variable global al movie id seleccionado
   selectedMovieId = movieId;
+
   // Seleccionar la html card
   selectMovieHTMLCard(movieId);
   // Checkear el navigation buttons
   enableOrDisableNavigationButtons();
+}
+
+function resetSelectedAttributes() {
+  selectedMovieId = null;
+  selectedLanguage = null;
+  selectedRoomType = null;
+  selectedDate = null;
+  selectedMovieScreening = null;
+  selectedSeatsAmount = null;
+  selectedRoomSeats = null;
 }
 
 function fetchAndLoadMovieId(movieId) {
@@ -357,6 +372,11 @@ function loadMovieLanguagesIntoSelectInput() {
 function loadMovieRoomTypesIntoSelectInput() {
   roomTypeSelectComponent.options = movieRoomTypes;
   roomTypeSelectComponent.selectedOption = movieRoomTypes[0];
+}
+
+function loadAndRenderMovieScreeningIntoComponent() {
+  movieScreeningSelectorComponent.selectedScreening = selectedMovieScreening;
+  movieScreeningSelectorComponent.movieScreenings = movieScreenings;
 }
 
 function determineInitialReservationStepToDisplay() {
@@ -657,6 +677,7 @@ function onMovieScreeningSelectionStepLoads() {
     selectedRoomType?.key,
     selectedDate,
   );
+  loadAndRenderMovieScreeningIntoComponent();
 }
 
 function onRoomSeatsSelectionStepLoads() {

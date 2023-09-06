@@ -14,6 +14,15 @@ export class MovieScreeningSelectorComponent {
   /** @type {Function} */
   #onScreeningSelectCallbackFn = null;
 
+  get selectedScreening() {
+    return this.#selectedScreening;
+  }
+
+  set selectedScreening(screening) {
+    this.#selectedScreening = screening;
+    this.#createAndAppendMovieScreeningsListContainer();
+  }
+
   get movieScreenings() {
     return this.#movieScreenings;
   }
@@ -57,6 +66,7 @@ export class MovieScreeningSelectorComponent {
   #createAndAppendMovieScreeningsListContainer() {
     // remove existing content
     this.#movieScreeningsSelectorHTMLContainer.innerHTML = '';
+    // Create and append list
     this.#buildAndAppendList();
   }
 
