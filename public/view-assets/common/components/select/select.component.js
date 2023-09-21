@@ -97,6 +97,7 @@ export class SelectComponent {
     );
     inputComponent.showResetButton = false;
     inputComponent.HTMLComponents.inputHTMLComponent.readOnly = true;
+    inputComponent.HTMLComponents.inputHTMLComponent.tabIndex = -1;
     inputComponent.render();
     this.#inputComponent = inputComponent;
 

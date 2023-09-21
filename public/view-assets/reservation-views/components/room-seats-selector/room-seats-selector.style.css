@@ -1,0 +1,72 @@
+.room-seats-selector-container {
+  background-color: rgb(25, 48, 129);
+  padding: 10px;
+  border-radius: 30px;
+}
+
+.room-seats-selector-container button {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px 10px 0 0;
+}
+
+.room-seats-selector-container > h3 {
+  color: white;
+  text-align: center;
+}
+
+.seats-info {
+  
+}
+
+.seats-info p {
+  margin: 0 0 0 7px;
+  color: white;
+}
+
+.seats-info button {
+  border: hidden;
+}
+
+.seats-info > .available-seats-info {
+}
+
+.seats-info > .selected-seats-info {
+}
+
+.seats-info > .occupied-seats-info {
+}
+
+.seats-info > .available-seats-info, .seats-info > .selected-seats-info, .seats-info > .occupied-seats-info {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.seats-info > .available-seats-info button {
+  background: rgba(217, 217, 217, 1);
+}
+
+.seats-info > .selected-seats-info button {
+  background: rgba(0, 122, 255, 1);
+}
+
+.seats-info > .occupied-seats-info button {
+  background: rgba(188, 49, 49, 1);
+}
+
+.room-container {
+  background-color: rgba(59, 90, 202, 1);
+  padding: 25px;
+  border-radius: 25px;
+  margin-top: 25px;
+}
+
+
+.room-screen {
+  height: 10px;
+  width: 40%;
+  background: rgb(217, 217, 217);
+  margin: 0 auto;
+  border-radius: 10px 10px 0 0;
+}

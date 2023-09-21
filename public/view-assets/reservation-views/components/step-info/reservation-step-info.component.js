@@ -35,6 +35,26 @@ export class ReservationStepInfo {
    *
    * @param {keyof typeof RESERVATION_STEPS} step - Reservation step
    */
+  get currentStep() {
+    return this.#currentStep;
+  }
+
+  /**
+   *
+   *
+   * @param {keyof typeof RESERVATION_STEPS} step - Reservation step
+   */
+  set currentStep(currentStep) {
+    this.#currentStep = RESERVATION_STEPS[currentStep];
+    console.log('New current step', currentStep);
+    this.#removeOrAddClassesToTheSteps();
+  }
+
+  /**
+   *
+   *
+   * @param {keyof typeof RESERVATION_STEPS} step - Reservation step
+   */
   setStep(step) {
     this.#currentStep = step;
     this.render();
@@ -61,6 +81,7 @@ export class ReservationStepInfo {
 
     for (const step of Object.keys(RESERVATION_STEPS)) {
       const stepElement = document.createElement('section');
+      stepElement.id = `${step}-step-info`;
       stepElement.className = `step ${step}`;
 
       const stepName = document.createElement('p');
@@ -75,5 +96,19 @@ export class ReservationStepInfo {
     }
 
     return container;
+  }
+
+  #removeOrAddClassesToTheSteps() {
+    const [stepsContainer] = this.#parentContainerHTMLComponent.children;
+    if (!stepsContainer) return;
+    const steps = stepsContainer.children;
+    for (let index = 0; index < steps.length; index++) {
+      const step = steps[index];
+      if (index === this.#currentStep) {
+        step.className = `${step.className} active-step`;
+      } else {
+        step.className = step.className.replaceAll('active-step', '');
+      }
+    }
   }
 }

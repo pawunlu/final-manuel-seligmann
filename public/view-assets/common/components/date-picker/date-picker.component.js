@@ -100,6 +100,8 @@ export class DatePickerComponent {
     inputComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
     inputComponent.placeholder = 'Fecha';
     inputComponent.showResetButton = false;
+    inputComponent.HTMLComponents.inputHTMLComponent.readOnly = true;
+    inputComponent.HTMLComponents.inputHTMLComponent.tabIndex = -1;
     inputComponent.render();
     this.#inputComponent = inputComponent;
 

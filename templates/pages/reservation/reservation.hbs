@@ -24,6 +24,9 @@
       {{!-- Movie Screenings Selector Component & Style  --}}
       <script src="/view-assets/reservation-views/components/movie-screening-selector/movie-screening-selector.component.js" type="module"></script>
       <link href="/view-assets/reservation-views/components/movie-screening-selector/movie-screening-selector.style.css" rel="stylesheet" type="text/css">
+      {{!-- Room Seats Selector Component & Style  --}}
+      <script src="/view-assets/reservation-views/components/room-seats-selector/room-seats-selector.component.js" type="module"></script>
+      <link href="/view-assets/reservation-views/components/room-seats-selector/room-seats-selector.style.css" rel="stylesheet" type="text/css">
       {{!-- Reservation View Script & Style --}}
       <script src="/view-assets/reservation-views/reservations.script.js" type="module"></script>
       <link href="/view-assets/reservation-views/reservations.style.css" rel="stylesheet" type="text/css">
@@ -36,114 +39,130 @@
     {{!-- Step info Component --}}
     <section id="step-info"></section>
 
-    {{!-- Movie selector --}}
-    <section id="movie-selection-step" class="reservation-step movie-selection-step">
-      <h2>Selecciona una película</h2>
-      <section class="movies-container">
-        {{#if movies.length}}
-          {{#each movies}}
-            {{> fragments/public/movieDisplayer movie=this}}
-          {{/each}}
-        {{ else }}
-          <p>No hay peliculas para mostrar</p>
-        {{/if}}
-      </section>
-    </section>
+    <section id="step-container">
 
-    <section id="movie-screening-selection-step" class="reservation-step movie-screening-selection-step">
-      <h2>Selecciona una función</h2>
-      <section class="screening-filters">
-        <section id="language-selector" class="language-selector"></section>
-        <section id="room-type-selector" class="room-type-selector"></section>
-        <section id="date-selector" class="room-type-selector"></section>
-      </section>
+      <section id="step-slider">
 
-      <section id="movie-screening-selection">
-        {{!-- <section class="movie-screenings-container">
-          <section class="date-screenings-container">
-            <h3>Hoy</h3>
-            <section class="date-screenings-table">
-              <section class="screening-row selected-screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionada</button>
+        {{!-- Movie selector --}}
+        <section id="movie-selection-step" class="reservation-step movie-selection-step">
+          <h2>Selecciona una película</h2>
+          <section class="movies-container" hideable-element="true">
+            {{#if movies.length}}
+              {{#each movies}}
+                {{> fragments/public/movieDisplayer movie=this}}
+              {{/each}}
+            {{ else }}
+              <p>No hay peliculas para mostrar</p>
+            {{/if}}
+          </section>
+        </section>
+
+        <section id="movie-screening-selection-step" class="reservation-step movie-screening-selection-step">
+          <h2>Selecciona una función</h2>
+          <section class="screening-filters">
+            <section id="language-selector" class="language-selector"></section>
+            <section id="room-type-selector" class="room-type-selector"></section>
+            <section id="date-selector" class="room-type-selector"></section>
+          </section>
+
+          <section id="movie-screening-selection" hideable-element="true"></section>
+        </section>
+
+        <section id="room-seats-selection-step" class="reservation-step room-seats-selection-step">
+          <h2>Selecciona los asientos</h2>
+          <section id="room-seats-selection" class="room-seats-selector-container" hideable-element="true">
+            <h3>Nombre de la pelicula - Idioma - Formato - Fecha:Hora</h3>
+            <section class="seats-info">
+              <section class="available-seats-info">
+                <button tabindex="-1"></button>
+                <p>Asientos disponibles</p>
               </section>
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
+              <section class="selected-seats-info">
+                <button tabindex="-1"></button>
+                <p>Asientos seleccionado</p>
+                <p>(2/3)</p>
               </section>
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
+              <section class="occupied-seats-info">
+                <button tabindex="-1"></button>
+                <p>Asientos ocupados</p>
+              </section>
+            </section>
+            <section class="room-container">
+              <section class="room-screen"></section>
+              <section class="room-seats">
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+              </section>
+            </section>
+            <p></p>
+          </section>
+        </section>
+
+        <section id="user-data-form-step" class="reservation-step user-data-form-step">
+          <h2>Datos personales</h2>
+          <form class="user-data-form" hideable-element="true">
+            <section id="name-input"></section>
+            <section id="email-input"></section>
+            <section id="phone-input"></section>
+          </form>
+        </section>
+
+        <section id="reservation-summary-step" class="reservation-step reservation-summary-step">
+          <h2>Resumen</h2>
+          <section>
+
+            <section class="user-data-summary">
+              <h3>Datos personales</h3>
+              <section>
+                <label for="name-input-summary">Nombre y apellido:</label>
+                <output id="name-input-summary"></output>
+              </section>
+              <section>
+                <label for="email-input-summary">Email:</label>
+                <output id="name-input-summary"></output>
+              </section>
+              <section>
+                <label for="phone-input-summary">Teléfono:</label>
+                <output id="phone-input-summary"></output>
+              </section>
+            </section>
+            <section class="reservation-details-summary">
+              <h3>Información</h3>
+              <section>
+                <label for="movie-name-summary">Pelicula:</label>
+                <output id="movie-name-summary"></output>
+              </section>
+              <section>
+                <label for="movie-room-type-summary">Sala:</label>
+                <output id="movie-room-type-summary"></output>
+              </section>
+              <section>
+                <label for="movie-starts-at-summary">Fecha y hora:</label>
+                <output id="movie-starts-at-summary"></output>
+              </section>
+              <section>
+                <label for="room-seats-summary">Asientos:</label>
+                <output id="room-seats-summary"></output>
+              </section>
+              <section>
+                <label for="total-summary">Total:</label>
+                <output id="total-summary"></output>
               </section>
             </section>
           </section>
-          <section class="date-screenings-container">
-            <h3>Mañana</h3>
-            <section class="date-screenings-table">
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
-              </section>
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
-              </section>
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
-              </section>
-            </section>
-          </section>
-          <section class="date-screenings-container">
-            <h3>Viernes 12/08</h3>
-            <section class="date-screenings-table">
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
-              </section>
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
-              </section>
-              <section class="screening-row">
-                <p>Español</p>
-                <p>2D</p>
-                <p>13:30</p>
-                <button>Seleccionar</button>
-              </section>
-            </section>
-          </section>
-        </section> --}}
+        </section>
+
       </section>
+
     </section>
 
-    <section id="room-seats-selection-step" class="reservation-step room-seats-selection-step">
-      <h2>Selecciona los asientos</h2>
-    </section>
-
-    <section id="user-data-form-step" class="reservation-step user-data-form-step">
-      <h2>Datos personales</h2>
-    </section>
-
-    <section id="reservation-summary-step" class="reservation-step reservation-summary-step">
-      <h2>Resumen</h2>
-    </section>
 
         {{!-- Navigation buttons --}}
     <section id="navigation-buttons"></section>
