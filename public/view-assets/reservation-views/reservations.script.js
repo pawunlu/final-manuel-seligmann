@@ -123,7 +123,7 @@ let userPhoneInputComponent = null;
 /** @type {ReservationNavigationButtons} */
 let navigationButtonsComponent = null;
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', async (event) => {
   // Cover all hideable html elements
   coverAllHideableHTMLElements();
 
@@ -140,15 +140,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
   loadEventListeners();
 
   // Display the corresponding reservation step based on the loaded url params
-  displayInitialReservationStep();
+  await displayInitialReservationStep();
 
   // Load current reservation step
-  loadCurrentReservationStep();
+  await loadCurrentReservationStep();
 });
 
 function coverAllHideableHTMLElements() {
   const hideableHTMLElements = document.querySelectorAll(
-    `[hideable-element="true"]`,
+    `[hide-when-not-displaying="true"]`,
   );
 
   for (const element of hideableHTMLElements) {
@@ -158,7 +158,7 @@ function coverAllHideableHTMLElements() {
 
 function coverHideableHTMLElementsExcept(...HTMLElements) {
   const allHideableHTMLElements = document.querySelectorAll(
-    `[hideable-element="true"]`,
+    `[hide-when-not-displaying="true"]`,
   );
 
   for (const element of allHideableHTMLElements) {
@@ -178,13 +178,13 @@ function coverHideableHTMLElement(element) {
   element.classList.add('hide-element');
 }
 
-function displayInitialReservationStep() {
+async function displayInitialReservationStep() {
   const currentStepIndex = RESERVATION_STEPS.findIndex(
     (RESERVATION_STEP) => RESERVATION_STEP === currentDisplayingReservationStep,
   );
 
   updateStepSlider(currentStepIndex);
-  loadCurrentReservationStep();
+  await loadCurrentReservationStep();
 }
 
 function loadEventListeners() {
@@ -240,16 +240,18 @@ function resetSelectedAttributes() {
   selectedRoomSeats = null;
 }
 
-function fetchAndLoadMovieData(movieId) {
+async function fetchAndLoadMovieData(movieId) {
+  movieScreeningSelectorComponent.loading = true;
   fetchAndLoadMovieAvailableLanguages(movieId);
   fetchAndLoadMovieAvailableRoomTypes(movieId);
   loadDate();
-  fetchAndLoadMovieScreening(
+  await fetchAndLoadMovieScreening(
     movieId,
     selectedLanguage?.key,
     selectedRoomType?.key,
     selectedDate,
   );
+  movieScreeningSelectorComponent.loading = false;
 }
 
 function fetchAndLoadMovieAvailableLanguages(movieId) {
@@ -331,7 +333,12 @@ function loadDate() {
   selectedDate = urlDate;
 }
 
-function fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date) {
+async function fetchAndLoadMovieScreening(
+  movieId,
+  languageKey,
+  roomTypeKey,
+  date,
+) {
   console.log(
     'Movie screenings fetched and loaded with params:',
     movieId,
@@ -411,6 +418,8 @@ function fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date) {
     },
   ];
 
+  await setTimeoutAsync();
+
   movieScreenings = mockedScreenings.filter((screening) => {
     return (
       (languageKey ? screening.language.key === languageKey : true) &&
@@ -422,6 +431,18 @@ function fetchAndLoadMovieScreening(movieId, languageKey, roomTypeKey, date) {
   });
 }
 
+function setTimeoutAsync() {
+  console.log('se llamo el timeout');
+  return new Promise((res, rej) => {
+    setTimeout(res, 1000);
+  });
+}
+
+function resetMovieLanguagesSelectInput() {
+  languageSelectComponent.options = [];
+  languageSelectComponent.selectedOption = null;
+}
+
 function loadMovieLanguagesIntoSelectInput() {
   languageSelectComponent.options = movieLanguages;
 
@@ -430,6 +451,11 @@ function loadMovieLanguagesIntoSelectInput() {
   );
 
   languageSelectComponent.selectedOption = selectedLanguage || defaultOption;
+}
+
+function resetMovieRoomTypesSelectInput() {
+  roomTypeSelectComponent.options = [];
+  roomTypeSelectComponent.selectedOption = null;
 }
 
 function loadMovieRoomTypesIntoSelectInput() {
@@ -444,6 +470,11 @@ function loadMovieRoomTypesIntoSelectInput() {
 
 function loadDateIntoDatePickerInput() {
   datePickerComponent.selectedDate = selectedDate;
+}
+
+function resetMovieScreeningComponent() {
+  movieScreeningSelectorComponent.selectedScreening = null;
+  movieScreeningSelectorComponent.movieScreenings = [];
 }
 
 function loadAndRenderMovieScreeningIntoComponent() {
@@ -486,15 +517,17 @@ function loadAndRenderLanguageSelectComponent() {
       (language) => language.id === null,
     );
   }
-  languageSelectComponent.onSelect = (language) => {
+  languageSelectComponent.onSelect = async (language) => {
     selectedLanguage = language;
-    fetchAndLoadMovieScreening(
+    movieScreeningSelectorComponent.loading = true;
+    await fetchAndLoadMovieScreening(
       selectedMovieId,
       selectedLanguage?.key,
       selectedRoomType?.key,
       selectedDate,
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
+    movieScreeningSelectorComponent.loading = false;
   };
   languageSelectComponent.render();
 }
@@ -510,15 +543,17 @@ function loadAndRenderRoomTypesSelectComponent() {
       (language) => language.id === null,
     );
   }
-  roomTypeSelectComponent.onSelect = (roomType) => {
+  roomTypeSelectComponent.onSelect = async (roomType) => {
+    movieScreeningSelectorComponent.loading = true;
     selectedRoomType = roomType;
-    fetchAndLoadMovieScreening(
+    await fetchAndLoadMovieScreening(
       selectedMovieId,
       selectedLanguage?.key,
       selectedRoomType?.key,
       selectedDate,
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
+    movieScreeningSelectorComponent.loading = false;
   };
   roomTypeSelectComponent.render();
 }
@@ -526,15 +561,17 @@ function loadAndRenderRoomTypesSelectComponent() {
 function loadAndRenderDatePickerComponent() {
   datePickerComponent = new DatePickerComponent('date-selector');
   datePickerComponent.emptyDateText = 'Todos los días';
-  datePickerComponent.onSelect = (date) => {
+  datePickerComponent.onSelect = async (date) => {
+    movieScreeningSelectorComponent.loading = true;
     selectedDate = date;
-    fetchAndLoadMovieScreening(
+    await fetchAndLoadMovieScreening(
       selectedMovieId,
       selectedLanguage?.key,
       selectedRoomType?.key,
       selectedDate,
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
+    movieScreeningSelectorComponent.loading = false;
   };
   datePickerComponent.render();
 }
@@ -586,7 +623,7 @@ function loadAndRenderNavigationButtonsComponent() {
   navigationButtonsComponent.render();
 }
 
-function loadCurrentReservationStep() {
+async function loadCurrentReservationStep() {
   console.log('current reservation step:', currentDisplayingReservationStep);
   const stepLoadedActions = getActionsForStepWhenLoaded(
     currentDisplayingReservationStep,
@@ -595,7 +632,7 @@ function loadCurrentReservationStep() {
     (loadedReservationStep) =>
       loadedReservationStep === currentDisplayingReservationStep,
   );
-  if (!hasStepAlreadyBeingLoaded) stepLoadedActions();
+  if (!hasStepAlreadyBeingLoaded) await stepLoadedActions();
 
   stepInfoComponent.currentStep = currentDisplayingReservationStep;
 
@@ -628,7 +665,7 @@ function addEventListenerToReservationStepsSlider() {
       );
 
       const hideableHTMLElements = reservationStepElement.querySelectorAll(
-        `[hideable-element="true"]`,
+        `[hide-when-not-displaying="true"]`,
       );
 
       for (const hideableElement of hideableHTMLElements) {
@@ -647,7 +684,7 @@ function addEventListenerToReservationStepsSlider() {
       );
 
       const hideableHTMLElements = reservationStepElement.querySelectorAll(
-        `[hideable-element="true"]`,
+        `[hide-when-not-displaying="true"]`,
       );
       coverHideableHTMLElementsExcept(...hideableHTMLElements);
     }
@@ -656,7 +693,7 @@ function addEventListenerToReservationStepsSlider() {
 
 function addEventListenersToNavigationButtons() {
   // Go back to the previous step event
-  navigationButtonsComponent.onPreviousButtonClick = () => {
+  navigationButtonsComponent.onPreviousButtonClick = async () => {
     const currentStepIndex = RESERVATION_STEPS.findIndex(
       (RESERVATION_STEP) =>
         RESERVATION_STEP === currentDisplayingReservationStep,
@@ -667,11 +704,11 @@ function addEventListenersToNavigationButtons() {
 
     updateStepSlider(previousStepIndex);
 
-    loadCurrentReservationStep();
+    await loadCurrentReservationStep();
   };
 
   // Go to the next step event
-  navigationButtonsComponent.onNextButtonClick = () => {
+  navigationButtonsComponent.onNextButtonClick = async () => {
     const currentStepIndex = RESERVATION_STEPS.findIndex(
       (RESERVATION_STEP) =>
         RESERVATION_STEP === currentDisplayingReservationStep,
@@ -687,7 +724,7 @@ function addEventListenersToNavigationButtons() {
 
     updateStepSlider(nextStepIndex);
 
-    loadCurrentReservationStep();
+    await loadCurrentReservationStep();
   };
 }
 
@@ -826,9 +863,13 @@ function onMovieSelectionStepLoads() {
   if (selectedMovieId) selectMovie(selectedMovieId);
 }
 
-function onMovieScreeningSelectionStepLoads() {
+async function onMovieScreeningSelectionStepLoads() {
   console.log('movie-screening-selection step loaded');
-  fetchAndLoadMovieData(selectedMovieId);
+  resetMovieLanguagesSelectInput();
+  resetMovieRoomTypesSelectInput();
+  resetMovieScreeningComponent();
+
+  await fetchAndLoadMovieData(selectedMovieId);
   loadMovieLanguagesIntoSelectInput();
   loadMovieRoomTypesIntoSelectInput();
   loadDateIntoDatePickerInput();
@@ -848,19 +889,31 @@ function onReservationSummaryStepLoads() {
   // TODO: Get movie's data
   // const selectedMovieCard = document.getElementById()
 
+  const clientNameOutput = document.getElementById('name-input-summary');
+  const clientEmailOutput = document.getElementById('email-input-summary');
+  const clientPhoneOutput = document.getElementById('phone-input-summary');
+
   const movieNameOutput = document.getElementById('movie-name-summary');
   const roomTypeNameOutput = document.getElementById('movie-room-type-summary');
   const startsAtOutput = document.getElementById('movie-starts-at-summary');
   const seatsOutput = document.getElementById('room-seats-summary');
   const totalOutput = document.getElementById('total-summary');
 
+  clientNameOutput.innerHTML = 'Nombre de prueba (MOCK)';
+  clientEmailOutput.innerHTML = 'Email de prueba (MOCK)';
+  clientPhoneOutput.innerHTML = 'Telefono de prueba (MOCK)';
   movieNameOutput.innerHTML = 'Nombre de prueba (MOCK)';
   roomTypeNameOutput.innerHTML = selectedMovieScreening.roomType.name;
   startsAtOutput.innerHTML = selectedMovieScreening.startsAt.toLocaleString();
-  totalOutput.innerHTML = '$800 (Mock)';
+  seatsOutput.innerHTML = getSelectedSeatsOutput();
+  totalOutput.innerHTML = '$800 (MOCK)';
 }
 
 function updateStepSlider(currentSlide) {
   const stepSlider = document.getElementById('step-slider');
   stepSlider.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+
+function getSelectedSeatsOutput() {
+  return `Asiento 3A (MOCK)`;
 }

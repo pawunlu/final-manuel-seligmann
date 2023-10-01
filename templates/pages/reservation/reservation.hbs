@@ -46,7 +46,7 @@
         {{!-- Movie selector --}}
         <section id="movie-selection-step" class="reservation-step movie-selection-step">
           <h2>Selecciona una película</h2>
-          <section class="movies-container" hideable-element="true">
+          <section class="movies-container" hide-when-not-displaying="true">
             {{#if movies.length}}
               {{#each movies}}
                 {{> fragments/public/movieDisplayer movie=this}}
@@ -65,12 +65,12 @@
             <section id="date-selector" class="room-type-selector"></section>
           </section>
 
-          <section id="movie-screening-selection" hideable-element="true"></section>
+          <section id="movie-screening-selection" hide-when-not-displaying="true"></section>
         </section>
 
         <section id="room-seats-selection-step" class="reservation-step room-seats-selection-step">
           <h2>Selecciona los asientos</h2>
-          <section id="room-seats-selection" class="room-seats-selector-container" hideable-element="true">
+          <section id="room-seats-selection" class="room-seats-selector-container" hide-when-not-displaying="true">
             <h3>Nombre de la pelicula - Idioma - Formato - Fecha:Hora</h3>
             <section class="seats-info">
               <section class="available-seats-info">
@@ -107,7 +107,7 @@
 
         <section id="user-data-form-step" class="reservation-step user-data-form-step">
           <h2>Datos personales</h2>
-          <form class="user-data-form" hideable-element="true">
+          <form class="user-data-form" hide-when-not-displaying="true">
             <section id="name-input"></section>
             <section id="email-input"></section>
             <section id="phone-input"></section>
@@ -126,7 +126,7 @@
               </section>
               <section>
                 <label for="email-input-summary">Email:</label>
-                <output id="name-input-summary"></output>
+                <output id="email-input-summary"></output>
               </section>
               <section>
                 <label for="phone-input-summary">Teléfono:</label>

@@ -199,7 +199,7 @@ export class SelectComponent {
 
   #setSelectedOption(option, executeCallback = true) {
     this.#selectedOption = option;
-    this.#inputComponent.text = option?.name;
+    this.#inputComponent.text = option?.name ?? '';
     this.#appendOptionsToContainer(this.#options);
     if (executeCallback && this.#onSelectCallbackFn)
       this.#onSelectCallbackFn(option);

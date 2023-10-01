@@ -14,6 +14,9 @@ export class MovieScreeningSelectorComponent {
   /** @type {Function} */
   #onScreeningSelectCallbackFn = null;
 
+  /** @type {boolean} */
+  #isLoading = false;
+
   get selectedScreening() {
     return this.#selectedScreening;
   }
@@ -34,6 +37,15 @@ export class MovieScreeningSelectorComponent {
 
   set onScreeningSelect(callbackFn) {
     this.#onScreeningSelectCallbackFn = callbackFn;
+  }
+
+  set loading(loading) {
+    this.#isLoading = loading;
+    if (this.#isLoading) {
+      this.#createAndAppendLoadingAnimation();
+    } else {
+      this.#createAndAppendMovieScreeningsListContainer();
+    }
   }
 
   constructor(parentContainerId) {
@@ -63,6 +75,14 @@ export class MovieScreeningSelectorComponent {
     return container;
   }
 
+  #createAndAppendLoadingAnimation() {
+    // remove existing content
+    this.#movieScreeningsSelectorHTMLContainer.innerHTML = '';
+    const loadingText = document.createElement('p');
+    loadingText.innerHTML = 'Loading...';
+    this.#movieScreeningsSelectorHTMLContainer.appendChild(loadingText);
+  }
+
   #createAndAppendMovieScreeningsListContainer() {
     // remove existing content
     this.#movieScreeningsSelectorHTMLContainer.innerHTML = '';
@@ -72,6 +92,13 @@ export class MovieScreeningSelectorComponent {
 
   #buildAndAppendList() {
     const datesList = this.#getDifferentDatesFromMovieScreenings();
+    if (datesList.length === 0) {
+      const emptySection = document.createElement('p');
+      emptySection.innerHTML = 'No hay nada que ver';
+      this.#movieScreeningsSelectorHTMLContainer.appendChild(emptySection);
+      return;
+    }
+
     for (const date of datesList) {
       const dateScreeningsContainer = document.createElement('section');
       this.#movieScreeningsSelectorHTMLContainer.appendChild(
