@@ -7,9 +7,24 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailsModule } from './modules/mails/mails.module';
 import { ViewsModule } from './modules/views/views.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import envValidationSchema from './config/env.config';
+import { database } from './config/typeorm.config';
+import { RoomSeatsModule } from './modules/room-seats/room-seats.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [database],
+      validationSchema: envValidationSchema,
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.get('database'),
+    }),
     MoviesModule,
     RoomTypesModule,
     RoomsModule,
@@ -18,6 +33,7 @@ import { ViewsModule } from './modules/views/views.module';
     AuthModule,
     MailsModule,
     ViewsModule,
+    RoomSeatsModule,
   ],
   controllers: [],
   providers: [],
