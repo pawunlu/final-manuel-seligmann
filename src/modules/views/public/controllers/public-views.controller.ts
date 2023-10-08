@@ -13,8 +13,8 @@ export class PublicViewsController {
 
   @Get('cartelera')
   @Render('public/movies')
-  handleMovieScheduleView() {
-    return this.publicViewsService.handleMovieScheduleViewData();
+  handleMovieBillboardView() {
+    return this.publicViewsService.handleMovieBillboardViewData();
   }
 
   handleMovieInformationView() {
