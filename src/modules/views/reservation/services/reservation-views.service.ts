@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { MoviesService } from '../../../movies/services';
+import { movieDtoToMovieTemplate } from '../../../movies/mappers';
 
 @Injectable()
 export class ReservationViewsService {
   constructor(private moviesService: MoviesService) {}
 
   async handleReservationViewData() {
-    const { items: movies } = await this.moviesService.findAll({ all: true });
+    const { items } = await this.moviesService.findAll({ all: true });
     return {
-      movies: movies.map((movie) => ({
-        ...movie,
-        showRibbon: movie.isPremiere,
-      })),
+      movies: items.map(movieDtoToMovieTemplate),
     };
   }
 }

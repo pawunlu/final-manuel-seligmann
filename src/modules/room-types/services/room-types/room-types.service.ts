@@ -6,7 +6,7 @@ import { roomtypeToRoomTypeDtoMapper } from '../../mappers';
 import {
   PaginationQueryDto,
   PaginationResponseDto,
-} from '../../../../common/dto';
+} from '../../../../common/dtos';
 
 @Injectable()
 export class RoomTypesService {
