@@ -3,7 +3,7 @@ import { MoviesRepository } from '../../repositories/movies.repository';
 import {
   PaginationQueryDto,
   PaginationResponseDto,
-} from '../../../../common/dto';
+} from '../../../../common/dtos';
 import { CreateMovieDto, MovieDto, UpdateMovieDto } from '../../dtos';
 import { MovieNotFoundException } from '../../errors';
 import { movieToMovieDtoMapper } from '../../mappers/movie-to-movieDTO.mapper';
