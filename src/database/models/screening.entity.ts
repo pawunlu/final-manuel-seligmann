@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Language, Movie, Reservation, Room, RoomType } from '.';
+import { Language, Movie, Reservation, Room, RoomType, ScreeningSeat } from '.';
 
 @Entity()
 export class Screening {
@@ -55,4 +55,9 @@ export class Screening {
 
   @OneToMany(() => Reservation, (reservation) => reservation.screening)
   reservations: Reservation[];
+
+  @OneToMany(() => ScreeningSeat, (screeningSeat) => screeningSeat.screening, {
+    cascade: true,
+  })
+  seats: ScreeningSeat[];
 }

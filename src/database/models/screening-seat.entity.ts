@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservation, ReservationScreeningSeat, Room } from '.';
+import { ReservationScreeningSeat, Screening } from '.';
 
 @Entity()
 export class ScreeningSeat {
@@ -23,6 +23,15 @@ export class ScreeningSeat {
 
   @Column()
   row: string;
+
+  @Column()
+  isVisible: boolean;
+
+  @Column()
+  screeningId: number;
+
+  @ManyToOne(() => Screening, (screening) => screening.seats)
+  screening: Screening;
 
   @OneToMany(
     () => ReservationScreeningSeat,

@@ -2,7 +2,7 @@ export * from './movie.entity';
 export * from './room-type.entity';
 export * from './room.entity';
 export * from './room-seat.entity';
-export * from './reservation-seat.entity';
+export * from './screening-seat.entity';
 export * from './user.entity';
 export * from './language.entity';
 export * from './screening.entity';

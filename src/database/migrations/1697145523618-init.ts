@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Init1696795737412 implements MigrationInterface {
-  name = 'Init1696795737412';
+export class Init1697145523618 implements MigrationInterface {
+  name = 'Init1697145523618';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -17,7 +17,7 @@ export class Init1696795737412 implements MigrationInterface {
       `CREATE TABLE "room_seat" ("id" BIGSERIAL NOT NULL, "coordinateX" smallint NOT NULL, "coordinateY" smallint NOT NULL, "column" character varying NOT NULL, "row" character varying NOT NULL, "roomId" bigint NOT NULL, CONSTRAINT "PK_9e10337479e1d5550e7d4b0a871" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "screening_seat" ("id" BIGSERIAL NOT NULL, "coordinateX" smallint NOT NULL, "coordinateY" smallint NOT NULL, "column" smallint NOT NULL, "row" character varying NOT NULL, CONSTRAINT "PK_ec5de30f1c38b4027c414bedbb6" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "screening_seat" ("id" BIGSERIAL NOT NULL, "coordinateX" smallint NOT NULL, "coordinateY" smallint NOT NULL, "column" smallint NOT NULL, "row" character varying NOT NULL, "isVisible" boolean NOT NULL, "screeningId" bigint NOT NULL, CONSTRAINT "PK_ec5de30f1c38b4027c414bedbb6" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "user" ("id" BIGSERIAL NOT NULL, "username" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "isActive" boolean NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`,
@@ -45,6 +45,9 @@ export class Init1696795737412 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "room_seat" ADD CONSTRAINT "FK_5663d234016afa300db03ea4430" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "screening_seat" ADD CONSTRAINT "FK_4aa29401f8806873063270d23b9" FOREIGN KEY ("screeningId") REFERENCES "screening"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "screening" ADD CONSTRAINT "FK_a84042bef1152d9dbdb1446c811" FOREIGN KEY ("movieId") REFERENCES "movie"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
@@ -96,6 +99,9 @@ export class Init1696795737412 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "screening" DROP CONSTRAINT "FK_a84042bef1152d9dbdb1446c811"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "screening_seat" DROP CONSTRAINT "FK_4aa29401f8806873063270d23b9"`,
     );
     await queryRunner.query(
       `ALTER TABLE "room_seat" DROP CONSTRAINT "FK_5663d234016afa300db03ea4430"`,
