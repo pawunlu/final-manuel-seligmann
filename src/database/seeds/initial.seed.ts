@@ -155,6 +155,7 @@ export default class InitialDatabaseSeed implements Seeder {
       take: 2,
       relations: {
         roomType: true,
+        seats: true,
       },
     });
 
@@ -170,6 +171,11 @@ export default class InitialDatabaseSeed implements Seeder {
           screening.languageId = language.id;
           screening.roomId = room.id;
           screening.roomTypeId = room.roomTypeId;
+          screening.seats = room.seats.map((seat) => ({
+            ...seat,
+            id: undefined,
+            isVisible: true,
+          })) as any;
           screeningsToInsert.push(screening);
         }
       }
