@@ -5,9 +5,12 @@ import {
   ReservationScreeningsController,
   ScreeningsController,
 } from './controllers';
+import { ScreeningSeatsService } from './services/screening-seats/screening-seats.service';
+import { ScreeningSeatsModule } from '../screening-seats/screening-seats.module';
 
 @Module({
-  providers: [ScreeningsRepository, ScreeningsService],
+  providers: [ScreeningsRepository, ScreeningsService, ScreeningSeatsService],
   controllers: [ScreeningsController, ReservationScreeningsController],
+  imports: [ScreeningSeatsModule],
 })
 export class ScreeningsModule {}

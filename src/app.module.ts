@@ -12,6 +12,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import envValidationSchema from './config/env.config';
 import { database } from './config/typeorm.config';
 import { RoomSeatsModule } from './modules/room-seats/room-seats.module';
+import { LanguagesModule } from './modules/languages/languages.module';
+import { ReservationSeatsModule } from './modules/reservation-seats/reservation-seats.module';
+import { ScreeningSeatsRepository } from './modules/screening-seats/repositories/screening-seats/screening-seats.repository';
+import { ScreeningSeatsModule } from './modules/screening-seats/screening-seats.module';
 
 @Module({
   imports: [
@@ -34,8 +38,11 @@ import { RoomSeatsModule } from './modules/room-seats/room-seats.module';
     MailsModule,
     ViewsModule,
     RoomSeatsModule,
+    LanguagesModule,
+    ReservationSeatsModule,
+    ScreeningSeatsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [ScreeningSeatsRepository],
 })
 export class AppModule {}

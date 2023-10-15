@@ -8,7 +8,7 @@ import {
   PaginationResponseDto,
 } from '../../../../common/dtos';
 import { Screening } from '../../../../database/models';
-import { Between, FindOptionsWhere } from 'typeorm';
+import { Between, FindOptionsRelations, FindOptionsWhere } from 'typeorm';
 import * as moment from 'moment-timezone';
 import { TZ_ARGENTINA_NAME } from '../../../../common/constants';
 import { setMomentToBeginning, setMomentToEnd } from '../../../../common/utils';
@@ -54,12 +54,14 @@ export class ScreeningsService {
   async findAllBy(
     filters: FindOptionsWhere<Screening> = {},
     paginated?: PaginationQueryDto,
+    relations?: FindOptionsRelations<Screening>,
   ): Promise<PaginationResponseDto<ScreeningDto>> {
     const [screenings, count] = await this.screeningsRepository.findAndCount({
       where: filters,
       order: {
         startsAt: 'ASC',
       },
+      ...(relations && { relations }),
       ...(!paginated.all && { skip: paginated.items * (paginated.page - 1) }),
       ...(!paginated && { take: paginated.items }),
     });
@@ -90,6 +92,7 @@ export class ScreeningsService {
         ...(filters.languageId && { languageId: filters.languageId }),
         ...(filters.roomTypeId && { roomTypeId: filters.roomTypeId }),
         ...(filters.date && {
+          // StartsAt is a date stored with UTC TZ
           startsAt: Between(
             dateBeginning.utc().toDate(),
             dateEnd.utc().toDate(),
@@ -99,6 +102,12 @@ export class ScreeningsService {
         cancelledAt: null,
       },
       paginated,
+      {
+        movie: true,
+        language: true,
+        room: true,
+        roomType: true,
+      },
     );
   }
 

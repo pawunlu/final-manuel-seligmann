@@ -1,4 +1,7 @@
+import { LanguageDto } from '../../languages/dtos';
 import { MovieDto } from '../../movies/dtos';
+import { RoomTypeDto } from '../../room-types/dtos';
+import { RoomDto } from '../../rooms/dtos';
 
 export class ScreeningDto {
   id: number;
@@ -19,15 +22,18 @@ export class ScreeningDto {
 
   languageId: string;
 
-  // language: Language;
+  language?: LanguageDto;
 
   roomId: number;
 
-  // room: Room;
+  room?: RoomDto;
 
   roomTypeId: string;
 
-  // roomType: RoomType;
+  roomType?: RoomTypeDto;
+
+  // TODO: Add logic for remaining seats attribute
+  // remaininSeats?: number
 
   // reservations: Reservation[];
 }

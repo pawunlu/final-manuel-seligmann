@@ -19,7 +19,7 @@ export class ScreeningSeat {
   coordinateY: number;
 
   @Column({ type: 'smallint' })
-  column: number;
+  column: string;
 
   @Column()
   row: string;
