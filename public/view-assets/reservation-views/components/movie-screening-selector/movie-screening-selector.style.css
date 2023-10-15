@@ -25,6 +25,15 @@
   color: white;
 }
 
+.screening-row > p {
+  flex-basis: 15%;
+  text-align: center;
+}
+
+.screening-row > p:first-child {
+  flex-basis: 30%;
+}
+
 .screening-row button {
   color: white;
   background-color: rgba(25, 48, 129, 1);

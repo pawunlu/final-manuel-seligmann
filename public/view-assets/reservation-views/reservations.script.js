@@ -4,34 +4,61 @@ import { SelectComponent } from '../common/components/select/select.component.js
 import { DatePickerComponent } from '../common/components/date-picker/date-picker.component.js';
 import { MovieScreeningSelectorComponent } from '../reservation-views/components/movie-screening-selector/movie-screening-selector.component.js';
 import { InputComponent } from '../common/components/input/Input.component.js';
+import { RoomSeatsSelectorComponent } from './components/room-seats-selector/room-seats-selector.component.js';
+
+/**
+ * represents a Movie
+ * @typedef {Object} Movie
+ * @property {string} id - Movie's ID
+ * @property {string} name - Movie's Name
+ * @property {Date} createdAt - The date the Movie was created
+ */
 
 /**
  * represents a Movie Language
  * @typedef {Object} Language
- * @property {number} id - Language ID
+ * @property {string} id - Language ID. e.g: "ingles_subtitulado"
  * @property {string} name - Language name. e.g: "Inglés Subtitulado"
- * @property {string} key - Language key. e.g: "ingles_subtitulado"
  * @property {Date} createdAt - The date the language was created
  */
 
 /**
  * represents a Room Type
  * @typedef {Object} RoomType
- * @property {number} id - Room Type ID
+ * @property {number} id - Room Type ID. e.g: "3d_extreme"
  * @property {string} name - Room Type. e.g: "3D Extreme"
- * @property {string} key - Room Type key. e.g: "3d_extreme"
+ * @property {string} price - Room Type. e.g: "1800.50"
+ * @property {boolean} isVisible - Shows if a room type is visible
  * @property {Date} createdAt - The date the Room Type was created
+ * @property {Date} updatedAt - The date the Room Type was last updated
  */
 
 /**
  * represents a Screening
  * @typedef {Object} Screening
  * @property {number} id - Screening ID
- * @property {Language} language - Screening's Language
- * @property {RoomType} roomType - Screening's Room Type
  * @property {Date} startsAt - The date & time the screening starts
+ * @property {isVisible} isVisible - Shows if a reservation is visible/enabled
+ * @property {Date} cancelledAt - The date & time the reservation has be cancelled
+ * @property {number} movieId - Screening's MovieId
+ * @property {Movie} movie - Screening's Movie
+ * @property {string} languageId - Screening's LanguageId
+ * @property {Language} language - Screening's Language
+ * @property {string} roomTypeId - Screening's RoomTypeId
+ * @property {RoomType} roomType - Screening's Room Type
  * @property {number} remainingSeats - the number of remaining seats the screening has
  * @property {Date} createdAt - The date the screening was created
+ * @property {Date} updatedAt - The date the screening was last updated
+ */
+
+/**
+ * represents a Movie Screenings Endpoint response
+ * @typedef {Object} MovieScreeningsResponse
+ * @property {Screening} items - List of screenings
+ * @property {number} page - Page number (for pagination purposes)
+ * @property {number} itemsPerPage - The amount of items per page (for pagination purposes)
+ * @property {number} totalItems - The amount of total items (for pagination purposes)
+ * @property {number} totalPages - The amount of total pages (for pagination purposes)
  */
 
 const RESERVATION_STEPS = [
@@ -49,10 +76,10 @@ const loadedReservationSteps = [];
 let currentDisplayingReservationStep = null;
 
 /** @type {string} */
-let urlLanguageKey = null;
+let urlLanguageId = null;
 
 /** @type {string} */
-let urlRoomTypeKey = null;
+let urlRoomTypeId = null;
 
 /** @type {Date} */
 let urlDate = null;
@@ -111,6 +138,9 @@ let datePickerComponent = null;
 /** @type {MovieScreeningSelectorComponent} */
 let movieScreeningSelectorComponent = null;
 
+/** @type {RoomSeatsSelectorComponent} */
+let roomSeatsSelectorComponent = null;
+
 /** @type {InputComponent} */
 let userNameInputComponent = null;
 
@@ -123,7 +153,7 @@ let userPhoneInputComponent = null;
 /** @type {ReservationNavigationButtons} */
 let navigationButtonsComponent = null;
 
-document.addEventListener('DOMContentLoaded', async (event) => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Cover all hideable html elements
   coverAllHideableHTMLElements();
 
@@ -143,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   await displayInitialReservationStep();
 
   // Load current reservation step
-  await loadCurrentReservationStep();
+  // await loadCurrentReservationStep();
 });
 
 function coverAllHideableHTMLElements() {
@@ -198,16 +228,16 @@ function loadEventListeners() {
 }
 
 function fetchAndLoadURLParams() {
-  const { movieId, languageKey, roomTypeKey, date } = getUrlParams();
+  const { movieId, languageId, roomTypeKey, date } = getUrlParams();
   console.log(`Reservation flow started with the following params:`, {
     movieId,
-    languageKey,
+    languageId,
     roomTypeKey,
     date,
   });
 
-  urlLanguageKey = languageKey;
-  urlRoomTypeKey = roomTypeKey;
+  urlLanguageId = languageId;
+  urlRoomTypeId = roomTypeKey;
   urlDate = date;
 
   selectedMovieId = movieId || null;
@@ -227,8 +257,8 @@ function selectMovie(movieId) {
 }
 
 function resetSelectedAttributes() {
-  urlLanguageKey = null;
-  urlRoomTypeKey = null;
+  urlLanguageId = null;
+  urlRoomTypeId = null;
   urlDate = null;
 
   selectedMovieId = null;
@@ -237,95 +267,70 @@ function resetSelectedAttributes() {
   selectedDate = null;
   selectedMovieScreening = null;
   selectedSeatsAmount = null;
-  selectedRoomSeats = null;
+  selectedRoomSeats = [];
 }
 
 async function fetchAndLoadMovieData(movieId) {
   movieScreeningSelectorComponent.loading = true;
+  await fetchAndLoadMovieScreening(
+    movieId,
+    selectedLanguage?.id,
+    selectedRoomType?.id,
+    selectedDate,
+  );
   fetchAndLoadMovieAvailableLanguages(movieId);
   fetchAndLoadMovieAvailableRoomTypes(movieId);
   loadDate();
-  await fetchAndLoadMovieScreening(
-    movieId,
-    selectedLanguage?.key,
-    selectedRoomType?.key,
-    selectedDate,
-  );
   movieScreeningSelectorComponent.loading = false;
 }
 
-function fetchAndLoadMovieAvailableLanguages(movieId) {
+function fetchAndLoadMovieAvailableLanguages() {
   console.log('Movie available languages fetched and loaded');
+
   const languages = [
     {
       id: null,
-      key: null,
       name: 'Todos',
     },
-    {
-      id: 1,
-      key: 'espanol',
-      name: 'Español',
-    },
-    {
-      id: 2,
-      key: 'ingles',
-      name: 'Ingles',
-    },
-    {
-      id: 3,
-      key: 'portugues',
-      name: 'Portugues',
-    },
   ];
+
+  movieScreenings.forEach((screening) => {
+    const { language: screeningLanguage } = screening;
+    const exists = languages.find(
+      (language) => language.id === screening.language.id,
+    );
+    if (!exists) languages.push(screeningLanguage);
+  });
 
   movieLanguages = languages;
 
   selectedLanguage = movieLanguages.find(
-    (language) => language.key === urlLanguageKey,
+    (language) => language.id === urlLanguageId,
   );
 }
 
-function fetchAndLoadMovieAvailableRoomTypes(movieId) {
+function fetchAndLoadMovieAvailableRoomTypes() {
   console.log('Room Types fetched and loaded');
 
   const roomTypes = [
     {
       id: null,
-      key: null,
       name: 'Todas',
     },
-    {
-      id: 1,
-      key: '2d',
-      name: '2D',
-    },
-    {
-      id: 2,
-      key: '3d',
-      name: '3D',
-    },
-    {
-      id: 3,
-      key: '3dx',
-      name: '3D Extreme',
-    },
-    {
-      id: 4,
-      key: '4d',
-      name: '4D',
-    },
-    {
-      id: 5,
-      key: 'monster',
-      name: 'Monter Screen',
-    },
   ];
+
+  movieScreenings.forEach((screening) => {
+    const { roomType: screeningRoomType } = screening;
+    const exists = roomTypes.find(
+      (roomType) => roomType.id === screeningRoomType.id,
+    );
+    if (!exists) roomTypes.push(screeningRoomType);
+  });
 
   movieRoomTypes = roomTypes;
 
   selectedRoomType = movieRoomTypes.find(
-    (roomType) => roomType.key === urlRoomTypeKey,
+    (roomType) => roomType.id === urlRoomTypeId,
   );
 }
 
@@ -335,95 +340,34 @@ function loadDate() {
 
 async function fetchAndLoadMovieScreening(
   movieId,
-  languageKey,
+  languageId,
   roomTypeKey,
   date,
 ) {
   console.log(
     'Movie screenings fetched and loaded with params:',
     movieId,
-    languageKey,
+    languageId,
     roomTypeKey,
     date?.toLocaleDateString(),
   );
-  // TODO: Replace this function's code by calling the Server's API
-  const mockedScreenings = [
-    {
-      id: 1,
-      language: {
-        id: 1,
-        name: 'Español',
-        key: 'espanol',
-        createdAt: new Date(),
-      },
-      roomType: {
-        id: 1,
-        name: '2D',
-        key: '2d',
-      },
-      startsAt: new Date(2023, 9, 10, 11, 30),
-      remainingSeats: 4,
-      createdAt: new Date(),
-    },
-    {
-      id: 2,
-      language: {
-        id: 1,
-        name: 'Español',
-        key: 'espanol',
-        createdAt: new Date(),
-      },
-      roomType: {
-        id: 1,
-        name: '2D',
-        key: '2d',
-      },
-      startsAt: new Date(2023, 9, 10, 12, 30),
-      remainingSeats: 4,
-      createdAt: new Date(),
-    },
-    {
-      id: 3,
-      language: {
-        id: 1,
-        name: 'Español',
-        key: 'espanol',
-        createdAt: new Date(),
-      },
-      roomType: {
-        id: 1,
-        name: '2D',
-        key: '2d',
-      },
-      startsAt: new Date(2023, 9, 11, 12, 30),
-      remainingSeats: 4,
-      createdAt: new Date(),
-    },
-    {
-      id: 4,
-      language: {
-        id: 1,
-        name: 'Español',
-        key: 'espanol',
-        createdAt: new Date(),
-      },
-      roomType: {
-        id: 1,
-        name: '2D',
-        key: '2d',
-      },
-      startsAt: new Date(2023, 9, 12, 12, 30),
-      remainingSeats: 4,
-      createdAt: new Date(),
-    },
-  ];
 
-  await setTimeoutAsync();
+  const response = await fetchMovieScreenings(
+    movieId,
+    languageId,
+    roomTypeKey,
+    date,
+  );
 
-  movieScreenings = mockedScreenings.filter((screening) => {
+  const screenings = response.items.map((screening) => ({
+    ...screening,
+    startsAt: new Date(screening.startsAt),
+  }));
+
+  movieScreenings = screenings.filter((screening) => {
     return (
-      (languageKey ? screening.language.key === languageKey : true) &&
-      (roomTypeKey ? screening.roomType.key === roomTypeKey : true) &&
+      (languageId ? screening.language.id === languageId : true) &&
+      (roomTypeKey ? screening.roomType.id === roomTypeKey : true) &&
       (date
         ? screening.startsAt.toLocaleDateString() === date.toLocaleDateString()
         : true)
@@ -431,11 +375,33 @@ async function fetchAndLoadMovieScreening(
   });
 }
 
-function setTimeoutAsync() {
-  console.log('se llamo el timeout');
-  return new Promise((res, rej) => {
-    setTimeout(res, 1000);
+/**
+ *
+ *
+ * @param {number} movieId
+ * @param {string} languageId
+ * @param {string} roomTypeKey
+ * @param {Date} date
+ * @returns {Promise<MovieScreeningsResponse>}
+ */
+async function fetchMovieScreenings(movieId, languageId, roomTypeKey, date) {
+  if (!movieId)
+    throw new Error('MovieID is required to fetch Movie Screenings');
+
+  const searchParams = new URLSearchParams();
+  if (languageId) searchParams.append('languageId', languageId);
+  if (roomTypeKey) searchParams.append('roomTypeId', roomTypeKey);
+  if (date) searchParams.append('date', date.toISOString().split('T')[0]);
+
+  const url = `/api/reservation/screenings/movie/${movieId}?${searchParams.toString()}`;
+  const response = await fetch(url, {
+    method: 'GET',
   });
+
+  if (!response.ok)
+    throw new Error('Something went wrong fetching Screenings', response);
+
+  return response.json();
 }
 
 function resetMovieLanguagesSelectInput() {
@@ -495,6 +461,8 @@ function loadAndRenderComponents() {
   loadAndRenderRoomTypesSelectComponent();
   loadAndRenderDatePickerComponent();
   loadAndRenderMovieScreeningSelectorComponent();
+  // Room Seats Selection components
+  loadAndRenderRoomSeatsSelectorComponent();
   // User data form Components
   loadAndRenderUserNameInput();
   loadAndRenderUserEmailInput();
@@ -522,8 +490,8 @@ function loadAndRenderLanguageSelectComponent() {
     movieScreeningSelectorComponent.loading = true;
     await fetchAndLoadMovieScreening(
       selectedMovieId,
-      selectedLanguage?.key,
-      selectedRoomType?.key,
+      selectedLanguage?.id,
+      selectedRoomType?.id,
       selectedDate,
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
@@ -548,8 +516,8 @@ function loadAndRenderRoomTypesSelectComponent() {
     selectedRoomType = roomType;
     await fetchAndLoadMovieScreening(
       selectedMovieId,
-      selectedLanguage?.key,
-      selectedRoomType?.key,
+      selectedLanguage?.id,
+      selectedRoomType?.id,
       selectedDate,
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
@@ -566,8 +534,8 @@ function loadAndRenderDatePickerComponent() {
     selectedDate = date;
     await fetchAndLoadMovieScreening(
       selectedMovieId,
-      selectedLanguage?.key,
-      selectedRoomType?.key,
+      selectedLanguage?.id,
+      selectedRoomType?.id,
       selectedDate,
     );
     movieScreeningSelectorComponent.movieScreenings = movieScreenings;
@@ -587,6 +555,17 @@ function loadAndRenderMovieScreeningSelectorComponent() {
     enableOrDisableNavigationButtons();
   };
   movieScreeningSelectorComponent.render();
+}
+
+function loadAndRenderRoomSeatsSelectorComponent() {
+  roomSeatsSelectorComponent = new RoomSeatsSelectorComponent(
+    'room-seats-selection',
+  );
+  roomSeatsSelectorComponent.onSeatClick = (event) => {
+    console.log('seat clicked', event);
+    selectedRoomSeats = event.selectedSeats;
+  };
+  roomSeatsSelectorComponent.render();
 }
 
 function loadAndRenderUserNameInput() {
@@ -636,11 +615,6 @@ async function loadCurrentReservationStep() {
 
   stepInfoComponent.currentStep = currentDisplayingReservationStep;
 
-  // Display current step hidden elements
-  const reservationStepElement = document.getElementById(
-    `${currentDisplayingReservationStep}-step`,
-  );
-
   enableOrDisableNavigationButtons();
 }
 
@@ -657,9 +631,6 @@ function addEventListenerToReservationStepsSlider() {
 
   slideElement.addEventListener('transitionstart', (event) => {
     if (event.target === slideElement) {
-      console.log(
-        `Comenzó a correr. Current reservation step: "${currentDisplayingReservationStep}"`,
-      );
       const reservationStepElement = document.getElementById(
         `${currentDisplayingReservationStep}-step`,
       );
@@ -676,9 +647,6 @@ function addEventListenerToReservationStepsSlider() {
 
   slideElement.addEventListener('transitionend', (event) => {
     if (event.target === slideElement) {
-      console.log(
-        `Termino de correr. Current reservation step: "${currentDisplayingReservationStep}"`,
-      );
       const reservationStepElement = document.getElementById(
         `${currentDisplayingReservationStep}-step`,
       );
@@ -732,7 +700,7 @@ function getUrlParams() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const movieId = urlParams.get('movieId');
-  const languageKey = urlParams.get('languageKey');
+  const languageId = urlParams.get('languageId');
   const roomTypeKey = urlParams.get('roomTypeKey');
   const dateString = urlParams.get('date'); // Format YYYY-MM-DD
   let finalDate = null;
@@ -746,7 +714,7 @@ function getUrlParams() {
 
   return {
     movieId,
-    languageKey,
+    languageId,
     roomTypeKey,
     date: finalDate,
   };
@@ -775,8 +743,6 @@ function unselectMovieCard() {
 function enableOrDisableNavigationButtons() {
   const isPreviousButtonBeActive = shouldPreviousButtonBeActive();
   const isNextButtonBeActive = shouldNextButtonBeActive();
-  console.log('isPreviousButtonBeActive', isPreviousButtonBeActive);
-  console.log('isNextButtonBeActive', isNextButtonBeActive);
 
   isPreviousButtonBeActive
     ? navigationButtonsComponent.enablePreviousButton()
@@ -797,7 +763,6 @@ function shouldNextButtonBeActive() {
   const checkValidationStepFunction = getNextButtonValidationFunctionForStep(
     currentDisplayingReservationStep,
   );
-  console.log(checkValidationStepFunction);
 
   return checkValidationStepFunction();
 }
@@ -876,8 +841,40 @@ async function onMovieScreeningSelectionStepLoads() {
   loadAndRenderMovieScreeningIntoComponent();
 }
 
-function onRoomSeatsSelectionStepLoads() {
+async function onRoomSeatsSelectionStepLoads() {
   console.log('room-seats-selection step loaded');
+
+  const selectedScreeningOutput = document.getElementById(
+    'selected-screening-data',
+  );
+  selectedScreeningOutput.innerHTML = `
+    ${selectedMovieScreening.movie.name} -
+    ${selectedMovieScreening.language.name} -
+    ${selectedMovieScreening.roomType.name} -
+    ${selectedMovieScreening.startsAt.toLocaleString()}
+  `;
+
+  const seats = await fetchScreeningSeats(selectedMovieScreening.id);
+  roomSeatsSelectorComponent.seats = seats;
+  roomSeatsSelectorComponent.selectedSeats = selectedRoomSeats;
+}
+
+async function fetchScreeningSeats(screeningId) {
+  if (!screeningId)
+    throw new Error('ScreeningID is required to fetch the screening seats');
+
+  const url = `/api/reservation/screenings/${screeningId}/seats`;
+  const response = await fetch(url, {
+    method: 'GET',
+  });
+
+  if (!response.ok)
+    throw new Error(
+      'Something went wrong fetching the screening seats',
+      response,
+    );
+
+  return response.json();
 }
 
 function onUserDataFromStepLoads() {
@@ -899,14 +896,14 @@ function onReservationSummaryStepLoads() {
   const seatsOutput = document.getElementById('room-seats-summary');
   const totalOutput = document.getElementById('total-summary');
 
-  clientNameOutput.innerHTML = 'Nombre de prueba (MOCK)';
-  clientEmailOutput.innerHTML = 'Email de prueba (MOCK)';
-  clientPhoneOutput.innerHTML = 'Telefono de prueba (MOCK)';
-  movieNameOutput.innerHTML = 'Nombre de prueba (MOCK)';
+  clientNameOutput.innerHTML = userNameInputComponent.text;
+  clientEmailOutput.innerHTML = userEmailInputComponent.text;
+  clientPhoneOutput.innerHTML = userPhoneInputComponent.text;
+  movieNameOutput.innerHTML = selectedMovieScreening.movie.name;
   roomTypeNameOutput.innerHTML = selectedMovieScreening.roomType.name;
   startsAtOutput.innerHTML = selectedMovieScreening.startsAt.toLocaleString();
   seatsOutput.innerHTML = getSelectedSeatsOutput();
-  totalOutput.innerHTML = '$800 (MOCK)';
+  totalOutput.innerHTML = getReservationTotalPrice();
 }
 
 function updateStepSlider(currentSlide) {
@@ -915,5 +912,15 @@ function updateStepSlider(currentSlide) {
 }
 
 function getSelectedSeatsOutput() {
+  let str = '';
+  for (const seat of selectedRoomSeats) {
+    str += `Asiento ${seat.column}-${seat.row} (Sala ${selectedMovieScreening.roomType.name}) - $${selectedMovieScreening.roomType.price}.<br>`;
+  }
+  return str;
   return `Asiento 3A (MOCK)`;
+}
+
+function getReservationTotalPrice() {
+  const unitPrice = Number(selectedMovieScreening.roomType.price);
+  return `$${unitPrice * selectedRoomSeats.length}`;
 }

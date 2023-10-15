@@ -46,7 +46,6 @@ export class ReservationStepInfo {
    */
   set currentStep(currentStep) {
     this.#currentStep = RESERVATION_STEPS[currentStep];
-    console.log('New current step', currentStep);
     this.#removeOrAddClassesToTheSteps();
   }
 

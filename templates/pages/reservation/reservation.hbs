@@ -70,8 +70,8 @@
 
         <section id="room-seats-selection-step" class="reservation-step room-seats-selection-step">
           <h2>Selecciona los asientos</h2>
-          <section id="room-seats-selection" class="room-seats-selector-container" hide-when-not-displaying="true">
-            <h3>Nombre de la pelicula - Idioma - Formato - Fecha:Hora</h3>
+          <section class="room-seats-selector-container" hide-when-not-displaying="true">
+            <h3 id="selected-screening-data">Nombre de la pelicula - Idioma - Formato - Fecha:Hora</h3>
             <section class="seats-info">
               <section class="available-seats-info">
                 <button tabindex="-1"></button>
@@ -87,20 +87,7 @@
                 <p>Asientos ocupados</p>
               </section>
             </section>
-            <section class="room-container">
-              <section class="room-screen"></section>
-              <section class="room-seats">
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-              </section>
-            </section>
+            <section id="room-seats-selection" class="room-container"></section>
             <p></p>
           </section>
         </section>

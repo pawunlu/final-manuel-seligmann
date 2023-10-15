@@ -59,7 +59,33 @@
   background-color: rgba(59, 90, 202, 1);
   padding: 25px;
   border-radius: 25px;
-  margin-top: 25px;
+}
+
+.room-seats .empty-room-space {
+  background-color: transparent;
+  border: none;
+}
+
+.room-seats .room-seat {
+  cursor: pointer;
+  border: none;
+  margin: 2px;
+}
+
+.room-seats .room-seat:hover {
+  background-color: grey;
+}
+
+.room-seats .not-occupied-seat {
+  background: rgba(217, 217, 217, 1);
+}
+
+.room-seats .occupied-seat {
+  background: rgba(188, 49, 49, 1);
+}
+
+.room-seats .selected-seat {
+  background: rgba(0, 122, 255, 1);
 }
 
 
