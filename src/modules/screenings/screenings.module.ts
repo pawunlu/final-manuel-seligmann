@@ -9,8 +9,9 @@ import { ScreeningSeatsService } from './services/screening-seats/screening-seat
 import { ScreeningSeatsModule } from '../screening-seats/screening-seats.module';
 
 @Module({
+  imports: [ScreeningSeatsModule],
   providers: [ScreeningsRepository, ScreeningsService, ScreeningSeatsService],
   controllers: [ScreeningsController, ReservationScreeningsController],
-  imports: [ScreeningSeatsModule],
+  exports: [ScreeningsRepository, ScreeningsService, ScreeningSeatsService],
 })
 export class ScreeningsModule {}

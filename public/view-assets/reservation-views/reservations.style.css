@@ -27,6 +27,22 @@ h1, #step-info {
   box-sizing: border-box;
 }
 
+.reservation-step.movie-selection-step {
+
+}
+
+.reservation-step.movie-screening-selection-step {
+  min-height: 500px;
+}
+
+.reservation-step.room-seats-selection-step {
+  
+}
+
+.reservation-step.user-data-form-step {
+
+}
+
 .movie-displayer {
   padding: 10px;
 }
@@ -68,28 +84,31 @@ h1, #step-info {
   display: none;
 }
 
+.reservation-step.reservation-summary-step {
+  
+}
 
-.reservation-summary-step > section {
+.reservation-step.reservation-summary-step > section {
   display: flex;
   justify-content: space-between;
 }
 
-.reservation-summary-step h3 {
+.reservation-step.reservation-summary-step h3 {
   margin-bottom: 10px;
   color: white;
 }
 
-.reservation-summary-step label {
+.reservation-step.reservation-summary-step label {
   color: rgba(255, 197, 110, 1);
 }
 
-.reservation-summary-step output {
+.reservation-step.reservation-summary-step output {
   display: block;
   margin: 10px 10px 15px 15px;
   color: white;
 }
 
-.reservation-summary-step .reservation-details-summary {
+.reservation-step.reservation-summary-step .reservation-details-summary {
   background-color: rgb(25, 48, 129);
   padding: 20px;
   border-radius: 30px;

@@ -61,6 +61,13 @@ import { RoomSeatsSelectorComponent } from './components/room-seats-selector/roo
  * @property {number} totalPages - The amount of total pages (for pagination purposes)
  */
 
+/**
+ * represents the Movie Extra Data endpoint response
+ * @typedef {Object} MovieExtraData
+ * @property {RoomType} availableRoomTypes
+ * @property {Language} availableLanguages
+ */
+
 const RESERVATION_STEPS = [
   'movie-selection',
   'movie-screening-selection',
@@ -228,16 +235,16 @@ function loadEventListeners() {
 }
 
 function fetchAndLoadURLParams() {
-  const { movieId, languageId, roomTypeKey, date } = getUrlParams();
+  const { movieId, languageId, roomTypeId, date } = getUrlParams();
   console.log(`Reservation flow started with the following params:`, {
     movieId,
     languageId,
-    roomTypeKey,
+    roomTypeId,
     date,
   });
 
   urlLanguageId = languageId;
-  urlRoomTypeId = roomTypeKey;
+  urlRoomTypeId = roomTypeId;
   urlDate = date;
 
   selectedMovieId = movieId || null;
@@ -272,20 +279,21 @@ function resetSelectedAttributes() {
 
 async function fetchAndLoadMovieData(movieId) {
   movieScreeningSelectorComponent.loading = true;
+  loadDate();
+  await fetchAndLoadMovieExtraData(movieId);
   await fetchAndLoadMovieScreening(
     movieId,
     selectedLanguage?.id,
     selectedRoomType?.id,
     selectedDate,
   );
-  fetchAndLoadMovieAvailableLanguages(movieId);
-  fetchAndLoadMovieAvailableRoomTypes(movieId);
-  loadDate();
   movieScreeningSelectorComponent.loading = false;
 }
 
-function fetchAndLoadMovieAvailableLanguages() {
-  console.log('Movie available languages fetched and loaded');
+async function fetchAndLoadMovieExtraData(movieId) {
+  const { availableLanguages, availableRoomTypes } = await fetchMovieExtraData(
+    movieId,
+  );
 
   const languages = [
     {
@@ -294,44 +302,47 @@ function fetchAndLoadMovieAvailableLanguages() {
     },
   ];
 
-  movieScreenings.forEach((screening) => {
-    const { language: screeningLanguage } = screening;
-    const exists = languages.find(
-      (language) => language.id === screening.language.id,
-    );
-    if (!exists) languages.push(screeningLanguage);
-  });
-
-  movieLanguages = languages;
-
-  selectedLanguage = movieLanguages.find(
-    (language) => language.id === urlLanguageId,
-  );
-}
-
-function fetchAndLoadMovieAvailableRoomTypes() {
-  console.log('Room Types fetched and loaded');
-
   const roomTypes = [
     {
       id: null,
-      name: 'Todas',
+      name: 'Todos',
     },
   ];
 
-  movieScreenings.forEach((screening) => {
-    const { roomType: screeningRoomType } = screening;
-    const exists = roomTypes.find(
-      (roomType) => roomType.id === screeningRoomType.id,
+  movieLanguages = [...languages, ...availableLanguages];
+  if (urlLanguageId) {
+    selectedLanguage = movieLanguages.find(
+      (language) => language.id === urlLanguageId,
     );
-    if (!exists) roomTypes.push(screeningRoomType);
+  }
+
+  movieRoomTypes = [...roomTypes, ...availableRoomTypes];
+  if (urlRoomTypeId) {
+    selectedRoomType = movieRoomTypes.find(
+      (roomType) => roomType.id === urlRoomTypeId,
+    );
+  }
+}
+
+/**
+ *
+ *
+ * @param {number} movieId
+ * @returns {Promise<MovieExtraData>} movie extra data
+ */
+async function fetchMovieExtraData(movieId) {
+  if (!movieId)
+    throw new Error('MovieID is required to fetch Movie Extra Data');
+
+  const url = `/api/movies/${movieId}/extra-data`;
+  const response = await fetch(url, {
+    method: 'GET',
   });
 
-  movieRoomTypes = roomTypes;
+  if (!response.ok)
+    throw new Error('Something went wrong fetching Movie Extra Data', response);
 
-  selectedRoomType = movieRoomTypes.find(
-    (roomType) => roomType.id === urlRoomTypeId,
-  );
+  return response.json();
 }
 
 function loadDate() {
@@ -341,21 +352,13 @@ function loadDate() {
 async function fetchAndLoadMovieScreening(
   movieId,
   languageId,
-  roomTypeKey,
+  roomTypeId,
   date,
 ) {
-  console.log(
-    'Movie screenings fetched and loaded with params:',
-    movieId,
-    languageId,
-    roomTypeKey,
-    date?.toLocaleDateString(),
-  );
-
   const response = await fetchMovieScreenings(
     movieId,
     languageId,
-    roomTypeKey,
+    roomTypeId,
     date,
   );
 
@@ -367,7 +370,7 @@ async function fetchAndLoadMovieScreening(
   movieScreenings = screenings.filter((screening) => {
     return (
       (languageId ? screening.language.id === languageId : true) &&
-      (roomTypeKey ? screening.roomType.id === roomTypeKey : true) &&
+      (roomTypeId ? screening.roomType.id === roomTypeId : true) &&
       (date
         ? screening.startsAt.toLocaleDateString() === date.toLocaleDateString()
         : true)
@@ -380,17 +383,17 @@ async function fetchAndLoadMovieScreening(
  *
  * @param {number} movieId
  * @param {string} languageId
- * @param {string} roomTypeKey
+ * @param {string} roomTypeId
  * @param {Date} date
  * @returns {Promise<MovieScreeningsResponse>}
  */
-async function fetchMovieScreenings(movieId, languageId, roomTypeKey, date) {
+async function fetchMovieScreenings(movieId, languageId, roomTypeId, date) {
   if (!movieId)
     throw new Error('MovieID is required to fetch Movie Screenings');
 
   const searchParams = new URLSearchParams();
   if (languageId) searchParams.append('languageId', languageId);
-  if (roomTypeKey) searchParams.append('roomTypeId', roomTypeKey);
+  if (roomTypeId) searchParams.append('roomTypeId', roomTypeId);
   if (date) searchParams.append('date', date.toISOString().split('T')[0]);
 
   const url = `/api/reservation/screenings/movie/${movieId}?${searchParams.toString()}`;
@@ -412,9 +415,7 @@ function resetMovieLanguagesSelectInput() {
 function loadMovieLanguagesIntoSelectInput() {
   languageSelectComponent.options = movieLanguages;
 
-  const defaultOption = movieLanguages.find(
-    (language) => language.key === null,
-  );
+  const defaultOption = movieLanguages.find((language) => language.id === null);
 
   languageSelectComponent.selectedOption = selectedLanguage || defaultOption;
 }
@@ -427,9 +428,7 @@ function resetMovieRoomTypesSelectInput() {
 function loadMovieRoomTypesIntoSelectInput() {
   roomTypeSelectComponent.options = movieRoomTypes;
 
-  const defaultOption = movieRoomTypes.find(
-    (roomType) => roomType.key === null,
-  );
+  const defaultOption = movieRoomTypes.find((roomType) => roomType.id === null);
 
   roomTypeSelectComponent.selectedOption = selectedRoomType || defaultOption;
 }
@@ -562,7 +561,6 @@ function loadAndRenderRoomSeatsSelectorComponent() {
     'room-seats-selection',
   );
   roomSeatsSelectorComponent.onSeatClick = (event) => {
-    console.log('seat clicked', event);
     selectedRoomSeats = event.selectedSeats;
   };
   roomSeatsSelectorComponent.render();
@@ -701,7 +699,7 @@ function getUrlParams() {
   const urlParams = new URLSearchParams(queryString);
   const movieId = urlParams.get('movieId');
   const languageId = urlParams.get('languageId');
-  const roomTypeKey = urlParams.get('roomTypeKey');
+  const roomTypeId = urlParams.get('roomTypeId');
   const dateString = urlParams.get('date'); // Format YYYY-MM-DD
   let finalDate = null;
   if (dateString) {
@@ -715,7 +713,7 @@ function getUrlParams() {
   return {
     movieId,
     languageId,
-    roomTypeKey,
+    roomTypeId,
     date: finalDate,
   };
 }

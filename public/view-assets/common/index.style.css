@@ -1,9 +1,10 @@
 body {
   font-family: 'Inter';
   font-size: 22px;
+  background-color: #3B5ACA;
+  height: 100vh;
 }
 
 body > main {
-  background-color: #3B5ACA;
   position: relative;
 }
