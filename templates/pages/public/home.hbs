@@ -1,3 +1,19 @@
-<h1>
-  Esto es el incio
-</h1>
+{{> fragments/public/base}}
+
+  {{#> head-block}}
+      <title>PAW Cine</title>
+
+      {{!-- Carousel component Script & Style --}}
+      <script src="/view-assets/common/components/carousel/carousel.component.js" type="module"></script>
+      <link href="/view-assets/common/components/carousel/carousel.style.css" rel="stylesheet" type="text/css">
+      {{!-- Home's Script & Style --}}
+      <script src="/view-assets/public-views/home/home.script.js" type="module"></script>
+      <link href="/view-assets/public-views/home/home.style.css" rel="stylesheet" type="text/css">
+  {{/head-block}}
+
+
+  {{#*inline "main-block"}}
+    <section id="movies-carousel"></section>
+  {{/inline}}
+
+{{fragments/public/base}}

@@ -16,6 +16,11 @@ import { Movie } from '../../../../database/models';
 import { ScreeningsService } from '../../../screenings/services';
 import { LanguageDto } from '../../../languages/dtos';
 import { RoomTypeDto } from '../../../room-types/dtos';
+import {
+  FindOptionsOrder,
+  FindOptionsRelations,
+  FindOptionsWhere,
+} from 'typeorm';
 
 @Injectable()
 export class MoviesService {
@@ -43,7 +48,30 @@ export class MoviesService {
       order: {
         billboardPositionIndex: 'ASC',
       },
-      ...(!paginated.all && { skip: paginated.items * paginated.page }),
+      ...(!paginated.all && { skip: paginated.items * (paginated.page - 1) }),
+      ...(!paginated.all && { take: paginated.items }),
+    });
+
+    return {
+      items: movies.map((movie) => movieToMovieDtoMapper(movie)),
+      page: paginated.page,
+      itemsPerPage: paginated.items || count,
+      totalItems: count,
+      totalPages: Math.ceil(count / paginated.items || count),
+    };
+  }
+
+  async findAllBy(
+    filters: FindOptionsWhere<Movie> = {},
+    orderBy?: FindOptionsOrder<Movie>,
+    paginated?: PaginationQueryDto,
+    relations?: FindOptionsRelations<Movie>,
+  ): Promise<PaginationResponseDto<MovieDto>> {
+    const [movies, count] = await this.moviesRepository.findAndCount({
+      where: filters,
+      ...(orderBy && { order: orderBy }),
+      ...(relations && { relations }),
+      ...(!paginated.all && { skip: paginated.items * (paginated.page - 1) }),
       ...(!paginated && { take: paginated.items }),
     });
 
@@ -106,5 +134,20 @@ export class MoviesService {
       availableLanguages,
       availableRoomTypes,
     };
+  }
+
+  async findCarouselMovies(): Promise<MovieDto[]> {
+    const { items } = await this.findAllBy(
+      {
+        displayInCarousel: true,
+      },
+      {
+        carouselPositionIndex: 'ASC',
+      },
+      {
+        all: true,
+      },
+    );
+    return items;
   }
 }

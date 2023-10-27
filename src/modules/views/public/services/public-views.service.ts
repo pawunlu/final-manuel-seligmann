@@ -10,6 +10,14 @@ export class PublicViewsService {
     private roomTypesService: RoomTypesService,
   ) {}
 
+  async handleHomeView() {
+    const { items } = await this.moviesService.findAll({ page: 1, items: 6 });
+
+    return {
+      movies: items.map(movieDtoToMovieTemplate),
+    };
+  }
+
   async handleMovieBillboardViewData() {
     const { items } = await this.moviesService.findAll({ all: true });
 

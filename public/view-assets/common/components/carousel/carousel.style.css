@@ -1,0 +1,137 @@
+.container-component {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+  height: 400px;
+}
+
+.slide {
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+}
+
+.slide > .image {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: clamp(700px, 100%, 1300px) auto;
+  background-position: center;
+}
+
+.slide > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide > .slide-description {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  color: white;
+  background: linear-gradient(0deg, rgb(59, 90, 202) 0%, rgba(28,28,28,0.6) 22%, rgba(28,28,28,0.4) 100%);
+}
+
+.slide > .slide-description > .slide-description-content {
+  height: 100%;
+  width: var(--content-width);
+  max-width: var(--max-content-width);
+  min-width: var(--min-content-width);
+  margin: 0 auto;
+  position: relative;
+  /* border: solid 1px red; */
+}
+
+.slide .slide-description-content > h2 {
+  position: absolute;
+  top: 250px;
+}
+
+.slide .slide-description-content > .clasification, .slide .slide-description-content > .duration {
+  position: absolute;
+  top: calc(250px + 50px);
+}
+
+.slide .slide-description-content > .clasification {
+  left: 0;
+}
+
+.slide .slide-description-content > .duration {
+  left: 200px;
+}
+
+.slide > .slide-description p:nth-child(1) {
+  color: rgba(255, 197, 110, 1);
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.slide > .slide-description p:nth-child(2) {
+  color: white;
+  display: inline-block;
+}
+
+.slide .carousel-reservation-button {
+  background-color: rgba(25, 48, 129, 1);
+  color: white;
+  width: 160px;
+  height: 50px;
+  position: absolute;
+  right: 0;
+  top: 260px;
+  border-radius: 30px;
+  border: none;
+}
+
+
+.carousel-dots-container {
+  position: absolute;
+  top: 86%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.carousel-dots-container > button {
+  margin: 0 10px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: var(--blue3);
+  border: none;
+}
+
+.carousel-dots-container > button:hover {
+  cursor: pointer;
+  background-color: var(--white1);
+}
+
+.carousel-dots-container > button.active-dot {
+  background-color: var(--yellow1);
+}
+
+.container-component > .carousel-previous-button, .container-component > .carousel-next-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+}
+
+.container-component > .carousel-previous-button {
+  left: 0;
+}
+
+.container-component > .carousel-next-button {
+  right: 0;
+}

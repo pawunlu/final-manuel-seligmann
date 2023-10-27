@@ -8,7 +8,7 @@ export class PublicViewsController {
   @Get()
   @Render('public/home')
   handleHomeView() {
-    // Inicio
+    return this.publicViewsService.handleHomeView();
   }
 
   @Get('cartelera')
@@ -17,6 +17,8 @@ export class PublicViewsController {
     return this.publicViewsService.handleMovieBillboardViewData();
   }
 
+  @Get('pelicula/:movieId')
+  @Render('public/movie-info')
   handleMovieInformationView() {
     // Mas informacion de una pelicula
   }
@@ -27,6 +29,8 @@ export class PublicViewsController {
     return this.publicViewsService.handleRoomTypesViewData();
   }
 
+  @Get('sobre-nosotros')
+  @Render('public/about-us')
   handleAboutUsView() {
     // Sobre nosotros
   }
