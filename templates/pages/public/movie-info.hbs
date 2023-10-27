@@ -1,3 +1,14 @@
-<h1>
-  Esto es una Pelicula
-</h1>
+{{> fragments/public/base}}
+
+  {{#> head-block}}
+      <title>Nombre de pelicula | PAW Cine</title>
+  {{/head-block}}
+
+
+  {{#*inline "main-block"}}
+    <h1>
+      Esto es una Pelicula
+    </h1>
+  {{/inline}}
+
+{{fragments/public/base}}

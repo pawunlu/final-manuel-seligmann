@@ -1,10 +1,44 @@
+:root {
+  /* COLORS */
+  --blue1: rgba(59, 90, 202, 1);
+  --blue2: rgba(25, 48, 129, 1);
+  --blue3: rgba(20, 26, 50, 1);
+  --yellow1: rgba(255, 197, 110, 1);
+  --light-blue1: rgba(0, 122, 255, 1);
+  --white1: rgba(255, 255, 255, 1);
+
+  --content-width: 60%;
+  --min-content-width: 600px;
+  --max-content-width: 1000px;
+}
+
 body {
-  font-family: 'Inter';
+  font-family: 'Inter' !important;
   font-size: 22px;
-  background-color: #3B5ACA;
+  background-color: var(--blue1);
   height: 100vh;
 }
 
 body > main {
   position: relative;
+}
+
+h1 {
+  font-size: 34px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+h5, h6 {
+  font-size: 16px;
 }
