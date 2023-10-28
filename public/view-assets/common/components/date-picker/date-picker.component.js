@@ -65,6 +65,26 @@ export class DatePickerComponent {
     this.#onSelectCallbackFn = callbackFn;
   }
 
+  #backgroundColor = null;
+  get backgroundColor() {
+    return this.#backgroundColor;
+  }
+
+  set backgroundColor(backgroundColor) {
+    this.#backgroundColor = backgroundColor;
+    this.#inputComponent.backgroundColor = backgroundColor;
+  }
+
+  #placeholderColor = null;
+  get placeholderColor() {
+    return this.#placeholderColor;
+  }
+
+  set placeholderColor(placeholderColor) {
+    this.#placeholderColor = placeholderColor;
+    this.#inputComponent.placeholderColor = placeholderColor;
+  }
+
   constructor(parentContainerId) {
     this.#parentContainerHTMLComponent =
       document.getElementById(parentContainerId);
@@ -96,8 +116,10 @@ export class DatePickerComponent {
     const inputComponent = new InputComponent(
       `${this.#parentContainerHTMLComponent.id}-date-picker-container`,
     );
-    inputComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
-    inputComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+    inputComponent.backgroundColor =
+      this.#backgroundColor ?? 'rgba(25, 48, 129, 0.25)';
+    inputComponent.placeholderColor =
+      this.#placeholderColor ?? 'rgba(255, 197, 110, 1)';
     inputComponent.placeholder = 'Fecha';
     inputComponent.showResetButton = false;
     inputComponent.HTMLComponents.inputHTMLComponent.readOnly = true;

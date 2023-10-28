@@ -113,8 +113,8 @@ export class MoviesService {
       },
     );
 
-    const availableLanguages: LanguageDto[] = [];
-    const availableRoomTypes: RoomTypeDto[] = [];
+    let availableLanguages: LanguageDto[] = [];
+    let availableRoomTypes: RoomTypeDto[] = [];
 
     movieScreenings.items.forEach((screening) => {
       const exists = availableLanguages.find(
@@ -128,6 +128,26 @@ export class MoviesService {
         (roomType) => roomType.id === screening.roomType.id,
       );
       if (!exists) availableRoomTypes.push(screening.roomType);
+    });
+
+    availableLanguages = availableLanguages.sort(function (a, b) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+
+    availableRoomTypes = availableRoomTypes.sort(function (a, b) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
     });
 
     return {

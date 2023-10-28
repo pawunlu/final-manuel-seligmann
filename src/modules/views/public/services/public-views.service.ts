@@ -35,4 +35,9 @@ export class PublicViewsService {
       roomTypes,
     };
   }
+
+  async handleMovieinformationView(movieId: number) {
+    const movie = await this.moviesService.findOneById(movieId);
+    return movie;
+  }
 }

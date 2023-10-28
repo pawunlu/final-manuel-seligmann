@@ -1,14 +1,73 @@
 {{> fragments/public/base}}
 
   {{#> head-block}}
-      <title>Nombre de pelicula | PAW Cine</title>
+      <title>{{name}} | PAW Cine</title>
+      {{!-- Input Component & Style  --}}
+      <script src="/view-assets/common/components/input/input.component.js" type="module"></script>
+      <link href="/view-assets/common/components/input/input.style.css" rel="stylesheet" type="text/css">
+      {{!-- Select Component & Style  --}}
+      <script src="/view-assets/common/components/select/select.component.js" type="module"></script>
+      <link href="/view-assets/common/components/select/select.style.css" rel="stylesheet" type="text/css">
+      {{!-- Date-picker Component & Style  --}}
+      <script src="/view-assets/common/components/date-picker/date-picker.component.js" type="module"></script>
+      <link href="/view-assets/common/components/date-picker/date-picker.style.css" rel="stylesheet" type="text/css">
+      {{!-- movie displayer style --}}
+      <link href="/view-assets/public-views/movies/fragments/movie-displayer/movie-displayer.style.css" rel="stylesheet" type="text/css">
+        {{!-- Buttons Styles --}}
+      <link href="/view-assets/common/buttons.style.css" rel="stylesheet" type="text/css">
+      {{!-- current view Style & Script --}}
+      <link href="/view-assets/public-views/movie-info/movie-info.style.css" rel="stylesheet" type="text/css">
+      <script src="/view-assets/public-views/movie-info/movie-info.script.js" type="module"></script>
   {{/head-block}}
 
 
   {{#*inline "main-block"}}
-    <h1>
-      Esto es una Pelicula
-    </h1>
+    <section class="reservation-displayer">
+      <section class="body-content-container">
+        <h1>Reserva tu entrada</h1>
+        <section class="filters-container">
+          <section class="filters-container">
+            <section id="language-selector"></section>
+            <section id="room-type-selector"></section>
+            <section id="date-picker-selector"></section>
+          </section>
+          <button id="reservation-button" class="button button-1">Reservar</button>
+        </section>
+      </section>
+    </section>
+    <section class="body-content-container">
+      {{> fragments/public/movieDisplayer movie=this}}
+      <h1>{{name}}</h1>
+      <section class="genre-container">
+        <label for="genre">Género: </label>
+        <output id="genre">{{genre}}</output>
+      </section>
+      <section class="duration-container">
+        <label for="duration">Duración: </label>
+        <output id="duration">{{durationInMinutes}} minutos</output>
+      </section>
+      <section class="rated-container">
+        <label for="rated">Clasificación: </label>
+        <output id="rated">{{rated}}</output>
+      </section>
+      <section class="calification-container">
+        <label for="calification">Calificación: </label>
+        <output id="calification">{{calification}}/10</output>
+      </section>
+      <section class="languages-container">
+        <label for="languages">Idiomas: </label>
+        <output id="languages">...</output>
+      </section>
+      <section class="room-types-container">
+        <label for="room-types">Formatos: </label>
+        <output id="room-types">...</output>
+      </section>
+      <section class="synopsis-container">
+        <h2>Sinopsis</h2>
+        <output id="synopsis">{{sinopsis}}</output>
+      </section>
+    </section>
+
   {{/inline}}
 
 {{fragments/public/base}}

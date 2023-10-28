@@ -42,3 +42,10 @@ h4 {
 h5, h6 {
   font-size: 16px;
 }
+
+.body-content-container {
+  width: var(--content-width);
+  max-width: var(--max-content-width);
+  min-width: var(--min-content-width);
+  margin: 0 auto;
+}

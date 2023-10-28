@@ -16,12 +16,43 @@ let carouselComponent = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   carouselComponent = new CarouselComponent('movies-carousel');
+  carouselComponent.onSlideClick = (movie) => {
+    redirectToMovieInfoView(movie.id);
+  };
+  carouselComponent.onReservationButtonClick = (movie) => {
+    redirectToMovieReservation(movie.id);
+  };
   carouselComponent.render();
+
+  loadEvents();
 
   await fetchAndLoadMoviesIntoCarousel();
 });
 
+function loadEvents() {
+  loadMoviesEvents();
+  loadBillboardButtonEvent();
+}
+
+function loadMoviesEvents() {
+  const moviesContainer = document.getElementById('movies-container');
+  for (const movieDisplayer of moviesContainer.children) {
+    const movieId = movieDisplayer.getAttribute('movie-id');
+    movieDisplayer.addEventListener('click', () => {
+      redirectToMovieInfoView(movieId);
+    });
+  }
+}
+
+function loadBillboardButtonEvent() {
+  const button = document.getElementById('billboard-button');
+  button.addEventListener('click', () => {
+    redirectToMoviesBillboard();
+  });
+}
+
 async function fetchAndLoadMoviesIntoCarousel() {
+  // TODO: Create some animation of a way of showing the carousel movies are loading as the data is been fetch
   // TODO set carousel as loading = true
   const movies = await fetchCarouselMovies();
   carouselComponent.items = movies;
@@ -43,4 +74,16 @@ async function fetchCarouselMovies() {
     throw new Error('Something went wrong fetching Movie Extra Data', response);
 
   return response.json();
+}
+
+function redirectToMovieInfoView(movieId) {
+  window.location.href = `/pelicula/${movieId}`;
+}
+
+function redirectToMovieReservation(movieId) {
+  window.location.href = `/reservar?movieId=${movieId}`;
+}
+
+function redirectToMoviesBillboard() {
+  window.location.href = '/cartelera';
 }
