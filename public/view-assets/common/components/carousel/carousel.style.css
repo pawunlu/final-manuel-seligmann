@@ -43,6 +43,10 @@
   background: linear-gradient(0deg, rgb(59, 90, 202) 0%, rgba(28,28,28,0.6) 22%, rgba(28,28,28,0.4) 100%);
 }
 
+.slide > .slide-description:hover {
+  cursor: pointer;
+}
+
 .slide > .slide-description > .slide-description-content {
   height: 100%;
   width: var(--content-width);
@@ -94,6 +98,10 @@
   border: none;
 }
 
+.slide .carousel-reservation-button:hover {
+  cursor: pointer;
+}
+
 
 .carousel-dots-container {
   position: absolute;
@@ -124,14 +132,22 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 60px;
+  background-color: var(--blue3);
+  border: none;
+}
+
+.container-component > .carousel-previous-button:hover, .container-component > .carousel-next-button:hover {
+  cursor: pointer;
 }
 
 .container-component > .carousel-previous-button {
   left: 0;
+  border-radius: 0 100px 100px 0;
 }
 
 .container-component > .carousel-next-button {
   right: 0;
+  border-radius: 100px 0 0 100px;
 }

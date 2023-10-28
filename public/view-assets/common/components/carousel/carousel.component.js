@@ -38,6 +38,28 @@ export class CarouselComponent {
     return this.#items;
   }
 
+  /** @type {Function} */
+  #onSlideClickCallbackFn = null;
+
+  /**
+   *
+   * @param {function(Movie)} callbackFn
+   */
+  set onSlideClick(callbackFn) {
+    this.#onSlideClickCallbackFn = callbackFn;
+  }
+
+  /** @type {Function} */
+  #onReservationButtonClickCallbackFn = null;
+
+  /**
+   *
+   * @param {function(Movie)} callbackFn
+   */
+  set onReservationButtonClick(callbackFn) {
+    this.#onReservationButtonClickCallbackFn = callbackFn;
+  }
+
   constructor(parentContainerId) {
     this.#parentContainerHTMLComponent =
       document.getElementById(parentContainerId);
@@ -105,6 +127,13 @@ export class CarouselComponent {
   #createSlide(movie) {
     const slide = document.createElement('div');
     slide.classList.add('slide');
+    slide.addEventListener('click', (event) => {
+      if (
+        this.#isElementPartOfTheSlide(event.target) &&
+        this.#onSlideClickCallbackFn
+      )
+        this.#onSlideClickCallbackFn(movie);
+    });
 
     const image = document.createElement('section');
     const slideBackground = this.#createSlideBackgroundImage(movie.bannerName);
@@ -151,6 +180,10 @@ export class CarouselComponent {
     const reserveButton = document.createElement('button');
     reserveButton.innerHTML = 'Reservar';
     reserveButton.classList.add('carousel-reservation-button');
+    reserveButton.addEventListener('click', () => {
+      if (this.#onReservationButtonClickCallbackFn)
+        this.#onReservationButtonClickCallbackFn(movie);
+    });
     captionContent.appendChild(reserveButton);
 
     return slide;
@@ -170,7 +203,7 @@ export class CarouselComponent {
    * @param {string} url
    */
   #createSlideBackgroundImage(url) {
-    return `linear-gradient(90deg, rgba(59,90,202,1) 0%, rgba(17,17,25,0) 50%, rgba(59,90,202,1) 100%), url("${url}")`;
+    return `linear-gradient(90deg, var(--blue1) 0%, rgba(17,17,25,0) 50%, var(--blue1) 100%), url("${url}")`;
   }
 
   #createDotsContainer() {
@@ -241,5 +274,9 @@ export class CarouselComponent {
     });
 
     return button;
+  }
+
+  #isElementPartOfTheSlide(htmlElement) {
+    return htmlElement.className.includes('slide-description');
   }
 }

@@ -9,11 +9,29 @@
       {{!-- Home's Script & Style --}}
       <script src="/view-assets/public-views/home/home.script.js" type="module"></script>
       <link href="/view-assets/public-views/home/home.style.css" rel="stylesheet" type="text/css">
+      {{!-- Movie cards styles --}}
+      <link href="/view-assets/public-views/movies/fragments/movie-displayer/movie-displayer.style.css" rel="stylesheet" type="text/css">
+      <link href="/view-assets/public-views/movies/movies.style.css" rel="stylesheet" type="text/css">
+      {{!-- Buttons Styles --}}
+      <link href="/view-assets/common/buttons.style.css" rel="stylesheet" type="text/css">
   {{/head-block}}
 
 
   {{#*inline "main-block"}}
     <section id="movies-carousel"></section>
+
+    <h1>Cartelera</h1>
+    <section id="movies-container" class="movies-container">
+      {{#if movies.length}}
+        {{#each movies}}
+          {{> fragments/public/movieDisplayer movie=this}}
+        {{/each}}
+      {{ else }}
+        <p>No hay peliculas para mostrar</p>
+      {{/if}}
+    </section>
+    <button id="billboard-button" class="button button-1">Ver mas</button>
+
   {{/inline}}
 
 {{fragments/public/base}}
