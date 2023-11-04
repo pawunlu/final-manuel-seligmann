@@ -7,6 +7,11 @@
   cursor: pointer;
 }
 
+.small-button {
+  height: 39px;
+  width: 100px;
+}
+
 .button-1 {
   background-color: var(--light-blue1);
   border: none;

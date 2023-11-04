@@ -1,0 +1,41 @@
+main {
+  width: 100vw;
+  height: 100vh;
+}
+
+.form-container {
+  width: 450px;
+  height: 600px;
+  background-color: var(--blue2);
+  margin: auto auto;
+  border-radius: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form-container > h1, .form-container > p {
+  color: white;
+  text-align: center;
+}
+
+.form-container > h1 {
+  margin: 50px 0 20px 0;
+  color: var(--yellow1);
+}
+
+#email-input, #password-input {
+  width: 400px;
+  margin: auto auto;
+  display: block;
+}
+
+#email-input {
+  margin: 50px auto 0 auto;
+}
+
+.form-container > button {
+  margin: 20px auto;
+  display: block;
+}

@@ -5,7 +5,7 @@ export class InputComponent {
   /** @type {HTMLElement} */
   #inputContainerHTMLComponent = null;
 
-  /** @type {HTMLElement} */
+  /** @type {HTMLInputElement} */
   #inputHTMLComponent = null;
 
   /** @type {HTMLElement} */
@@ -207,7 +207,7 @@ export class InputComponent {
     );
     resetButton.style.color = this.#resetButtonColor;
     input.style.paddingRight = '35px';
-    resetButton.style.display = this.#text ? 'block' : 'none';
+    resetButton.style.display = this.#displayResetButtonIfNecessary();
     resetButton.addEventListener('click', () => (this.text = ''));
     inputContainer.appendChild(resetButton);
     if (!this.#showResetButton) resetButton.style.display = 'none';
@@ -243,7 +243,7 @@ export class InputComponent {
   }
 
   #displayResetButton() {
-    this.#resetButtonHTMLComponent.style.display = 'block';
+    this.#resetButtonHTMLComponent.style.display = 'inline-block';
   }
 
   #displayErrorMessage() {

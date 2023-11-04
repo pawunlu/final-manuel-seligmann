@@ -625,7 +625,7 @@ function addEventListenerToMovieCards() {
 }
 
 function addEventListenerToReservationStepsSlider() {
-  const slideElement = document.getElementById('step-slider');
+  const slideElement = document.getElementById('steps-slider');
 
   slideElement.addEventListener('transitionstart', (event) => {
     if (event.target === slideElement) {
@@ -905,7 +905,7 @@ function onReservationSummaryStepLoads() {
 }
 
 function updateStepSlider(currentSlide) {
-  const stepSlider = document.getElementById('step-slider');
+  const stepSlider = document.getElementById('steps-slider');
   stepSlider.style.transform = `translateX(-${currentSlide * 100}%)`;
 }
 

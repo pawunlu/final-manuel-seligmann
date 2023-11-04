@@ -26,6 +26,18 @@
   padding: 0 20px;
 }
 
+.movie-data-container {
+  padding-top: 30px;
+}
+
 .movie-displayer figcaption {
   display: none;
+}
+
+.movie-data-container label {
+  color: var(--yellow1);
+}
+
+.movie-data-container h1, .movie-data-container output, .movie-data-container h2 {
+  color: var(--white1);
 }

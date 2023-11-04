@@ -188,11 +188,21 @@ function loadRoomTypesIntoComponent(roomTypes) {
  *
  * @param {Language[]} languages
  */
-function loadLanguagesIntoMovieInfomation(languages) {}
+function loadLanguagesIntoMovieInfomation(languages) {
+  const languagesHTMLText = document.getElementById('languages');
+  languagesHTMLText.innerHTML = languages
+    .map((language) => language.name)
+    .join(', ');
+}
 
 /**
  *
  *
  * @param {RoomType[]} roomTypes
  */
-function loadRoomTypesIntoMovieInfomation(roomTypes) {}
+function loadRoomTypesIntoMovieInfomation(roomTypes) {
+  const roomTypesHTMLText = document.getElementById('room-types');
+  roomTypesHTMLText.innerHTML = roomTypes
+    .map((roomType) => roomType.name)
+    .join(', ');
+}

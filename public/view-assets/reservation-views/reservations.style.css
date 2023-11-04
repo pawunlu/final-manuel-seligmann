@@ -8,13 +8,13 @@ h1, #step-info {
 }
 
 
-#step-container {
+#steps-container {
   position: relative;
   width: 100%;
   overflow: hidden;
 }
 
-#step-slider {
+#steps-slider {
   display: flex;
   transition: transform 0.25s ease-in-out;
 }

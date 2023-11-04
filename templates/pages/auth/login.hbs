@@ -1,0 +1,30 @@
+{{> fragments/admin/base}}
+
+  {{#> head-block}}
+      <title>Login | PAW Cine</title>
+
+      {{!-- Input component Script & Style --}}
+      <script src="/view-assets/common/components/input/input.component.js" type="module"></script>
+      <link href="/view-assets/common/components/input/input.style.css" rel="stylesheet" type="text/css">
+      {{!-- Login's Script & Style --}}
+      <script src="/view-assets/auth-views/login/login.script.js" type="module"></script>
+      <link href="/view-assets/auth-views/login/login.style.css" rel="stylesheet" type="text/css"> 
+      {{!-- Buttons Styles --}}
+      <link href="/view-assets/common/buttons.style.css" rel="stylesheet" type="text/css">
+  {{/head-block}}
+
+
+  {{#*inline "main-block"}}
+
+
+    <section class="form-container">
+      <h1>Login</h1>
+      <p>Sistema para administradores de PAW Cines</p>
+      <section id="email-input"></section>
+      <section id="password-input"></section>
+      <button id="login-button" class="button small-button button-1">Entrar</button>
+    </section>
+
+  {{/inline}}
+
+{{fragments/public/base}}
