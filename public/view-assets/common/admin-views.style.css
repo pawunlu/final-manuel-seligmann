@@ -7,9 +7,18 @@ body {
 }
 
 body > nav {
-  width: var(--navbar-display-width);
+  width: auto;
+  position: relative;
+  /* overflow: hidden; */
 }
 
 body > main {
   width: calc(100% - var(--navbar-display-width));
+}
+
+#navbar-toggle-button {
+  position: absolute;
+  top: 25px;
+  left: calc(var(--navbar-display-width) - 40px);
+  z-index: 1;
 }

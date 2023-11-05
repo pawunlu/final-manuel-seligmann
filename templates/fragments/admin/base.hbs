@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link href="/view-assets/common/reset.style.css" rel="stylesheet" type="text/css">
     <link href="/view-assets/common/index.style.css" rel="stylesheet" type="text/css">
     <link href="/view-assets/common/admin-views.style.css" rel="stylesheet" type="text/css">
-    <link href="/view-assets/admin-views/navbar/navbar.style.css" rel="stylesheet" type="text/css">
-    <script src="/view-assets/admin-views/navbar/navbar.script.js"></script>
+    <link href="/view-assets/admin-views/common/navbar/navbar.style.css" rel="stylesheet" type="text/css">
+    <script src="/view-assets/admin-views/common/navbar/navbar.script.js"></script>
     <script src="/view-assets/common/utils.script.js"></script>
     {{#> head-block}}
     {{/head-block}}
@@ -14,6 +15,7 @@
 <body>
     <nav>
         {{> fragments/admin/navbar}}
+        <button id="navbar-toggle-button">X</button>
     </nav>
     <main>
         {{#> main-block}}

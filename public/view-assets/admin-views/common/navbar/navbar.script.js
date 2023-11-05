@@ -14,8 +14,8 @@
  * @property {string} url - Item's URL
  */
 
-/** @type {boolean} - Only used on mobile screen resolutions */
-let isNavBarOpen = false;
+/** @type {boolean} */
+let isNavBarOpen = null;
 
 const bodyItemsList = [
   {
@@ -85,8 +85,44 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function initializeNavbar() {
+  setupDisplayValue();
   loadAndRenderBodyItems();
   loadEvents();
+}
+
+function setupDisplayValue() {
+  const showNavbar = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue('--show-navbar');
+
+  console.log('showNavbar', showNavbar);
+  isNavBarOpen = showNavbar === 'true';
+  console.log('navbar open', isNavBarOpen);
+  openOrCloseNavbar();
+}
+
+function openOrCloseNavbar() {
+  if (isNavBarOpen) {
+    displayNavbar();
+  } else {
+    hideNavbar();
+  }
+}
+
+function hideNavbar() {
+  const navbarContainer = document.getElementById('nav-bar-container');
+  navbarContainer.style.display = 'none';
+
+  const navbarToggleButton = document.getElementById('navbar-toggle-button');
+  navbarToggleButton.style.left = '0px';
+}
+
+function displayNavbar() {
+  const navbarContainer = document.getElementById('nav-bar-container');
+  navbarContainer.style.display = 'block';
+
+  const navbarToggleButton = document.getElementById('navbar-toggle-button');
+  navbarToggleButton.style.left = 'calc(var(--navbar-display-width) - 40px)';
 }
 
 function loadAndRenderBodyItems() {
@@ -211,17 +247,9 @@ function loadLogoutEvent() {
 }
 
 function loadOpenCloseButtonEvents() {
-  const button = document.getElementById('open-close-button');
+  const button = document.getElementById('navbar-toggle-button');
   button.addEventListener('click', () => {
     isNavBarOpen = !isNavBarOpen;
-    if (isNavBarOpen) {
-      displayNavbar();
-    } else {
-      hideNavbar();
-    }
+    openOrCloseNavbar();
   });
 }
-
-function displayNavbar() {}
-
-function hideNavbar() {}
