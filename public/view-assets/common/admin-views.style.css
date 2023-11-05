@@ -1,0 +1,15 @@
+:root {
+  --navbar-display-width: 250px
+}
+
+body {
+  display: flex;
+}
+
+body > nav {
+  width: var(--navbar-display-width);
+}
+
+body > main {
+  width: calc(100% - var(--navbar-display-width));
+}

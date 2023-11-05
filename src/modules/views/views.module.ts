@@ -7,6 +7,7 @@ import { AdminViewsService } from './admin/services/admin-views.service';
 import { PublicViewsService } from './public/services/public-views.service';
 import { ReservationViewsService } from './reservation/services/reservation-views.service';
 import { MoviesModule } from '../movies/movies.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   controllers: [
@@ -15,6 +16,6 @@ import { MoviesModule } from '../movies/movies.module';
     PublicViewsController,
   ],
   providers: [AdminViewsService, PublicViewsService, ReservationViewsService],
-  imports: [MoviesModule, RoomTypesModule],
+  imports: [MoviesModule, RoomTypesModule, AuthModule],
 })
 export class ViewsModule {}

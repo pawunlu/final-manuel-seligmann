@@ -1,0 +1,94 @@
+.nav-bar-container {
+  height: 100vh;
+  background-color: var(--blue2);
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.nav-bar-container > .navbar-header {
+  padding: 0 0 10px 0;
+  border-bottom: 2px solid var(--blue1);
+}
+
+.nav-bar-container > .navbar-header > .user-img {
+  width: 50px;
+  height: 50px;
+  background: var(--white1);
+  border-radius: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-bar-container > .navbar-header > .user-img > p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nav-bar-container > .navbar-header > .username {
+  display: inline-block;
+  font-weight: bold;
+  color: var(--white1);
+  margin-left: 15px;
+}
+
+.nav-bar-container .navbar-item {
+  color: var(--white1);
+  margin: 5px 0;
+  padding: 5px 20px;
+  border-radius: 5px;
+}
+
+.nav-bar-container .navbar-item:hover {
+  background-color: var(--blue1);
+  cursor: pointer;
+}
+
+.nav-bar-container > .navbar-body .navbar-item.child-item {
+  padding: 5px 35px;
+}
+
+.nav-bar-container > .navbar-body .collapsible-container {
+  overflow: hidden;
+}
+
+.nav-bar-container > .navbar-body [id*='children-container-'] {
+  margin-top: -100%;
+  transition: all 0.75s;
+}
+
+.nav-bar-container > .navbar-body [id*='children-container-'].expanded {
+  margin-top: 0;
+}
+
+.nav-bar-container .item-selected, .nav-bar-container > .navbar-body .navbar-item:has(+ .collapsible-container .item-selected) {
+  background-color: var(--blue1);
+  color: var(--yellow1) !important;
+}
+
+.nav-bar-container > .navbar-body .navbar-item + .collapsible-container .item-selected {
+  color: var(--yellow1);
+  background-color: unset;
+}
+
+.nav-bar-container > .navbar-body .navbar-item + .collapsible-container .item-selected:hover {
+  background-color: unset;
+}
+
+
+.navbar-footer {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+}
+
+.open-close-button {
+  position: absolute;
+  top: 10px;
+  left: var(--navbar-display-width);
+}

@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <link href="/view-assets/common/reset.style.css" rel="stylesheet" type="text/css">
     <link href="/view-assets/common/index.style.css" rel="stylesheet" type="text/css">
+    <link href="/view-assets/common/admin-views.style.css" rel="stylesheet" type="text/css">
+    <link href="/view-assets/admin-views/navbar/navbar.style.css" rel="stylesheet" type="text/css">
+    <script src="/view-assets/admin-views/navbar/navbar.script.js"></script>
     <script src="/view-assets/common/utils.script.js"></script>
     {{#> head-block}}
     {{/head-block}}
 </head>
 <body>
     <nav>
-        {{!-- {{> parts/nav}} --}}
+        {{> fragments/admin/navbar}}
     </nav>
     <main>
         {{#> main-block}}
