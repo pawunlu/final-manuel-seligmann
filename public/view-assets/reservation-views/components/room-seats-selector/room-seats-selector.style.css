@@ -59,6 +59,8 @@
   background-color: rgba(59, 90, 202, 1);
   padding: 25px;
   border-radius: 25px;
+  display: flex;
+  justify-content: center;
 }
 
 .room-seats .empty-room-space {

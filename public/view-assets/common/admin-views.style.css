@@ -13,12 +13,13 @@ body > nav {
 }
 
 body > main {
-  width: calc(100% - var(--navbar-display-width));
+  /* width: calc(100% - var(--navbar-display-width)); */
+  width: 100%;
 }
 
 #navbar-toggle-button {
   position: absolute;
-  top: 25px;
+  top: 20px;
   left: calc(var(--navbar-display-width) - 40px);
   z-index: 1;
 }

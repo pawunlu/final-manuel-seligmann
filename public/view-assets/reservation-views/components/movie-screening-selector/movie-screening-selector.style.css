@@ -1,9 +1,17 @@
-.movie-screenings-container {
+:root {
+  --selected-screening-button-content: Seleccionado;
+  --unselected-screening-button-content: Seleccionar;
+}
 
+@media screen and (max-width: 700px) {
+  :root {
+    --selected-screening-button-content: ☑;
+    --unselected-screening-button-content: ☐;
+  }
 }
 
 .date-screenings-container {
-
+  margin-bottom: 25px;
 }
 
 .date-screenings-container h3{
@@ -11,8 +19,10 @@
   border-bottom: 1px solid white;
 }
 
-.date-screenings-table {
-  padding: 10px;
+@media screen and (max-width: 700px) {
+  .date-screenings-container h3{
+    font-size: 25px;
+  }
 }
 
 .screening-row {
@@ -23,6 +33,7 @@
   border-radius: 30px;
   margin: 10px 0;
   color: white;
+  align-items: center;
 }
 
 .screening-row > p {
@@ -41,6 +52,15 @@
   padding: 4px 20px;
   border-radius: 20px;
   width: 150px;
+}
+
+@media screen and (max-width: 700px) {
+  .screening-row button {
+    padding: 4px 10px;
+    width: unset;
+    font-size: 18px;
+    font-weight: 500;
+  }
 }
 
 .screening-row button:hover {

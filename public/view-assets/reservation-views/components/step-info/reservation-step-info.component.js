@@ -70,43 +70,80 @@ export class ReservationStepInfo {
   }
 
   render() {
-    const stepInfoElement = this.#createStepInfoElement();
-    this.#parentContainerHTMLComponent.replaceChildren(stepInfoElement);
+    const [stepInfoForDesktop, stepInfoForMobile] =
+      this.#createStepInfoElements();
+    this.#parentContainerHTMLComponent.replaceChildren(
+      stepInfoForDesktop,
+      stepInfoForMobile,
+    );
   }
 
-  #createStepInfoElement() {
-    const container = document.createElement('section');
-    container.className = 'steps-info';
+  #createStepInfoElements() {
+    const stepInfoElementForDesktopView =
+      this.#createStepInfoElementForDesktopView();
+
+    const stepInfoElementForMobileView = this.#stepInfoElementForMobileView();
+
+    return [stepInfoElementForDesktopView, stepInfoElementForMobileView];
+  }
+
+  #createStepInfoElementForDesktopView() {
+    const containerForDesktopView = document.createElement('section');
+    containerForDesktopView.className = 'desktop-steps-info';
 
     for (const step of Object.keys(RESERVATION_STEPS)) {
       const stepElement = document.createElement('section');
-      stepElement.id = `${step}-step-info`;
-      stepElement.className = `step ${step}`;
+      stepElement.className = `step desktop-view-step ${step}`;
 
       const stepName = document.createElement('p');
       stepName.innerHTML = RESERVATION_STEPS_NAMES[step];
       stepElement.appendChild(stepName);
 
       const stepNumber = document.createElement('p');
-      stepNumber.innerHTML = RESERVATION_STEPS[step];
+      stepNumber.innerHTML = RESERVATION_STEPS[step] + 1;
       stepElement.appendChild(stepNumber);
 
-      container.appendChild(stepElement);
+      containerForDesktopView.appendChild(stepElement);
     }
 
-    return container;
+    return containerForDesktopView;
+  }
+
+  #stepInfoElementForMobileView() {
+    const containerForDesktopView = document.createElement('section');
+    containerForDesktopView.className = 'mobile-steps-info';
+
+    for (const step of Object.keys(RESERVATION_STEPS)) {
+      const stepElement = document.createElement('section');
+      stepElement.className = `step mobile-view-step ${step}`;
+
+      const stepNumber = document.createElement('p');
+      stepNumber.innerHTML = `Paso ${RESERVATION_STEPS[step] + 1} / ${
+        Object.keys(RESERVATION_STEPS).length
+      }`;
+      stepElement.appendChild(stepNumber);
+
+      containerForDesktopView.appendChild(stepElement);
+    }
+
+    return containerForDesktopView;
   }
 
   #removeOrAddClassesToTheSteps() {
-    const [stepsContainer] = this.#parentContainerHTMLComponent.children;
-    if (!stepsContainer) return;
-    const steps = stepsContainer.children;
-    for (let index = 0; index < steps.length; index++) {
-      const step = steps[index];
+    const [stepsInfoForDesktop, stepsInfoForMobile] =
+      this.#parentContainerHTMLComponent.children;
+    if (!stepsInfoForDesktop) return;
+    const stepsForDesktop = stepsInfoForDesktop.children;
+    const stepsForMobile = stepsInfoForMobile.children;
+    for (let index = 0; index < stepsForDesktop.length; index++) {
+      const stepForDesktop = stepsForDesktop[index];
+      const stepForMobile = stepsForMobile[index];
       if (index === this.#currentStep) {
-        step.className = `${step.className} active-step`;
+        stepForDesktop.classList.add('active-step');
+        stepForMobile.classList.add('active-step');
       } else {
-        step.className = step.className.replaceAll('active-step', '');
+        stepForDesktop.classList.remove('active-step');
+        stepForMobile.classList.remove('active-step');
       }
     }
   }

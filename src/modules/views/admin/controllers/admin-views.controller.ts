@@ -1,9 +1,14 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Res } from '@nestjs/common';
 import { AdminViewsService } from '../services/admin-views.service';
 
 @Controller('admin')
 export class AdminViewsController {
   constructor(private adminViewsService: AdminViewsService) {}
+
+  @Get('')
+  handleAdminHomeView(@Res() res) {
+    return res.redirect('admin/tablero');
+  }
 
   @Get('tablero')
   @Render('admin/dashboard')

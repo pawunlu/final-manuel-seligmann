@@ -1,9 +1,24 @@
-.steps-info {
+.desktop-steps-info {
   background-color: rgba(25, 48, 129, 1);
   display: inline-block;
 }
 
-.step {
+.mobile-steps-info {
+  margin: 15px 0;
+  display: none;
+}
+
+@media screen and (max-width: 700px) {
+  .desktop-steps-info {
+    display: none;
+  }
+
+  .mobile-steps-info {
+    display: inline-block;
+  }
+}
+
+.desktop-view-step.step {
   display: inline-block;
   margin: 30px;
   text-align: center;
@@ -11,13 +26,13 @@
 }
 
 /* Step name */
-.step > p:nth-child(1) {
+.desktop-view-step.step > p:nth-child(1) {
   color: white;
   margin-bottom: 5px;
 }
 
 /* Step number */
-.step > p:nth-child(2) {
+.desktop-view-step.step > p:nth-child(2) {
   text-align: center;
   line-height: 50px;
   color: black;
@@ -29,7 +44,7 @@
   position: relative;
 }
 
-.step:not(:last-child) > p:nth-child(2):after {
+.desktop-view-step.step:not(:last-child) > p:nth-child(2):after {
   content: "";
   position: absolute;
   top: 50%;
@@ -40,7 +55,7 @@
   cursor: none;
 }
 
-.step:not(:first-child) > p:nth-child(2)::before {
+.desktop-view-step.step:not(:first-child) > p:nth-child(2)::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -51,17 +66,21 @@
   cursor: none;
 }
 
-
-.active-step {
-  
-}
-
-.step.active-step > p:first-child {
+.desktop-view-step.step.active-step > p:first-child {
   color: rgba(255, 197, 110, 1);
   transition: 0.5s ease;
 }
 
-.step.active-step > p:not(:first-child) {
+.desktop-view-step.step.active-step > p:not(:first-child) {
   background-color: rgba(255, 197, 110, 1);
   transition: 0.5s ease;
+}
+
+.mobile-view-step.step:not(.active-step) {
+  display: none;
+}
+
+.mobile-view-step.step > p:nth-child(1) {
+  text-align: center;
+  color: var(--yellow1);
 }

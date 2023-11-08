@@ -52,7 +52,7 @@ function loadBillboardButtonEvent() {
 }
 
 async function fetchAndLoadMoviesIntoCarousel() {
-  // TODO: Create some animation of a way of showing the carousel movies are loading as the data is been fetch
+  // TODO: Create some animation showing the carousel movies are loading as the data is been fetch
   // TODO set carousel as loading = true
   const movies = await fetchCarouselMovies();
   carouselComponent.items = movies;

@@ -95,9 +95,7 @@ function setupDisplayValue() {
     document.documentElement,
   ).getPropertyValue('--show-navbar');
 
-  console.log('showNavbar', showNavbar);
   isNavBarOpen = showNavbar === 'true';
-  console.log('navbar open', isNavBarOpen);
   openOrCloseNavbar();
 }
 
@@ -115,6 +113,8 @@ function hideNavbar() {
 
   const navbarToggleButton = document.getElementById('navbar-toggle-button');
   navbarToggleButton.style.left = '0px';
+
+  document.documentElement.style.setProperty('--navbar-display-width', '0px');
 }
 
 function displayNavbar() {
@@ -123,6 +123,8 @@ function displayNavbar() {
 
   const navbarToggleButton = document.getElementById('navbar-toggle-button');
   navbarToggleButton.style.left = 'calc(var(--navbar-display-width) - 40px)';
+
+  document.documentElement.style.setProperty('--navbar-display-width', '250px');
 }
 
 function loadAndRenderBodyItems() {
@@ -182,6 +184,7 @@ function createHTMLItem(item) {
  */
 function crateHTMLCollapsibleItem(item) {
   const container = document.createElement('section');
+  container.id = `collapsible-item-${item.name}`;
 
   const htmlItem = document.createElement('section');
   htmlItem.classList.add('navbar-item');
@@ -199,6 +202,8 @@ function crateHTMLCollapsibleItem(item) {
     openOrCloseCollapsibleItem(item, collapsibleContainer);
   };
 
+  assignIconToCollapsable(item, container);
+
   const childrenContainer = document.createElement('section');
   childrenContainer.id = `children-container-${item.name}`;
   childrenContainer.classList.add('expanded');
@@ -211,6 +216,22 @@ function crateHTMLCollapsibleItem(item) {
   }
 
   return container;
+}
+
+/**
+ *
+ *
+ * @param {Item} item
+ * @param {HTMLElement} collapsibleHTMLItem
+ */
+function assignIconToCollapsable(item, collapsibleHTMLItem) {
+  if (item.isCollapsibleOpen) {
+    collapsibleHTMLItem.children[0].classList.remove('collapsable-closed');
+    collapsibleHTMLItem.children[0].classList.add('collapsable-opened');
+  } else {
+    collapsibleHTMLItem.children[0].classList.add('collapsable-closed');
+    collapsibleHTMLItem.children[0].classList.remove('collapsable-opened');
+  }
 }
 
 function handleRedirect(url) {
@@ -228,6 +249,12 @@ function openOrCloseCollapsibleItem(item, htmlCollapsibleContainerItem) {
 
   const childrenContainer = htmlCollapsibleContainerItem.children[0];
   childrenContainer.classList.toggle('expanded');
+
+  const collapsibleItem = document.getElementById(
+    `collapsible-item-${item.name}`,
+  );
+
+  assignIconToCollapsable(item, htmlCollapsibleContainerItem.parentElement);
 }
 
 function loadEvents() {

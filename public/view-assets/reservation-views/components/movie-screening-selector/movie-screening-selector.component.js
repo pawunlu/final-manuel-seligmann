@@ -173,12 +173,19 @@ export class MovieScreeningSelectorComponent {
       .toLocaleTimeString()
       .substr(0, 5);
 
+    const selectedButtonContent = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue('--selected-screening-button-content');
+    const unselectedButtonContent = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue('--unselected-screening-button-content');
+
     const selectButtonHTML = document.createElement('button');
     rowHTMLContainer.appendChild(selectButtonHTML);
     selectButtonHTML.innerHTML =
       this.#selectedScreening?.id === screeningData.id
-        ? 'Seleccionado'
-        : 'Seleccionar';
+        ? selectedButtonContent
+        : unselectedButtonContent;
     selectButtonHTML.addEventListener('click', () => {
       this.#onScreeningRowButtonClick(screeningData);
     });
@@ -194,6 +201,10 @@ export class MovieScreeningSelectorComponent {
   }
 
   #unselectHTMLRow(screening) {
+    const unselectedButtonContent = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue('--unselected-screening-button-content');
+
     const currentSelectedScreeningRow = document.querySelector(
       `[screening-id="${screening.id}"]`,
     );
@@ -204,15 +215,19 @@ export class MovieScreeningSelectorComponent {
         'selected-screening-row',
         '',
       );
-    currentSelectedScreeningRow.children[3].innerHTML = 'Seleccionar';
+    currentSelectedScreeningRow.children[3].innerHTML = unselectedButtonContent;
   }
 
   #selectHTMLRow(screening) {
+    const selectedButtonContent = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue('--selected-screening-button-content');
+
     const newSelectedScreeningRow = document.querySelector(
       `[screening-id="${screening.id}"]`,
     );
     newSelectedScreeningRow.className = `${newSelectedScreeningRow.className} selected-screening-row`;
-    newSelectedScreeningRow.children[3].innerHTML = 'Seleccionado';
+    newSelectedScreeningRow.children[3].innerHTML = selectedButtonContent;
   }
 
   #selectScreening(screening) {

@@ -3,20 +3,40 @@
   {{#> head-block}}
       <title>Configurar el carousel | PAW Cine</title>
 
-      {{!-- Input component Script & Style --}}
-      {{!-- <script src="/view-assets/common/components/input/input.component.js" type="module"></script>
-      <link href="/view-assets/common/components/input/input.style.css" rel="stylesheet" type="text/css"> --}}
-      {{!-- Login's Script & Style --}}
-      {{!-- <script src="/view-assets/auth-views/login/login.script.js" type="module"></script>
-      <link href="/view-assets/auth-views/login/login.style.css" rel="stylesheet" type="text/css">  --}}
-      {{!-- Buttons Styles --}}
-      {{!-- <link href="/view-assets/common/buttons.style.css" rel="stylesheet" type="text/css"> --}}
-  {{/head-block}}
+      {{!-- Carousel component Script & Style --}}
+      <script src="/view-assets/common/components/carousel/carousel.component.js" type="module"></script>
+      <link href="/view-assets/common/components/carousel/carousel.style.css" rel="stylesheet" type="text/css">
 
+      {{!-- Carousel-config views's Script & Style --}}
+      <script src="/view-assets/admin-views/carousel-config/carousel-config.script.js" type="module"></script>
+      <link href="/view-assets/admin-views/carousel-config/carousel-config.style.css" rel="stylesheet" type="text/css"> 
+
+      {{!-- Carousel Slides List Component Script & Style --}}
+      <script src="/view-assets/admin-views/carousel-config/components/slides-list/slides-list.component.js" type="module"></script>
+      <link href="/view-assets/admin-views/carousel-config/components/slides-list/slides-list.style.css" rel="stylesheet" type="text/css"> 
+  {{/head-block}}
 
   {{#*inline "main-block"}}
 
-    <h1>Config de carousel</h1>
+    <section id="preview-carousel"></section>
+
+    <h1>Configurar el orden del carousel</h1>
+    
+    <button id="test-button">Test</button>
+
+    <section class="body-content-container">
+      <section class="slides-list">
+        <section class="slide">
+          <section class="slide-navigation">
+            <p class="carousel-index-position">1</p>
+            <section class="icon-move-upwards">△</section>
+            <section class="icon-drag-and-drop">⫩</section>
+            <section class="icon-move-downwards">▽</section>
+          </section>
+          <section class="slide-img"></section>
+        </section>
+      </section>
+    </section>
 
   {{/inline}}
 

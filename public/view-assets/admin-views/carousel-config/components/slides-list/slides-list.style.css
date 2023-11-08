@@ -1,0 +1,45 @@
+.slides-list {
+  width: 100%;
+}
+
+.slides-list > .slide {
+  width: 100%;
+  background-color: var(--transparent-blue1);
+  padding: 10px;
+  border-radius: 30px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.slides-list > .slide .slide-navigation {
+  margin: 0 30px;
+  text-align: center;
+  flex-grow: 0;
+}
+
+.slides-list > .slide .slide-img {
+  background-image: url('https://www.themoviedb.org/t/p/original/7AYpRimYUlVEIl1vC26U2ZDfz5f.jpg');
+  height: 250px;
+  width: 400px;
+  background-repeat: no-repeat;
+  background-size: clamp(300px, 100%, 1300px) auto;
+  background-position: center;
+  flex-grow: 1;
+  border-radius: 20px;
+}
+
+
+.slides-list > .slide .slide-navigation .carousel-index-position {
+  margin: 7px 0 60px 0;
+}
+
+.slides-list > .slide .slide-navigation .icon-drag-and-drop {
+  margin: 10px 0;
+}
+
+.slides-list > .slide .slide-navigation .icon-drag-and-drop,
+.slides-list > .slide .slide-navigation .icon-move-upwards,
+.slides-list > .slide .slide-navigation .icon-move-downwards {
+  color: white;
+  font-size: 27px;
+}

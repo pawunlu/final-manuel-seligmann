@@ -2,13 +2,6 @@
   --show-navbar: true;
 }
 
-@media screen and (max-width: 700px) {
-  :root {
-    --show-navbar: false;
-  }
-}
-
-
 .nav-bar-container {
   height: 100vh;
   width: var(--navbar-display-width);
@@ -19,36 +12,18 @@
 }
 
 .nav-bar-container > .navbar-header {
-  padding: 0 0 10px 0;
+  padding: 10px 0 10px 0;
   border-bottom: 2px solid var(--blue1);
 }
 
-.nav-bar-container > .navbar-header > .user-img {
-  width: 50px;
-  height: 50px;
-  background: var(--white1);
-  border-radius: 100px;
-  display: inline-block;
-  vertical-align: middle;
-  font-weight: bold;
-  position: relative;
-}
-
-.nav-bar-container > .navbar-header > .user-img > p {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.nav-bar-container > .navbar-header > .username {
-  display: inline-block;
+.nav-bar-container > .navbar-header > p {
   font-weight: bold;
   color: var(--white1);
-  margin-left: 15px;
+  margin-left: 5px;
 }
 
 .nav-bar-container .navbar-item {
+  position: relative;
   color: var(--white1);
   margin: 5px 0;
   padding: 5px 20px;
@@ -58,6 +33,22 @@
 .nav-bar-container .navbar-item:hover {
   background-color: var(--blue1);
   cursor: pointer;
+}
+
+.nav-bar-container .navbar-item.collapsable-opened::after,
+.nav-bar-container .navbar-item.collapsable-closed::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 85%;
+}
+
+.nav-bar-container .navbar-item.collapsable-closed::after {
+  content: "▲"
+}
+
+.nav-bar-container .navbar-item.collapsable-opened::after {
+  content: "▼"
 }
 
 .nav-bar-container > .navbar-body .navbar-item.child-item {
@@ -91,10 +82,21 @@
   background-color: unset;
 }
 
-
 .navbar-footer {
   position: absolute;
   bottom: 10px;
   left: 10px;
   right: 10px;
+}
+
+
+@media screen and (max-width: 700px) {
+  :root {
+    --show-navbar: false;
+  }
+
+  .nav-bar-container {
+    position: absolute;
+    z-index: 1;
+  }
 }

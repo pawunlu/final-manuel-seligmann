@@ -10,7 +10,7 @@
   height: 400px;
 }
 
-.slide {
+.slider .slide {
   flex: 0 0 100%;
   width: 100%;
   box-sizing: border-box;
@@ -18,7 +18,7 @@
   position: relative;
 }
 
-.slide > .image {
+.slider .slide > .image {
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
@@ -26,13 +26,13 @@
   background-position: center;
 }
 
-.slide > img {
+.slider .slide > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.slide > .slide-description {
+.slider .slide > .slide-description {
   position: absolute;
   top: 0;
   left: 0;
@@ -43,11 +43,11 @@
   background: linear-gradient(0deg, rgb(59, 90, 202) 0%, rgba(28,28,28,0.6) 22%, rgba(28,28,28,0.4) 100%);
 }
 
-.slide > .slide-description:hover {
+.slider .slide > .slide-description:hover {
   cursor: pointer;
 }
 
-.slide > .slide-description > .slide-description-content {
+.slider .slide > .slide-description > .slide-description-content {
   height: 100%;
   width: var(--content-width);
   max-width: var(--max-content-width);
@@ -57,36 +57,36 @@
   /* border: solid 1px red; */
 }
 
-.slide .slide-description-content > h2 {
+.slider .slide .slide-description-content > h2 {
   position: absolute;
   top: 250px;
 }
 
-.slide .slide-description-content > .clasification, .slide .slide-description-content > .duration {
+.slider .slide .slide-description-content > .clasification, .slide .slide-description-content > .duration {
   position: absolute;
   top: calc(250px + 50px);
 }
 
-.slide .slide-description-content > .clasification {
+.slider .slide .slide-description-content > .clasification {
   left: 0;
 }
 
-.slide .slide-description-content > .duration {
+.slider .slide .slide-description-content > .duration {
   left: 200px;
 }
 
-.slide > .slide-description p:nth-child(1) {
+.slider .slide > .slide-description p:nth-child(1) {
   color: rgba(255, 197, 110, 1);
   display: inline-block;
   margin-right: 10px;
 }
 
-.slide > .slide-description p:nth-child(2) {
+.slider .slide > .slide-description p:nth-child(2) {
   color: white;
   display: inline-block;
 }
 
-.slide .carousel-reservation-button {
+.slider .slide .carousel-reservation-button {
   background-color: rgba(25, 48, 129, 1);
   color: white;
   width: 160px;
@@ -98,7 +98,7 @@
   border: none;
 }
 
-.slide .carousel-reservation-button:hover {
+.slider .slide .carousel-reservation-button:hover {
   cursor: pointer;
 }
 
@@ -129,6 +129,8 @@
 }
 
 .container-component > .carousel-previous-button, .container-component > .carousel-next-button {
+  color: var(--white1);
+  font-size: 40px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -145,9 +147,44 @@
 .container-component > .carousel-previous-button {
   left: 0;
   border-radius: 0 100px 100px 0;
+  padding: 0 10px 0 0;
 }
 
 .container-component > .carousel-next-button {
   right: 0;
   border-radius: 100px 0 0 100px;
+  padding: 0 0 0 10px;
+}
+
+
+@media screen and (max-width: 700px) {
+  .slider .slide .slide-description-content > h2 {
+    top: 180px;
+    font-size: 34px;
+  }
+
+  .slider .slide .slide-description-content > .clasification,
+  .slide .slide-description-content > .duration {
+    position: absolute;
+    left: 0px !important;
+    font-size: 20px;
+  }
+  
+  .slider .slide .slide-description-content > .clasification {
+    top: 230px;
+  }
+  
+  .slide .slide-description-content > .duration {
+    top: 260px;
+  }
+
+  .slide .slide-description-content > .carousel-reservation-button {
+    top: 230px;
+    width: 110px;
+  }
+
+  .carousel-dots-container > button {
+    height: 30px;
+    width: 30px;
+  }
 }

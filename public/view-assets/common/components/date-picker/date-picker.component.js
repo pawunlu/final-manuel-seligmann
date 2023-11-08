@@ -205,6 +205,7 @@ export class DatePickerComponent {
     const previousButtonContainer = document.createElement('span');
     const previousButton = document.createElement('button');
     previousButton.classList = 'previous-month-button';
+    previousButton.innerHTML = '‹';
     previousButton.onclick = () => {
       this.#switchToPreviousMonth(year, month);
     };
@@ -221,6 +222,7 @@ export class DatePickerComponent {
     const nextButtonContainer = document.createElement('span');
     const nextButton = document.createElement('button');
     nextButton.classList = 'next-month-button';
+    nextButton.innerHTML = '›';
     nextButton.onclick = () => {
       this.#switchToNextMonth(year, month);
     };

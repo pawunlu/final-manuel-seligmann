@@ -45,12 +45,9 @@
   cursor: pointer;
 }
 
-.calendar-container .previous-month-button {
-  background-image: url("/src/public/svg/left-arrow-with-circle.svg");
-}
-
-.calendar-container .next-month-button {
-  background-image: url("/src/public/svg/right-arrow-with-circle.svg");
+.calendar-container .previous-month-button, .calendar-container .next-month-button {
+  color: var(--white1);
+  font-size: 20px;
 }
 
 .calendar-header {

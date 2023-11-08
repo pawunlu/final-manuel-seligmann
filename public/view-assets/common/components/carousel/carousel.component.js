@@ -255,6 +255,7 @@ export class CarouselComponent {
   #createPreviousButton() {
     const button = document.createElement('button');
     button.classList.add('carousel-previous-button');
+    button.innerHTML = '‹';
     button.addEventListener('click', () => {
       this.#currentSlide =
         (this.#currentSlide - 1 + this.#items.length) % this.#items.length;
@@ -267,6 +268,7 @@ export class CarouselComponent {
   #createNextButton() {
     const button = document.createElement('button');
     button.classList.add('carousel-next-button');
+    button.innerHTML = '›';
     button.addEventListener('click', () => {
       this.#currentSlide =
         (this.#currentSlide + 1 + this.#items.length) % this.#items.length;
