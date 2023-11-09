@@ -173,19 +173,15 @@ export class MovieScreeningSelectorComponent {
       .toLocaleTimeString()
       .substr(0, 5);
 
-    const selectedButtonContent = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue('--selected-screening-button-content');
-    const unselectedButtonContent = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue('--unselected-screening-button-content');
-
     const selectButtonHTML = document.createElement('button');
     rowHTMLContainer.appendChild(selectButtonHTML);
-    selectButtonHTML.innerHTML =
+
+    const childrenToAppend =
       this.#selectedScreening?.id === screeningData.id
-        ? selectedButtonContent
-        : unselectedButtonContent;
+        ? this.#createButtonChildrenForSelectedRow()
+        : this.#createButtonChildrenForUnselectedRow();
+    selectButtonHTML.append(...childrenToAppend);
+
     selectButtonHTML.addEventListener('click', () => {
       this.#onScreeningRowButtonClick(screeningData);
     });
@@ -196,43 +192,56 @@ export class MovieScreeningSelectorComponent {
   #onScreeningRowButtonClick(screening) {
     if (this.#selectedScreening) this.#unselectHTMLRow(this.#selectedScreening);
     this.#selectHTMLRow(screening);
-
     this.#selectScreening(screening);
   }
 
   #unselectHTMLRow(screening) {
-    const unselectedButtonContent = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue('--unselected-screening-button-content');
-
     const currentSelectedScreeningRow = document.querySelector(
       `[screening-id="${screening.id}"]`,
     );
     if (!currentSelectedScreeningRow) return;
 
-    currentSelectedScreeningRow.className =
-      currentSelectedScreeningRow.className.replace(
-        'selected-screening-row',
-        '',
-      );
-    currentSelectedScreeningRow.children[3].innerHTML = unselectedButtonContent;
+    currentSelectedScreeningRow.classList.remove('selected-screening-row');
+
+    const button = currentSelectedScreeningRow.children[3];
+    button.replaceChildren(...this.#createButtonChildrenForUnselectedRow());
   }
 
   #selectHTMLRow(screening) {
-    const selectedButtonContent = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue('--selected-screening-button-content');
-
     const newSelectedScreeningRow = document.querySelector(
       `[screening-id="${screening.id}"]`,
     );
-    newSelectedScreeningRow.className = `${newSelectedScreeningRow.className} selected-screening-row`;
-    newSelectedScreeningRow.children[3].innerHTML = selectedButtonContent;
+    newSelectedScreeningRow.classList.add('selected-screening-row');
+
+    const button = newSelectedScreeningRow.children[3];
+    button.replaceChildren(
+      ...this.#createButtonChildrenForSelectedRow(screening),
+    );
   }
 
   #selectScreening(screening) {
     this.#selectedScreening = screening;
     if (this.#onScreeningSelectCallbackFn)
       this.#onScreeningSelectCallbackFn(screening);
+  }
+
+  #createButtonChildrenForSelectedRow() {
+    const textForDesktop = document.createElement('p');
+    textForDesktop.innerHTML = 'Seleccionado';
+
+    const textForMobile = document.createElement('p');
+    textForMobile.innerHTML = '☑';
+
+    return [textForDesktop, textForMobile];
+  }
+
+  #createButtonChildrenForUnselectedRow() {
+    const textForDesktop = document.createElement('p');
+    textForDesktop.innerHTML = 'Seleccionar';
+
+    const textForMobile = document.createElement('p');
+    textForMobile.innerHTML = '☐';
+
+    return [textForDesktop, textForMobile];
   }
 }
