@@ -58,7 +58,7 @@ function initializeComponents() {
 function intializeLanguageSelectorComponent() {
   languageSelectComponent = new SelectComponent('language-selector');
   languageSelectComponent.backgroundColor = 'rgba(59, 90, 202, 0.25)';
-  languageSelectComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  languageSelectComponent.placeholderColor = 'var(--yellow1)';
   languageSelectComponent.placeholder = 'Idioma';
   languageSelectComponent.options = [];
   languageSelectComponent.render();
@@ -67,7 +67,7 @@ function intializeLanguageSelectorComponent() {
 function intializeRoomTypeSelectorComponent() {
   roomTypeSelectComponent = new SelectComponent('room-type-selector');
   roomTypeSelectComponent.backgroundColor = 'rgba(59, 90, 202, 0.25)';
-  roomTypeSelectComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  roomTypeSelectComponent.placeholderColor = 'var(--yellow1)';
   roomTypeSelectComponent.placeholder = 'Formato';
   roomTypeSelectComponent.options = [];
   roomTypeSelectComponent.render();
@@ -76,7 +76,7 @@ function intializeRoomTypeSelectorComponent() {
 function intializeDatePickerSelectorComponent() {
   datePickerComponent = new DatePickerComponent('date-picker-selector');
   datePickerComponent.backgroundColor = 'rgba(59, 90, 202, 0.25)';
-  datePickerComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  datePickerComponent.placeholderColor = 'var(--yellow1)';
   datePickerComponent.emptyDateText = 'Todos los días';
   datePickerComponent.render();
 }

@@ -149,7 +149,7 @@ export class CarouselComponent {
     captionContent.classList.add('slide-description-content');
     caption.appendChild(captionContent);
 
-    const movieTitle = document.createElement('h2');
+    const movieTitle = document.createElement('h1');
     movieTitle.innerHTML = movie.name;
     captionContent.appendChild(movieTitle);
 
@@ -179,6 +179,7 @@ export class CarouselComponent {
 
     const reserveButton = document.createElement('button');
     reserveButton.innerHTML = 'Reservar';
+    reserveButton.classList.add('reservation-button-1');
     reserveButton.classList.add('carousel-reservation-button');
     reserveButton.addEventListener('click', () => {
       if (this.#onReservationButtonClickCallbackFn)

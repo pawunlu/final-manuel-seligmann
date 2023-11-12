@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap');
+
 :root {
   /* COLORS */
   --blue1: rgba(59, 90, 202, 1);
@@ -22,7 +24,7 @@
 }
 
 body {
-  font-family: 'Inter' !important;
+  font-family: 'Inter', sans-serif;
   font-size: 22px;
   background-color: var(--blue1);
   height: 100vh;

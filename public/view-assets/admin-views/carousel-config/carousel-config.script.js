@@ -1,4 +1,5 @@
 import { CarouselComponent } from '../../common/components/carousel/carousel.component.js';
+import { SlidesListComponent } from '../../admin-views/carousel-config/components/slides-list/slides-list.component.js';
 
 /**
  * represents a Movie
@@ -10,6 +11,9 @@ import { CarouselComponent } from '../../common/components/carousel/carousel.com
 /** @type {CarouselComponent} */
 let carouselComponent = null;
 
+/** @type {SlidesListComponent} */
+let slidesListComponent = null;
+
 /** @type {Movie[]} */
 let carouselMovies = [];
 
@@ -17,10 +21,10 @@ let carouselMovies = [];
 let changesToSave = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
-  carouselComponent = new CarouselComponent('preview-carousel');
-  carouselComponent.render();
+  loadAndRenderCarouselComponent();
+  loadAndRenderSlidesListComponent();
 
-  await fetchAndLoadMoviesIntoCarousel();
+  await fetchAndLoadMoviesIntoComponents();
 
   const button = document.getElementById('test-button');
   button.addEventListener('click', () => {
@@ -30,12 +34,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-async function fetchAndLoadMoviesIntoCarousel() {
+function loadAndRenderCarouselComponent() {
+  carouselComponent = new CarouselComponent('preview-carousel');
+  carouselComponent.render();
+}
+
+function loadAndRenderSlidesListComponent() {
+  slidesListComponent = new SlidesListComponent('slides-list-container');
+  slidesListComponent.render();
+}
+
+async function fetchAndLoadMoviesIntoComponents() {
   // TODO: Create some animation showing the carousel movies are loading as the data is been fetch
   // TODO set carousel as loading = true
   const movies = await fetchCarouselMovies();
-  carouselComponent.items = movies;
   carouselMovies = movies;
+  carouselComponent.items = movies;
+  slidesListComponent.slides = movies;
   // TODO set carousel as loading = false
 }
 

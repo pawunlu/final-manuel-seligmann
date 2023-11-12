@@ -34,21 +34,57 @@ export class AdminViewsController {
     // Handle the movies config view
   }
 
-  @Get('pelicula/:movieId')
+  @Get('peliculas/:movieId')
   @Render('admin/movie-config')
   handleMovieConfigView() {
     // Handle the movie config view
   }
 
-  @Get('nueva-pelicula')
-  @Render('admin/movie-config')
-  handleNewMovieConfigView() {
-    // Handle the new movie config view
+  @Get('tipo-salas')
+  @Render('admin/room-types-config')
+  handleRoomTypesView() {
+    // Handle the room-types config view
   }
 
-  // @Get('tipo-salas')
-  // @Render('admin/room-types')
-  // handleRoomTypesView() {
-  //   // Handle the new movie config view
-  // }
+  @Get('tipo-salas/:roomTypeId')
+  @Render('admin/room-type-config')
+  handleRoomTypeConfigView() {
+    // Handle the room-type config view
+  }
+
+  @Get('salas')
+  @Render('admin/rooms-config')
+  handleRoomsView() {
+    // Handle the rooms-config view
+  }
+
+  @Get('salas/:roomId')
+  @Render('admin/room-config')
+  handleRoomConfigView() {
+    // Handle the room-config view
+  }
+
+  @Get('funciones')
+  @Render('admin/screenings-config')
+  handleScreeningsConfigView() {
+    // Handle the screenings-config view
+  }
+
+  @Get('funciones/:screeningId')
+  @Render('admin/screening-config')
+  handleScreeningConfigView() {
+    // Handle the screening-config view
+  }
+
+  @Get('reservas')
+  @Render('admin/reservations')
+  handleReservationsView() {
+    // Handle the reservations view
+  }
+
+  @Get('reservas/:reservationId')
+  @Render('admin/reservation')
+  handleReservationView() {
+    // Handle the reservation view
+  }
 }

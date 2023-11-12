@@ -20,3 +20,19 @@
   font-weight: bold;
   border-radius: 50px;
 }
+
+.reservation-button-1 {
+  background: linear-gradient(to left, var(--blue2) 50%, var(--yellow1) 50%);
+  color: white;
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: all 0.15s ease;
+  font-weight: bold;
+}
+
+.reservation-button-1:hover {
+  cursor: pointer;
+  background-position: left bottom;
+  color: black;
+  font-weight: bold;
+}

@@ -1,11 +1,12 @@
 .desktop-steps-info {
-  background-color: rgba(25, 48, 129, 1);
+  background-color: var(--blue2);
   display: inline-block;
 }
 
 .mobile-steps-info {
   margin: 15px 0;
   display: none;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 700px) {
@@ -23,6 +24,7 @@
   margin: 30px;
   text-align: center;
   cursor: default;
+  font-weight: bold;
 }
 
 /* Step name */
@@ -67,12 +69,12 @@
 }
 
 .desktop-view-step.step.active-step > p:first-child {
-  color: rgba(255, 197, 110, 1);
+  color: var(--yellow1);
   transition: 0.5s ease;
 }
 
 .desktop-view-step.step.active-step > p:not(:first-child) {
-  background-color: rgba(255, 197, 110, 1);
+  background-color: var(--yellow1);
   transition: 0.5s ease;
 }
 

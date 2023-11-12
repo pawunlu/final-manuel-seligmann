@@ -15,9 +15,23 @@
   margin-bottom: 10px;
 }
 
-#language-selector, #room-type-selector, #date-picker-selector {
-  margin-right: 15px
+@media screen and (max-width: 700px) {
+  .filters-container {
+    flex-wrap: wrap;
+  }
 }
+
+#language-selector, #room-type-selector, #date-picker-selector {
+  margin-right: 15px;
+}
+
+@media screen and (max-width: 700px) {
+  #language-selector, #room-type-selector, #date-picker-selector {
+    width: 100%;
+    margin-right: unset;
+  }
+}
+
 
 #reservation-button {
   transform: translateY(38%);
@@ -25,6 +39,15 @@
   border-radius: 10px;
   padding: 0 20px;
 }
+
+@media screen and (max-width: 700px) {
+  #reservation-button {
+    transform: unset;
+    width: 100%;
+    margin-top: 5px;
+  }
+}
+
 
 .movie-data-container {
   padding-top: 30px;

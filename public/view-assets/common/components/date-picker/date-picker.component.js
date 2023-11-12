@@ -117,9 +117,9 @@ export class DatePickerComponent {
       `${this.#parentContainerHTMLComponent.id}-date-picker-container`,
     );
     inputComponent.backgroundColor =
-      this.#backgroundColor ?? 'rgba(25, 48, 129, 0.25)';
+      this.#backgroundColor ?? 'var(--transparent-blue1)';
     inputComponent.placeholderColor =
-      this.#placeholderColor ?? 'rgba(255, 197, 110, 1)';
+      this.#placeholderColor ?? 'var(--yellow1)';
     inputComponent.placeholder = 'Fecha';
     inputComponent.showResetButton = false;
     inputComponent.HTMLComponents.inputHTMLComponent.readOnly = true;

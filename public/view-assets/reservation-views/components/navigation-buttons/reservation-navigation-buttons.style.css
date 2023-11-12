@@ -1,5 +1,5 @@
 .reservation-navigation-buttons {
-  background-color: rgba(25, 48, 129, 1);
+  background-color: var(--blue2);
   width: 400px;
   display: inline-flex;
   justify-content: space-between;
@@ -29,7 +29,7 @@
 }
 
 .next-button {
-  background-color: rgba(0, 122, 255, 1);
+  background-color: var(--light-blue1);
   color: white;
 }
 

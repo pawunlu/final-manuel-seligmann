@@ -9,6 +9,7 @@
   border-radius: 30px;
   display: flex;
   box-sizing: border-box;
+  margin: 10px 0;
 }
 
 .slides-list > .slide .slide-navigation {
@@ -28,13 +29,31 @@
   border-radius: 20px;
 }
 
+@media screen and (max-width: 700px) {
+  .slides-list > .slide .slide-img {
+    height: unset;
+  }
+}
+
 
 .slides-list > .slide .slide-navigation .carousel-index-position {
   margin: 7px 0 60px 0;
 }
 
+@media screen and (max-width: 700px) {
+  .slides-list > .slide .slide-navigation .carousel-index-position {
+    margin: 7px 0 10px 0;
+  }
+}
+
 .slides-list > .slide .slide-navigation .icon-drag-and-drop {
   margin: 10px 0;
+}
+
+@media screen and (max-width: 700px) {
+  .slides-list > .slide .slide-navigation .icon-drag-and-drop {
+    display: none;
+  }
 }
 
 .slides-list > .slide .slide-navigation .icon-drag-and-drop,
@@ -42,4 +61,16 @@
 .slides-list > .slide .slide-navigation .icon-move-downwards {
   color: white;
   font-size: 27px;
+}
+
+.slides-list > .slide .slide-navigation .icon-drag-and-drop:hover,
+.slides-list > .slide .slide-navigation .icon-move-upwards:hover,
+.slides-list > .slide .slide-navigation .icon-move-downwards:hover {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+  .slides-list > .slide .slide-navigation .icon-move-upwards {
+    margin-bottom: 5px;
+  }
 }

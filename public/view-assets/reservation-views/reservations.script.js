@@ -476,8 +476,8 @@ function loadAndRenderStepInfoComponent() {
 function loadAndRenderLanguageSelectComponent() {
   languageSelectComponent = new SelectComponent('language-selector');
   languageSelectComponent.placeholder = 'Idioma';
-  languageSelectComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
-  languageSelectComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  languageSelectComponent.backgroundColor = 'var(--transparent-blue1)';
+  languageSelectComponent.placeholderColor = 'var(--yellow1)';
   if (selectedMovieId && movieLanguages.length) {
     languageSelectComponent.options = movieLanguages;
     languageSelectComponent.selectedOption = movieLanguages.find(
@@ -502,8 +502,8 @@ function loadAndRenderLanguageSelectComponent() {
 function loadAndRenderRoomTypesSelectComponent() {
   roomTypeSelectComponent = new SelectComponent('room-type-selector');
   roomTypeSelectComponent.placeholder = 'Sala';
-  roomTypeSelectComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
-  roomTypeSelectComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  roomTypeSelectComponent.backgroundColor = 'var(--transparent-blue1)';
+  roomTypeSelectComponent.placeholderColor = 'var(--yellow1)';
   if (selectedMovieId && movieRoomTypes) {
     roomTypeSelectComponent.options = movieRoomTypes;
     roomTypeSelectComponent.selectedOption = movieRoomTypes.find(
@@ -569,16 +569,16 @@ function loadAndRenderRoomSeatsSelectorComponent() {
 function loadAndRenderUserNameInput() {
   userNameInputComponent = new InputComponent('name-input');
   userNameInputComponent.placeholder = 'Nombre y apellido';
-  userNameInputComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
-  userNameInputComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  userNameInputComponent.backgroundColor = 'var(--transparent-blue1)';
+  userNameInputComponent.placeholderColor = 'var(--yellow1)';
   userNameInputComponent.render();
 }
 
 function loadAndRenderUserEmailInput() {
   userEmailInputComponent = new InputComponent('email-input');
   userEmailInputComponent.placeholder = 'Email';
-  userEmailInputComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
-  userEmailInputComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  userEmailInputComponent.backgroundColor = 'var(--transparent-blue1)';
+  userEmailInputComponent.placeholderColor = 'var(--yellow1)';
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   userEmailInputComponent.validationRegex = emailRegex;
   userEmailInputComponent.regexErrorMessage = 'El E-Mail no es válido';
@@ -588,8 +588,8 @@ function loadAndRenderUserEmailInput() {
 function loadAndRenderUserPhoneInput() {
   userPhoneInputComponent = new InputComponent('phone-input');
   userPhoneInputComponent.placeholder = 'Teléfono';
-  userPhoneInputComponent.backgroundColor = 'rgba(25, 48, 129, 0.25)';
-  userPhoneInputComponent.placeholderColor = 'rgba(255, 197, 110, 1)';
+  userPhoneInputComponent.backgroundColor = 'var(--transparent-blue1)';
+  userPhoneInputComponent.placeholderColor = 'var(--yellow1)';
   userPhoneInputComponent.render();
 }
 

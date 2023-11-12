@@ -40,7 +40,7 @@
   width: 100%;
   text-align: left;
   color: white;
-  background: linear-gradient(0deg, rgb(59, 90, 202) 0%, rgba(28,28,28,0.6) 22%, rgba(28,28,28,0.4) 100%);
+  background: linear-gradient(0deg, var(--blue1) 0%, rgba(28,28,28,0.6) 22%, rgba(28,28,28,0.4) 100%);
 }
 
 .slider .slide > .slide-description:hover {
@@ -57,9 +57,11 @@
   /* border: solid 1px red; */
 }
 
-.slider .slide .slide-description-content > h2 {
+.slider .slide .slide-description-content > h1 {
+  font-weight: 600;
+  font-size: 40px;
   position: absolute;
-  top: 250px;
+  top: 220px;
 }
 
 .slider .slide .slide-description-content > .clasification, .slide .slide-description-content > .duration {
@@ -72,13 +74,14 @@
 }
 
 .slider .slide .slide-description-content > .duration {
-  left: 200px;
+  left: 220px;
 }
 
 .slider .slide > .slide-description p:nth-child(1) {
-  color: rgba(255, 197, 110, 1);
+  color: var(--yellow1);
   display: inline-block;
   margin-right: 10px;
+  font-weight: 600;
 }
 
 .slider .slide > .slide-description p:nth-child(2) {
@@ -87,8 +90,6 @@
 }
 
 .slider .slide .carousel-reservation-button {
-  background-color: rgba(25, 48, 129, 1);
-  color: white;
   width: 160px;
   height: 50px;
   position: absolute;
@@ -96,10 +97,13 @@
   top: 260px;
   border-radius: 30px;
   border: none;
+  font-size: 20px;
 }
 
-.slider .slide .carousel-reservation-button:hover {
-  cursor: pointer;
+@media screen and (max-width: 700px) {
+  .slider .slide .carousel-reservation-button {
+    font-size: 19px;
+  }
 }
 
 
@@ -158,8 +162,8 @@
 
 
 @media screen and (max-width: 700px) {
-  .slider .slide .slide-description-content > h2 {
-    top: 180px;
+  .slider .slide .slide-description-content > h1 {
+    top: 155px;
     font-size: 34px;
   }
 

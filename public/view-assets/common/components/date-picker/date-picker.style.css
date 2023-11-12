@@ -17,7 +17,7 @@
   background: transparent;
   background-color: transparent;
   transition: border-color 0.2s;
-  background-color: rgba(25, 48, 129, 0.25);
+  background-color: var(--transparent-blue1);
   color: white;
 }
 

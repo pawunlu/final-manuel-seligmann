@@ -48,7 +48,7 @@
 }
 
 .seats-info > .selected-seats-info button {
-  background: rgba(0, 122, 255, 1);
+  background: var(--light-blue1);
 }
 
 .seats-info > .occupied-seats-info button {
@@ -56,7 +56,7 @@
 }
 
 .room-container {
-  background-color: rgba(59, 90, 202, 1);
+  background-color: var(--blue1);
   padding: 25px;
   border-radius: 25px;
   display: flex;
@@ -87,7 +87,7 @@
 }
 
 .room-seats .selected-seat {
-  background: rgba(0, 122, 255, 1);
+  background: var(--light-blue1);
 }
 
 

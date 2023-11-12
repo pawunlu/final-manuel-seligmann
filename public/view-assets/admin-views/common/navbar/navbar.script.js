@@ -30,16 +30,16 @@ const bodyItemsList = [
     isCollapsibleOpen: true,
     children: [
       {
+        name: 'Listado',
+        url: '/admin/peliculas',
+      },
+      {
         name: 'Carousel',
         url: '/admin/carousel',
       },
       {
         name: 'Cartelera',
         url: '/admin/cartelera',
-      },
-      {
-        name: 'Listado',
-        url: '/admin/peliculas',
       },
     ],
   },
@@ -59,7 +59,7 @@ const bodyItemsList = [
     ],
   },
   {
-    name: 'Functiones',
+    name: 'Funciones',
     url: '/admin/funciones',
     children: [],
   },
