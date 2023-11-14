@@ -1,7 +1,11 @@
 {{> fragments/admin/base}}
 
   {{#> head-block}}
-      <title>Configurar peliculas | PAW Cine</title>
+      <title>Configurar películas | PAW Cine</title>
+
+      {{!-- Table's Component & Style --}}
+      <script src="/view-assets/admin-views/common/components/table/table.component.js" type="module"></script>
+      <link href="/view-assets/admin-views/common/components/table/table.style.css" rel="stylesheet" type="text/css"> 
 
       {{!-- Movies config's Script & Style --}}
       <script src="/view-assets/admin-views/movies-config/movies-config.script.js" type="module"></script>
@@ -11,7 +15,17 @@
 
   {{#*inline "main-block"}}
 
-    <h1>Config de peliculas</h1>
+
+    <section class="body-content-container">
+      <header>
+        <h1>Listado de películas</h1>
+      </header>
+
+      <main>
+        <section id="movies-list"></section>
+      </main>
+
+    </section>
 
   {{/inline}}
 

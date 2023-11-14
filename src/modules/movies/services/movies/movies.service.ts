@@ -3,6 +3,7 @@ import { MoviesRepository } from '../../repositories/movies.repository';
 import {
   PaginationQueryDto,
   PaginationResponseDto,
+  QuerySearch,
 } from '../../../../common/dtos';
 import {
   CreateMovieDto,
@@ -20,6 +21,7 @@ import {
   FindOptionsOrder,
   FindOptionsRelations,
   FindOptionsWhere,
+  ILike,
 } from 'typeorm';
 
 @Injectable()
@@ -71,8 +73,10 @@ export class MoviesService {
       where: filters,
       ...(orderBy && { order: orderBy }),
       ...(relations && { relations }),
-      ...(!paginated.all && { skip: paginated.items * (paginated.page - 1) }),
-      ...(!paginated && { take: paginated.items }),
+      ...(!paginated.all && {
+        skip: paginated.items * (paginated.page - 1),
+        take: paginated.items,
+      }),
     });
 
     return {
@@ -169,5 +173,24 @@ export class MoviesService {
       },
     );
     return items;
+  }
+
+  async findAllMoviesPaginated(params?: QuerySearch) {
+    console.log(params);
+    const { query, page, items } = params || {};
+
+    return this.findAllBy(
+      {
+        name: ILike(`%${query || ''}%`),
+      },
+      {
+        createdAt: 'DESC',
+        name: 'ASC',
+      },
+      {
+        page: page ? page : 1,
+        items: items ? items : 15,
+      },
+    );
   }
 }

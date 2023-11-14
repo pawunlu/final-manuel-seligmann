@@ -61,7 +61,17 @@ const bodyItemsList = [
   {
     name: 'Funciones',
     url: '/admin/funciones',
-    children: [],
+    isCollapsibleOpen: true,
+    children: [
+      {
+        name: 'Actuales y futuras',
+        url: '/admin/funciones',
+      },
+      {
+        name: 'Finalizadas',
+        url: '/admin/funciones/finalizadas',
+      },
+    ],
   },
   {
     name: 'Reservas',

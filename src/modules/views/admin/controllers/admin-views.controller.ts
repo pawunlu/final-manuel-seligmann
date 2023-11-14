@@ -34,7 +34,7 @@ export class AdminViewsController {
     // Handle the movies config view
   }
 
-  @Get('peliculas/:movieId')
+  @Get('pelicula/:movieId')
   @Render('admin/movie-config')
   handleMovieConfigView() {
     // Handle the movie config view
@@ -46,7 +46,13 @@ export class AdminViewsController {
     // Handle the room-types config view
   }
 
-  @Get('tipo-salas/:roomTypeId')
+  @Get('tipo-salas/nueva')
+  @Render('admin/room-type-config')
+  handleNewRoomTypeView() {
+    // Handle the new room-type config view
+  }
+
+  @Get('tipo-sala/:roomTypeId')
   @Render('admin/room-type-config')
   handleRoomTypeConfigView() {
     // Handle the room-type config view
@@ -56,6 +62,12 @@ export class AdminViewsController {
   @Render('admin/rooms-config')
   handleRoomsView() {
     // Handle the rooms-config view
+  }
+
+  @Get('sala/:roomId')
+  @Render('admin/room-config')
+  handleNewRoomConfigView() {
+    // Handle the new room-config view
   }
 
   @Get('salas/:roomId')

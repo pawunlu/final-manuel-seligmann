@@ -1,9 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { MoviesService } from '../services';
-import { MovieDto, MovieExtraDataDto } from '../dtos';
+import { MoviesService } from '../../services';
+import { MovieDto, MovieExtraDataDto } from '../../dtos';
 
 @Controller('api/movies')
-export class MoviesController {
+export class MoviesPublicController {
   constructor(private moviesService: MoviesService) {}
   // findById() {}
   // findAll() {}
