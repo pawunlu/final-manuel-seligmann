@@ -135,14 +135,32 @@ export class TableComponent {
 
     // Actions column
     const actionsHeader = document.createElement('th');
+    row.append(actionsHeader);
     actionsHeader.classList.add('header-column-actions');
+
     const actionsButton = document.createElement('button');
     actionsHeader.append(actionsButton);
-    actionsButton.innerHTML = '...';
-    actionsButton.classList.add('header-column-row-actions');
+    actionsButton.innerHTML = '⋮';
     const displayActions = this.#actions.length > 0;
     if (!displayActions) actionsHeader.style.display = 'none';
-    row.append(actionsHeader);
+    actionsButton.addEventListener('click', () => {
+      const isDropdownHidden = actionsDropdown.style.display === 'none';
+      if (!isDropdownHidden) {
+        actionsDropdown.style.display = 'none';
+      } else {
+        actionsDropdown.style.display = 'block';
+      }
+    });
+
+    const actionsDropdown = document.createElement('ul');
+    actionsHeader.appendChild(actionsDropdown);
+    actionsDropdown.style.display = 'none';
+    for (const action of this.#actions) {
+      const actionItem = document.createElement('li');
+      actionItem.innerHTML = action.name;
+      actionItem.addEventListener('click', action.onClick);
+      actionsDropdown.append(actionItem);
+    }
 
     return container;
   }
