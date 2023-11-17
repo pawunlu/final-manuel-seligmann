@@ -8,8 +8,9 @@ export class PaginationQueryDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(1)
   @Type(() => Number)
-  items?: number = 20;
+  items?: number = 15;
 
   @IsOptional()
   @IsNumber()

@@ -1,7 +1,7 @@
 import { Screening } from '../../../database/models';
 import { languageToLanguageDtoMapper } from '../../languages/mappers';
 import { movieToMovieDtoMapper } from '../../movies/mappers';
-import { roomtypeToRoomTypeDtoMapper } from '../../room-types/mappers';
+import { roomTypeToRoomTypeDtoMapper } from '../../room-types/mappers';
 import { roomToRoomDtoMapper } from '../../rooms/mappers';
 import { ScreeningDto } from '../dtos';
 
@@ -57,7 +57,7 @@ export function screeningToScreeningDtoMapper(
     }),
     roomTypeId: screening.roomTypeId,
     ...(includeRoomTypeInfo && {
-      roomType: roomtypeToRoomTypeDtoMapper(screening.roomType),
+      roomType: roomTypeToRoomTypeDtoMapper(screening.roomType),
     }),
     createdAt: screening.createdAt,
     updatedAt: screening.updatedAt,

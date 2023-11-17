@@ -1,0 +1,61 @@
+.paginator-container {
+  display: inline-flex;
+  justify-content: center;
+  background-color: var(--blue2);
+  border-radius: 30px;
+  padding: 2px;
+}
+
+.paginator-container .pages-buttons {
+  display: flex;
+}
+
+.paginator-container .page-button, .paginator-container .paginator-ellipsis {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--white1);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 3px;
+  user-select: none;
+}
+
+.paginator-container .page-button {
+  background-color: var(--blue1);
+}
+
+.paginator-container .page-button:hover {
+  cursor: pointer;
+}
+
+.paginator-container .page-button:not(.current-page-button):hover {
+  color: var(--yellow1);
+}
+
+.paginator-container .page-button.current-page-button {
+  background-color: var(--light-blue1);
+}
+
+.page-button > .previous-button, .page-button > .next-button {
+  font-size: 37px;
+}
+
+.paginator-container .page-button > .previous-button {
+  transform: translate(-12%, -6%)
+}
+
+.paginator-container .page-button > .next-button {
+  transform: translate(12%, -6%)
+}
+
+@media screen and (max-width: 700px) {
+  .paginator-container .page-button:has(> .next-button), .paginator-container .page-button:has(> .previous-button) {
+    display: none;
+  }
+}
+
+

@@ -1,7 +1,7 @@
 import { RoomType } from '../../../database/models';
 import { RoomTypeDto } from '../dtos';
 
-export function roomtypeToRoomTypeDtoMapper(roomType: RoomType): RoomTypeDto {
+export function roomTypeToRoomTypeDtoMapper(roomType: RoomType): RoomTypeDto {
   return {
     id: roomType.id,
     name: roomType.name,

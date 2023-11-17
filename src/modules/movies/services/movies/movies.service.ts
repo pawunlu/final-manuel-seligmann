@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MoviesRepository } from '../../repositories/movies.repository';
 import {
+  FindAllByDto,
   PaginationQueryDto,
   PaginationResponseDto,
   QuerySearch,
@@ -17,12 +18,7 @@ import { Movie } from '../../../../database/models';
 import { ScreeningsService } from '../../../screenings/services';
 import { LanguageDto } from '../../../languages/dtos';
 import { RoomTypeDto } from '../../../room-types/dtos';
-import {
-  FindOptionsOrder,
-  FindOptionsRelations,
-  FindOptionsWhere,
-  ILike,
-} from 'typeorm';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class MoviesService {
@@ -63,12 +59,12 @@ export class MoviesService {
     };
   }
 
-  async findAllBy(
-    filters: FindOptionsWhere<Movie> = {},
-    orderBy?: FindOptionsOrder<Movie>,
-    paginated?: PaginationQueryDto,
-    relations?: FindOptionsRelations<Movie>,
-  ): Promise<PaginationResponseDto<MovieDto>> {
+  async findAllBy({
+    filters,
+    orderBy,
+    paginated,
+    relations,
+  }: FindAllByDto<Movie>): Promise<PaginationResponseDto<MovieDto>> {
     const [movies, count] = await this.moviesRepository.findAndCount({
       where: filters,
       ...(orderBy && { order: orderBy }),
@@ -161,36 +157,35 @@ export class MoviesService {
   }
 
   async findCarouselMovies(): Promise<MovieDto[]> {
-    const { items } = await this.findAllBy(
-      {
+    const { items } = await this.findAllBy({
+      filters: {
         displayInCarousel: true,
       },
-      {
+      orderBy: {
         carouselPositionIndex: 'ASC',
       },
-      {
+      paginated: {
         all: true,
       },
-    );
+    });
     return items;
   }
 
   async findAllMoviesPaginated(params?: QuerySearch) {
-    console.log(params);
     const { query, page, items } = params || {};
 
-    return this.findAllBy(
-      {
+    return this.findAllBy({
+      filters: {
         name: ILike(`%${query || ''}%`),
       },
-      {
+      orderBy: {
         createdAt: 'DESC',
         name: 'ASC',
       },
-      {
+      paginated: {
         page: page ? page : 1,
         items: items ? items : 15,
       },
-    );
+    });
   }
 }

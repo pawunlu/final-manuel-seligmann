@@ -2,11 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { RoomTypesRepository } from '../../repositories';
 import { RoomTypeDto } from '../../dtos';
 import { RoomTypeNotFoundException } from '../../errors';
-import { roomtypeToRoomTypeDtoMapper } from '../../mappers';
+import { roomTypeToRoomTypeDtoMapper } from '../../mappers';
 import {
+  FindAllByDto,
   PaginationQueryDto,
   PaginationResponseDto,
+  QuerySearch,
 } from '../../../../common/dtos';
+import { RoomType } from '../../../../database/models';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class RoomTypesService {
@@ -18,7 +22,7 @@ export class RoomTypesService {
     });
     if (!roomType) throw new RoomTypeNotFoundException();
 
-    return roomtypeToRoomTypeDtoMapper(roomType);
+    return roomTypeToRoomTypeDtoMapper(roomType);
   }
 
   async findAll(
@@ -36,12 +40,51 @@ export class RoomTypesService {
     });
 
     return {
-      items: movies.map((roomType) => roomtypeToRoomTypeDtoMapper(roomType)),
+      items: movies.map((roomType) => roomTypeToRoomTypeDtoMapper(roomType)),
       page: paginated.page,
       itemsPerPage: paginated.items || count,
       totalItems: count,
       totalPages: Math.ceil(count / paginated.items || count),
     };
+  }
+
+  async findAllBy({
+    filters,
+    orderBy,
+    paginated,
+    relations,
+  }: FindAllByDto<RoomType>): Promise<PaginationResponseDto<RoomTypeDto>> {
+    const [roomTypes, count] = await this.roomTypesRepository.findAndCount({
+      where: filters,
+      ...(orderBy && { order: orderBy }),
+      ...(relations && { relations }),
+      ...(!paginated.all && {
+        skip: paginated.items * (paginated.page - 1),
+        take: paginated.items,
+      }),
+    });
+
+    return {
+      items: roomTypes.map((roomType) => roomTypeToRoomTypeDtoMapper(roomType)),
+      page: paginated.page,
+      itemsPerPage: paginated.items || count,
+      totalItems: count,
+      totalPages: Math.ceil(count / paginated.items || count),
+    };
+  }
+
+  async findAllRoomTypesPaginated(params?: QuerySearch) {
+    const { query, page, items } = params || {};
+    console.log(params);
+
+    return this.findAllBy({
+      filters: { name: ILike(`%${query || ''}%`) },
+      orderBy: { createdAt: 'DESC', name: 'ASC' },
+      paginated: {
+        page: page ? page : 1,
+        items: items ? items : 15,
+      },
+    });
   }
 
   // async createOne(values: CreateMovieDto): Promise<MovieDto> {

@@ -1,5 +1,5 @@
 import { Room } from '../../../database/models';
-import { roomtypeToRoomTypeDtoMapper } from '../../room-types/mappers';
+import { roomTypeToRoomTypeDtoMapper } from '../../room-types/mappers';
 import { RoomDto } from '../dtos';
 
 type RoomMapperOptions = {
@@ -24,7 +24,7 @@ export function roomToRoomDtoMapper(
     updatedAt: room.updatedAt,
     roomTypeId: room.roomTypeId,
     ...(includeRoomTypeInfo && {
-      roomType: roomtypeToRoomTypeDtoMapper(room.roomType),
+      roomType: roomTypeToRoomTypeDtoMapper(room.roomType),
     }),
   };
 }

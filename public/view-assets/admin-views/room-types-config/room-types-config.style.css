@@ -1,0 +1,11 @@
+h1 {
+  color: var(--white1);
+  font-weight: bold;
+  text-align: left;
+  margin: 25px 0;
+}
+
+#paginator {
+  display: flex;
+  justify-content: center;
+}

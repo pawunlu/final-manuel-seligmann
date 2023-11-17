@@ -1,4 +1,5 @@
 import { TableComponent } from '../common/components/table/table.component.js';
+import { PaginatorComponent } from '../common/components/paginator/paginator.component.js';
 
 /**
  * represents a Movie
@@ -15,6 +16,9 @@ import { TableComponent } from '../common/components/table/table.component.js';
 /** @type {TableComponent} */
 let moviesTable = null;
 
+/** @type {PaginatorComponent} */
+let paginator = null;
+
 /** @type {Movie[]} */
 let movies = [];
 
@@ -28,10 +32,14 @@ let currentPage = null;
 let totalPages = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  loadAndRenderTableComponent();
-  const { page, query } = getUrlParams();
-  fetchAndLoadMovies(page || 1, query || '');
+  loadAndRenderComponents();
+  fetchAndLoadMovies(1);
 });
+
+function loadAndRenderComponents() {
+  loadAndRenderTableComponent();
+  loadAndRenderPaginatorComponent();
+}
 
 function loadAndRenderTableComponent() {
   const actions = [
@@ -58,20 +66,16 @@ function loadAndRenderTableComponent() {
   moviesTable.render();
 }
 
-function handleAddMovieEvent() {
-  console.log('Mostrar formulario para nueva pelicula');
+function loadAndRenderPaginatorComponent() {
+  paginator = new PaginatorComponent('paginator');
+  paginator.totalPages = 1;
+  paginator.currentPage = 1;
+  paginator.onPageChange = handlePageChange;
+  paginator.render();
 }
 
-function getUrlParams() {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const page = urlParams.get('page');
-  const query = urlParams.get('query');
-
-  return {
-    page,
-    query,
-  };
+function handleAddMovieEvent() {
+  console.log('Mostrar formulario para nueva pelicula');
 }
 
 async function fetchAndLoadMovies(page, query) {
@@ -130,4 +134,8 @@ function parseMoviesIntoTableItems(movies) {
  */
 function onEditMovieEventClick(movie) {
   console.log('Se quiere editar esta pelicula', movie);
+}
+
+function handlePageChange(newPage) {
+  fetchAndLoadMovies(newPage);
 }

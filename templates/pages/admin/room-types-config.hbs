@@ -2,6 +2,13 @@
 
   {{#> head-block}}
       <title>Configurar tipos de salas | PAW Cine</title>
+      {{!-- Table's Component & Style --}}
+      <script src="/view-assets/admin-views/common/components/table/table.component.js" type="module"></script>
+      <link href="/view-assets/admin-views/common/components/table/table.style.css" rel="stylesheet" type="text/css">
+
+      {{!-- Paginator's Component & Style --}}
+      <script src="/view-assets/admin-views/common/components/paginator/paginator.component.js" type="module"></script>
+      <link href="/view-assets/admin-views/common/components/paginator/paginator.style.css" rel="stylesheet" type="text/css">
   
       {{!-- Room-types-config views's Script & Style --}}
       <script src="/view-assets/admin-views/room-types-config/room-types-config.script.js" type="module"></script>
@@ -10,7 +17,12 @@
 
   {{#*inline "main-block"}}
 
-    <h1>Configurar Tipos de salas</h1>
+    <section class="body-content-container">
+      <h1>Configurar Tipos de salas</h1>
+      <section id="room-types-list"></section>
+      <section id="paginator"></section>
+    </section>
+
 
   {{/inline}}
 

@@ -7,6 +7,10 @@
       <script src="/view-assets/admin-views/common/components/table/table.component.js" type="module"></script>
       <link href="/view-assets/admin-views/common/components/table/table.style.css" rel="stylesheet" type="text/css"> 
 
+      {{!-- Paginator's Component & Style --}}
+      <script src="/view-assets/admin-views/common/components/paginator/paginator.component.js" type="module"></script>
+      <link href="/view-assets/admin-views/common/components/paginator/paginator.style.css" rel="stylesheet" type="text/css">
+
       {{!-- Movies config's Script & Style --}}
       <script src="/view-assets/admin-views/movies-config/movies-config.script.js" type="module"></script>
       <link href="/view-assets/admin-views/movies-config/movies-config.style.css" rel="stylesheet" type="text/css"> 
@@ -21,9 +25,8 @@
         <h1>Listado de películas</h1>
       </header>
 
-      <main>
-        <section id="movies-list"></section>
-      </main>
+      <section id="movies-list"></section>
+      <section id="paginator"></section>
 
     </section>
 
