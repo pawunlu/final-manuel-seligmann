@@ -1,6 +1,6 @@
 {{> fragments/public/base}}
 
-  {{#> head-block}}
+  {{#*inline "head-block"}}
       <title> Reservar | PAW Cine </title>
       {{!-- Reservation Step Info Component & Style --}}
       <script src="/view-assets/reservation-views/components/step-info/reservation-step-info.component.js" type="module"></script>
@@ -30,7 +30,7 @@
       {{!-- Reservation View Script & Style --}}
       <script src="/view-assets/reservation-views/reservations.script.js" type="module"></script>
       <link href="/view-assets/reservation-views/reservations.style.css" rel="stylesheet" type="text/css">
-  {{/head-block}}
+  {{/inline}}
 
   {{#*inline "main-block"}}
 

@@ -1,13 +1,13 @@
 {{> fragments/public/base}}
 
-  {{#> head-block}}
+  {{#*inline "head-block"}}
       <title>Cartelera | PAW Cine</title>
       {{!-- current view script --}}
       <script src="/view-assets/public-views/movies/movies.script.js"></script>
       <link href="/view-assets/public-views/movies/movies.style.css" rel="stylesheet" type="text/css">
             {{!-- movie displayer style --}}
       <link href="/view-assets/public-views/movies/fragments/movie-displayer/movie-displayer.style.css" rel="stylesheet" type="text/css">
-  {{/head-block}}
+  {{/inline}}
 
   {{#*inline "main-block"}}
 

@@ -1,6 +1,6 @@
 {{> fragments/public/base}}
 
-  {{#> head-block}}
+  {{#*inline "head-block"}}
       <title>{{name}} | PAW Cine</title>
       {{!-- Input Component & Style  --}}
       <script src="/view-assets/common/components/input/input.component.js" type="module"></script>
@@ -18,7 +18,7 @@
       {{!-- current view Style & Script --}}
       <link href="/view-assets/public-views/movie-info/movie-info.style.css" rel="stylesheet" type="text/css">
       <script src="/view-assets/public-views/movie-info/movie-info.script.js" type="module"></script>
-  {{/head-block}}
+  {{/inline}}
 
 
   {{#*inline "main-block"}}

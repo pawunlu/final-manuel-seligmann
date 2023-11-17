@@ -1,6 +1,6 @@
 {{> fragments/admin/base}}
 
-  {{#> head-block}}
+  {{#*inline "head-block"}}
       <title>Configurar películas | PAW Cine</title>
 
       {{!-- Table's Component & Style --}}
@@ -14,7 +14,7 @@
       {{!-- Movies config's Script & Style --}}
       <script src="/view-assets/admin-views/movies-config/movies-config.script.js" type="module"></script>
       <link href="/view-assets/admin-views/movies-config/movies-config.style.css" rel="stylesheet" type="text/css"> 
-  {{/head-block}}
+  {{/inline}}
 
 
   {{#*inline "main-block"}}

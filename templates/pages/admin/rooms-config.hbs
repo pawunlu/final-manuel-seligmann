@@ -1,6 +1,6 @@
 {{> fragments/admin/base}}
 
-  {{#> head-block}}
+  {{#*inline "head-block"}}
       <title>Configurar salas | PAW Cine</title>
        {{!-- Table's Component & Style --}}
       <script src="/view-assets/admin-views/common/components/table/table.component.js" type="module"></script>
@@ -13,7 +13,7 @@
       {{!-- Rooms-config views's Script & Style --}}
       <script src="/view-assets/admin-views/rooms-config/rooms-config.script.js" type="module"></script>
       <link href="/view-assets/admin-views/rooms-config/rooms-config.style.css" rel="stylesheet" type="text/css"> 
-  {{/head-block}}
+  {{/inline}}
 
   {{#*inline "main-block"}}
 

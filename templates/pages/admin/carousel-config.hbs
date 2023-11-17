@@ -1,6 +1,6 @@
 {{> fragments/admin/base}}
 
-  {{#> head-block}}
+  {{#*inline "head-block"}}
       <title>Configurar el carousel | PAW Cine</title>
 
       {{!-- Carousel component Script & Style --}}
@@ -14,7 +14,7 @@
       {{!-- Carousel Slides List Component Script & Style --}}
       <script src="/view-assets/admin-views/carousel-config/components/slides-list/slides-list.component.js" type="module"></script>
       <link href="/view-assets/admin-views/carousel-config/components/slides-list/slides-list.style.css" rel="stylesheet" type="text/css"> 
-  {{/head-block}}
+  {{/inline}}
 
   {{#*inline "main-block"}}
 
