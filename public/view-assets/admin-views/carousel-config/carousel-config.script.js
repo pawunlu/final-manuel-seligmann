@@ -25,13 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadAndRenderSlidesListComponent();
 
   await fetchAndLoadMoviesIntoComponents();
-
-  const button = document.getElementById('test-button');
-  button.addEventListener('click', () => {
-    const [first, second, third] = carouselMovies;
-    const newListOrder = [third, second, first];
-    carouselComponent.items = newListOrder;
-  });
 });
 
 function loadAndRenderCarouselComponent() {
@@ -41,6 +34,7 @@ function loadAndRenderCarouselComponent() {
 
 function loadAndRenderSlidesListComponent() {
   slidesListComponent = new SlidesListComponent('slides-list-container');
+  slidesListComponent.onSlidesPositionsChange = handleNewSlidesPosition;
   slidesListComponent.render();
 }
 
@@ -69,4 +63,15 @@ async function fetchCarouselMovies() {
     throw new Error('Something went wrong fetching Movie Extra Data', response);
 
   return response.json();
+}
+
+/**
+ *
+ *
+ * @param {Movie[]} list
+ */
+function handleNewSlidesPosition(list) {
+  carouselComponent.items = list;
+  changesToSave = list;
+  // TODO: Enable save | discard buttons
 }
