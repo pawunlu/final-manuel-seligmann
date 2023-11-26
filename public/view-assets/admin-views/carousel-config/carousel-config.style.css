@@ -3,3 +3,10 @@ h1 {
   text-align: center;
   margin-bottom: 10px;
 }
+
+#unsaved-changes-buttons {
+  position: sticky;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+}

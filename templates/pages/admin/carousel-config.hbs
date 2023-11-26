@@ -11,6 +11,13 @@
       <script src="/view-assets/admin-views/carousel-config/carousel-config.script.js" type="module"></script>
       <link href="/view-assets/admin-views/carousel-config/carousel-config.style.css" rel="stylesheet" type="text/css"> 
 
+      {{!-- Unsaved-Changes Buttons component Script & Style --}}
+      <script src="/view-assets/admin-views/common/components/unsaved-changes/unsaved-changes.component.js" type="module"></script>
+      <link href="/view-assets/admin-views/common/components/unsaved-changes/unsaved-changes.style.css" rel="stylesheet" type="text/css">
+
+      {{!-- Buttons Styles --}}
+      <link href="/view-assets/common/buttons.style.css" rel="stylesheet" type="text/css">
+
       {{!-- Carousel Slides List Component Script & Style --}}
       <script src="/view-assets/admin-views/carousel-config/components/slides-list/slides-list.component.js" type="module"></script>
       <link href="/view-assets/admin-views/carousel-config/components/slides-list/slides-list.style.css" rel="stylesheet" type="text/css"> 
@@ -23,6 +30,8 @@
     <h1>Configurar el orden del carousel</h1>
 
     <section id="slides-list-container" class="body-content-container"></section>
+
+    <section id="unsaved-changes-buttons" class="body-container-container"></section>
 
   {{/inline}}
 

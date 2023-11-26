@@ -61,10 +61,13 @@
   font-size: 27px;
 }
 
-.slides-list > .slide .slide-navigation .icon-drag-and-drop:hover,
 .slides-list > .slide .slide-navigation .icon-move-upwards:hover,
 .slides-list > .slide .slide-navigation .icon-move-downwards:hover {
   cursor: pointer;
+}
+
+.slides-list > .slide .slide-navigation .icon-drag-and-drop:hover {
+  cursor: all-scroll;
 }
 
 @media screen and (max-width: 700px) {

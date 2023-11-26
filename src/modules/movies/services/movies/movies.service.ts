@@ -62,7 +62,7 @@ export class MoviesService {
   async findAllBy({
     filters,
     orderBy,
-    paginated,
+    paginated = { all: true },
     relations,
   }: FindAllByDto<Movie>): Promise<PaginationResponseDto<MovieDto>> {
     const [movies, count] = await this.moviesRepository.findAndCount({
@@ -154,21 +154,6 @@ export class MoviesService {
       availableLanguages,
       availableRoomTypes,
     };
-  }
-
-  async findCarouselMovies(): Promise<MovieDto[]> {
-    const { items } = await this.findAllBy({
-      filters: {
-        displayInCarousel: true,
-      },
-      orderBy: {
-        carouselPositionIndex: 'ASC',
-      },
-      paginated: {
-        all: true,
-      },
-    });
-    return items;
   }
 
   async findAllMoviesPaginated(params?: QuerySearch) {

@@ -1,5 +1,6 @@
 import { CarouselComponent } from '../../common/components/carousel/carousel.component.js';
 import { SlidesListComponent } from '../../admin-views/carousel-config/components/slides-list/slides-list.component.js';
+import { UnsavedChangesButtonsComponent } from '../../admin-views/common/components/unsaved-changes/unsaved-changes.component.js';
 
 /**
  * represents a Movie
@@ -14,8 +15,14 @@ let carouselComponent = null;
 /** @type {SlidesListComponent} */
 let slidesListComponent = null;
 
+/** @type {UnsavedChangesButtonsComponent} */
+let unsavedChangesButtonsComponent = null;
+
 /** @type {Movie[]} */
 let carouselMovies = [];
+
+/** @type {Movie[]} */
+let unmodifiedCarouselMovies = [];
 
 /** @type {Movie[]} */
 let changesToSave = [];
@@ -23,6 +30,7 @@ let changesToSave = [];
 document.addEventListener('DOMContentLoaded', async () => {
   loadAndRenderCarouselComponent();
   loadAndRenderSlidesListComponent();
+  loadAndRenderUnsavedChangesComponent();
 
   await fetchAndLoadMoviesIntoComponents();
 });
@@ -38,10 +46,22 @@ function loadAndRenderSlidesListComponent() {
   slidesListComponent.render();
 }
 
+function loadAndRenderUnsavedChangesComponent() {
+  unsavedChangesButtonsComponent = new UnsavedChangesButtonsComponent(
+    'unsaved-changes-buttons',
+  );
+  unsavedChangesButtonsComponent.onDiscardButtonClick =
+    handleDiscardButtonClick;
+
+  unsavedChangesButtonsComponent.onSaveButtonClick = handleSaveButtonClick;
+  unsavedChangesButtonsComponent.display = false;
+}
+
 async function fetchAndLoadMoviesIntoComponents() {
   // TODO: Create some animation showing the carousel movies are loading as the data is been fetch
   // TODO set carousel as loading = true
   const movies = await fetchCarouselMovies();
+  unmodifiedCarouselMovies = movies;
   carouselMovies = movies;
   carouselComponent.items = movies;
   slidesListComponent.slides = movies;
@@ -68,10 +88,50 @@ async function fetchCarouselMovies() {
 /**
  *
  *
+ * @param {Movie[]} newMoviesOrder
+ */
+async function updateCarouselMoviesOrder(newMoviesOrder) {
+  const url = `/api/admin/movies/carousel`;
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newMoviesOrder),
+  });
+
+  if (!response.ok)
+    throw new Error(
+      'Something went wrong updating the carousel movies order',
+      response,
+    );
+}
+
+/**
+ *
+ *
  * @param {Movie[]} list
  */
 function handleNewSlidesPosition(list) {
   carouselComponent.items = list;
   changesToSave = list;
-  // TODO: Enable save | discard buttons
+
+  unsavedChangesButtonsComponent.display = true;
+}
+
+function handleDiscardButtonClick() {
+  unsavedChangesButtonsComponent.display = false;
+  changesToSave = [];
+  carouselMovies = unmodifiedCarouselMovies;
+  slidesListComponent.slides = carouselMovies;
+  carouselComponent.items = carouselMovies;
+}
+
+async function handleSaveButtonClick() {
+  console.log('se guardo lo siguiente:', changesToSave);
+  // TODO: Call endpoint to store the new carousel movies order
+  await updateCarouselMoviesOrder(changesToSave);
+  await fetchAndLoadMoviesIntoComponents();
+  unsavedChangesButtonsComponent.display = false;
+  changesToSave = [];
 }

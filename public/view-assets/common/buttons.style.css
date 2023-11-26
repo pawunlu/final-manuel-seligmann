@@ -12,10 +12,33 @@
   width: 100px;
 }
 
+.medium-button {
+  height: 50px;
+  width: 140px;
+}
+
 .button-1 {
   background-color: var(--light-blue1);
-  border: none;
   color: var(--white1);
+  border: none;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 50px;
+}
+
+.button-2 {
+  background-color: var(--blue1);
+  color: var(--white1);
+  border: none;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 50px;
+}
+
+.button-3 {
+  background-color: var(--yellow1);
+  color: var(--blue3);
+  border: none;
   font-size: 17px;
   font-weight: bold;
   border-radius: 50px;

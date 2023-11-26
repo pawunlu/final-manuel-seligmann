@@ -1,14 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { MoviesService } from '../../services';
+import { CarouselMoviesService, MoviesService } from '../../services';
 import { MovieDto, MovieExtraDataDto } from '../../dtos';
 
 @Controller('api/movies')
 export class MoviesPublicController {
-  constructor(private moviesService: MoviesService) {}
-  // findById() {}
-  // findAll() {}
-  // createOne() {}
-  // updateOne() {}
+  constructor(
+    private moviesService: MoviesService,
+    private carouselMoviesService: CarouselMoviesService,
+  ) {}
 
   @Get(':movieId/extra-data')
   findMovieExtraData(
@@ -19,6 +18,6 @@ export class MoviesPublicController {
 
   @Get('carousel')
   findCarouselMovies(): Promise<MovieDto[]> {
-    return this.moviesService.findCarouselMovies();
+    return this.carouselMoviesService.findCarouselMovies();
   }
 }

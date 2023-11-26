@@ -89,10 +89,10 @@ export class SlidesListComponent {
   #createSlideItem(item, slideIndex) {
     const slideContainer = document.createElement('section');
     slideContainer.classList.add('slide');
-    slideContainer.setAttribute('slide-id', slideIndex);
+    slideContainer.setAttribute('slide-index', slideIndex);
     slideContainer.setAttribute('item-id', item.id);
 
-    const slideNavigation = this.#createSlideNavigation(item);
+    const slideNavigation = this.#createSlideNavigation(item, slideIndex);
     const slideImage = this.#createSlideImage(item);
     slideContainer.append(slideNavigation, slideImage);
 
@@ -103,20 +103,19 @@ export class SlidesListComponent {
    *
    *
    * @param {Movie} item
+   * @param {Number} slideIndex
    * @returns {HTMLElement}
    */
-  #createSlideNavigation(item) {
+  #createSlideNavigation(item, slideIndex) {
     const container = document.createElement('section');
     container.classList.add('slide-navigation');
-
-    // const positionIndex = document.createElement('p');
-    // positionIndex.classList.add('carousel-index-position');
-    // positionIndex.innerHTML = item.carouselPositionIndex + 1;
-    // container.appendChild(positionIndex);
 
     const upwardsButton = document.createElement('section');
     upwardsButton.classList.add('icon-move-upwards');
     upwardsButton.innerHTML = '△';
+    upwardsButton.addEventListener('click', () => {
+      this.#handleReposition(item.id, slideIndex - 1);
+    });
     container.appendChild(upwardsButton);
 
     const dragAndDropButton = document.createElement('section');
@@ -127,6 +126,9 @@ export class SlidesListComponent {
     const downwardsButton = document.createElement('section');
     downwardsButton.classList.add('icon-move-downwards');
     downwardsButton.innerHTML = '▽';
+    downwardsButton.addEventListener('click', () => {
+      this.#handleReposition(item.id, slideIndex + 1);
+    });
     container.appendChild(downwardsButton);
 
     return container;
@@ -147,17 +149,40 @@ export class SlidesListComponent {
   }
 
   #handleReposition(itemId, newPosition) {
-    const itemIndex = this.#slides.findIndex(
+    itemId = Number(itemId);
+    newPosition = Number(newPosition);
+
+    // If the new position is a negative number then start counting from the end
+    if (newPosition < 0) newPosition = this.#slides.length + newPosition;
+    // If the new position is a higher number than the length of the slides then start counting from the beginning
+    if (newPosition > this.#slides.length - 1)
+      newPosition = 0 - this.#slides.length + newPosition;
+
+    const slideIndex = this.#slides.findIndex(
       (slide) => Number(slide.id) === itemId,
     );
-    if (itemIndex === -1) return;
+    if (slideIndex === -1) return;
+
+    const slideToReposition = this.#slides[slideIndex];
 
     const newSlidesPositions = [...this.#slides];
-    const [item] = newSlidesPositions.splice(itemIndex, 1);
+
+    const slidesAfterNewPosition = newSlidesPositions.splice(
+      slideIndex <= newPosition ? newPosition + 1 : newPosition,
+    );
+
+    const slideIndexAfterNewPosition = slidesAfterNewPosition.findIndex(
+      (slide) => Number(slide.id) === itemId,
+    );
+    if (slideIndexAfterNewPosition >= 0)
+      slidesAfterNewPosition.splice(slideIndexAfterNewPosition, 1);
+
+    newSlidesPositions.splice(slideIndex, 1);
     newSlidesPositions.splice(
-      newPosition < itemIndex ? newPosition : newPosition - 1,
+      newPosition,
       0,
-      item,
+      slideToReposition,
+      ...slidesAfterNewPosition,
     );
 
     if (this.#onSlidePositionChange)
@@ -183,7 +208,6 @@ export class SlidesListComponent {
     for (let index = 0; index < slidesData.length; index++) {
       const slideData = slidesData[index];
       const slide = currentContainerChildren[index];
-      slide.setAttribute('draggable-id', index);
 
       finalContainerChildren.push(slide);
       finalContainerChildren.push(
@@ -229,21 +253,33 @@ export class SlidesListComponent {
     );
     if (!droppedOnSeparator) return;
 
-    const targetSeparator = event.target;
-    const slideId = Number(event.dataTransfer.getData('id'));
-    const slide = document.querySelector(`[slide-id="${slideId}"]`);
+    const slideIndex = Number(event.dataTransfer.getData('slide-index'));
+    const slide = document.querySelector(`[slide-index="${slideIndex}"]`);
     const itemId = Number(slide.getAttribute('item-id'));
+
+    const targetSeparator = event.target;
     const separatorId = Number(targetSeparator.getAttribute('separator-id'));
 
-    const isSeparatorDropable = this.#isSeparatorDropable(slideId, separatorId);
+    const isSeparatorDropable = this.#isSeparatorDropable(
+      slideIndex,
+      separatorId,
+    );
 
     if (!isSeparatorDropable) return;
 
-    const newPosition = Number(
-      targetSeparator.getAttribute('before-slide-index'),
+    let separators = Array.from(
+      this.#listContainerHTMLComponent.querySelectorAll(`[separator-id]`),
+    );
+    separators = separators.filter((currentSeparator) => {
+      const currentSeparatorId = currentSeparator.getAttribute('separator-id');
+      return this.#isSeparatorDropable(slideIndex, currentSeparatorId);
+    });
+
+    const separatorIndex = separators.findIndex(
+      (separator) => separator === targetSeparator,
     );
 
-    this.#handleReposition(itemId, newPosition);
+    this.#handleReposition(itemId, separatorIndex);
   }
 
   /**
@@ -256,13 +292,13 @@ export class SlidesListComponent {
     const slide = event.target;
     slide.classList.add('dragging');
 
-    const slideIndex = slide.getAttribute('slide-id');
-    event.dataTransfer.setData('id', slideIndex);
+    const slideIndex = slide.getAttribute('slide-index');
+    event.dataTransfer.setData('slide-index', slideIndex);
 
     const separators = document.getElementsByClassName('separator');
     for (const separator of separators) {
       const separatorId = Number(separator.getAttribute('separator-id'));
-      const slideId = Number(slide.getAttribute('slide-id'));
+      const slideId = Number(slide.getAttribute('slide-index'));
 
       const isSeparatorDropable = this.#isSeparatorDropable(
         slideId,

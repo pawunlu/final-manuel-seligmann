@@ -1,0 +1,54 @@
+
+.unsaved-changes-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--blue2);
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 26px;
+  width: 50%;
+}
+
+@media screen and (max-width: 1300px) {
+  .unsaved-changes-buttons {
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .unsaved-changes-buttons {
+    width: 80%;
+  }
+}
+
+.unsaved-changes-buttons > p {
+  width: 60%;
+  color: var(--white1);
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+@media screen and (max-width: 1300px) {
+  .unsaved-changes-buttons > p {
+    width: unset;
+    margin: 0 0 10px 0;
+    flex-basis: 100%;
+    text-align: center;
+  }
+}
+
+.unsaved-changes-buttons > button {
+  width: 20%;
+}
+
+@media screen and (max-width: 1300px) {
+  .unsaved-changes-buttons > button {
+    width: unset;
+    flex-basis: 40%;
+  }
+}
+
+.unsaved-changes-buttons .button-2 {
+  margin-right: 15px;
+}
