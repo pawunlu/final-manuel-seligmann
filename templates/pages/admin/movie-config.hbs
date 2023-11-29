@@ -1,7 +1,17 @@
 {{> fragments/admin/base}}
 
   {{#*inline "head-block"}}
-      <title>Crear o Editar pelicula | PAW Cine</title>
+      <title>Ver pelicula | PAW Cine</title>
+
+      {{!-- Input component Script & Style --}}
+      <script src="/view-assets/common/components/input/input.component.js" type="module"></script>
+      <link href="/view-assets/common/components/input/input.style.css" rel="stylesheet" type="text/css">
+
+      {{!-- Carousel component Script & Style --}}
+      <script src="/view-assets/common/components/carousel/carousel.component.js" type="module"></script>
+      <link href="/view-assets/common/components/carousel/carousel.style.css" rel="stylesheet" type="text/css">
+
+      <link href="/view-assets/public-views/movies/fragments/movie-displayer/movie-displayer.style.css" rel="stylesheet" type="text/css">
 
       {{!-- Movie config's Script & Style --}}
       <script src="/view-assets/admin-views/movie-config/movie-config.script.js" type="module"></script>
@@ -10,8 +20,41 @@
 
 
   {{#*inline "main-block"}}
+    <section id="carousel-slide"></section>
 
-    <h1>Crear o editar peliculas</h1>
+    <section class="body-content-container">
+      <section id="movie-poster">
+        {{> fragments/public/movieDisplayer}}
+      </section>
+
+      <section class="movie-switches">
+        <ul>
+          <li>
+            <p>Mostrar en cartelera</p>
+            <section id="display-in-billboard-switch"></section>
+          </li>
+          <li>
+            <p>Mostrar en destacadas</p>
+            <section id="display-in-carousel-switch"></section>
+          </li>
+          <li>
+            <p>Mostrar como entreno</p>
+            <section id="display-as-premiere-switch"></section>
+          </li>
+        </ul>
+      </section>
+
+      <section class="movie-data-inputs">
+        <section id="movie-title-input"></section>
+        <section id="movie-genre-input"></section>
+        <section id="movie-rated-input"></section>
+        <section id="movie-calification-input"></section>
+        <section id="movie-duration-input"></section>
+        <section id="movie-sinopsis-input"></section>
+
+      </section>
+    </section>
+
 
   {{/inline}}
 

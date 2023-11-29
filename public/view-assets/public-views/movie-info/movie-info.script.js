@@ -115,7 +115,7 @@ function redirectToReservationView(movieId, languageId, roomTypeId, date) {
   console.log(searchParams.toString());
 
   const url = `/reservar?${searchParams.toString()}`;
-  window.location.href = url;
+  Utils.handleRedirect(url);
 }
 
 async function fetchAndLoadMovieExtraData() {

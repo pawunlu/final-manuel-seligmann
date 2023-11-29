@@ -75,7 +75,7 @@ function loadAndRenderPaginatorComponent() {
 }
 
 function handleAddMovieEvent() {
-  console.log('Mostrar formulario para nueva pelicula');
+  Utils.handleRedirect('/admin/peliculas/nueva');
 }
 
 async function fetchAndLoadMovies(page, query) {
@@ -133,7 +133,7 @@ function parseMoviesIntoTableItems(movies) {
  * @param {Movie} movie
  */
 function onEditMovieEventClick(movie) {
-  console.log('Se quiere editar esta pelicula', movie);
+  Utils.handleRedirect(`/admin/pelicula/${movie.id}/ver`);
 }
 
 function handlePageChange(newPage) {

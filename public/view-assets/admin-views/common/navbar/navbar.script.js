@@ -175,7 +175,7 @@ function createHTMLItem(item) {
   htmlItem.appendChild(text);
 
   htmlItem.onclick = () => {
-    handleRedirect(item.url);
+    Utils.handleRedirect(item.url);
   };
 
   htmlItem.classList.add('navbar-item');
@@ -242,10 +242,6 @@ function assignIconToCollapsable(item, collapsibleHTMLItem) {
     collapsibleHTMLItem.children[0].classList.add('collapsable-closed');
     collapsibleHTMLItem.children[0].classList.remove('collapsable-opened');
   }
-}
-
-function handleRedirect(url) {
-  window.location.href = url;
 }
 
 /**

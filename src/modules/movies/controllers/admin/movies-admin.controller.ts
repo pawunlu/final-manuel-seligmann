@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { CarouselMoviesService, MoviesService } from '../../services';
 import { QuerySearch } from '../../../../common/dtos';
+import { MovieDto } from '../../dtos';
 
 @Controller('api/admin/movies')
 export class MoviesAdminController {
@@ -15,7 +16,12 @@ export class MoviesAdminController {
   }
 
   @Put('carousel')
-  updateCarouselMoviesOrder(@Body() body: any) {
+  updateCarouselMoviesOrder(@Body() body: MovieDto[]) {
     return this.carouselMoviesService.updateCarouselMoviesOrder(body);
+  }
+
+  @Get(':movieId')
+  findMovie(@Param('movieId') movieId: number) {
+    return this.moviesService.findOneById(movieId);
   }
 }

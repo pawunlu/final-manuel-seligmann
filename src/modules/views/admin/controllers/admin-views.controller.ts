@@ -34,7 +34,13 @@ export class AdminViewsController {
     // Handle the movies config view
   }
 
-  @Get('pelicula/:movieId')
+  @Get('peliculas/nueva')
+  @Render('admin/new-movie')
+  handleNewMovieView() {
+    // Handle the movie config view
+  }
+
+  @Get('pelicula/:movieId/ver')
   @Render('admin/movie-config')
   handleMovieConfigView() {
     // Handle the movie config view

@@ -77,13 +77,13 @@ async function fetchCarouselMovies() {
 }
 
 function redirectToMovieInfoView(movieId) {
-  window.location.href = `/pelicula/${movieId}`;
+  Utils.handleRedirect(`/pelicula/${movieId}`);
 }
 
 function redirectToMovieReservation(movieId) {
-  window.location.href = `/reservar?movieId=${movieId}`;
+  Utils.handleRedirect(`/reservar?movieId=${movieId}`);
 }
 
 function redirectToMoviesBillboard() {
-  window.location.href = '/cartelera';
+  Utils.handleRedirect('/cartelera');
 }
