@@ -1,8 +1,37 @@
 import { CarouselComponent } from '../../common/components/carousel/carousel.component.js';
 import { InputComponent } from '../../common/components/input/Input.component.js';
+import { SwitchComponent } from '../../common/components/switch/switch.component.js';
+import { UnsavedChangesButtonsComponent } from '../../admin-views/common/components/unsaved-changes/unsaved-changes.component.js';
+
+/**
+ * represents a Movie
+ * @typedef {Object} Movie
+ * @property {string} id - Movie's ID
+ * @property {string} name - Movie's Name
+ * @property {string} genre - Movie's Genre
+ * @property {string} rated - Movie's rated
+ * @property {number} calification - Movie's Calification
+ * @property {string} imageName - Movie's image url
+ * @property {string} bannerName - Movie's Banner url
+ * @property {number} durationInMinutes - Movie's duration in minutes
+ * @property {boolean} displayInBillboard
+ * @property {boolean} displayInCarousel
+ * @property {boolean} isPremiere
+ * @property {string} sinopsis - Movie's Sinosis
+ * @property {Date} createdAt - The date the Movie was created
+ */
 
 /** @type {CarouselComponent} */
 let carousel = null;
+
+/** @type {SwitchComponent} */
+let displayInBillboardSwitch = null;
+
+/** @type {SwitchComponent} */
+let displayInCarouselSwitch = null;
+
+/** @type {SwitchComponent} */
+let displayAsPremiereSwitch = null;
 
 /** @type {InputComponent} */
 let titleInputComponent = null;
@@ -22,20 +51,17 @@ let durationInputComponent = null;
 /** @type {InputComponent} */
 let sinopsisInputComponent = null;
 
-/**
- * represents a Movie
- * @typedef {Object} Movie
- * @property {string} id - Movie's ID
- * @property {string} name - Movie's Name
- * @property {string} genre - Movie's Genre
- * @property {string} rated - Movie's rated
- * @property {number} calification - Movie's Calification
- * @property {string} imageName - Movie's image url
- * @property {string} bannerName - Movie's Banner url
- * @property {number} durationInMinutes - Movie's duration in minutes
- * @property {string} sinopsis - Movie's Sinosis
- * @property {Date} createdAt - The date the Movie was created
- */
+/** @type {UnsavedChangesButtonsComponent} */
+let unsavedButtonsComponent = null;
+
+/** @type {Movie} */
+let currentMovieData = {};
+
+/** @type {Movie} */
+let unsavedMovieData = {};
+
+/** @type {boolean} */
+let unsavedChanges = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadAndRenderComponents();
@@ -45,12 +71,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 function loadAndRenderComponents() {
   loadAndRenderDefaultCarouselSlide();
   loadAndRenderDefaultMoviePoster();
+  loadAndRenderSwitches();
   loadAndRenderMovieTitleInputComponent();
   loadAndRenderMovieGenreInputComponent();
   loadAndRenderMovieRatedInputComponent();
   loadAndRenderMovieCalificationInputComponent();
   loadAndRenderMovieDurationInputComponent();
   loadAndRenderMovieSinopsisInputComponent();
+  loadAndRenderUnsavedButtonsComponent();
 }
 
 function loadAndRenderDefaultCarouselSlide() {
@@ -71,6 +99,36 @@ function loadAndRenderDefaultMoviePoster() {
     'https://media.comicbook.com/files/img/default-movie.png';
 
   assignImageToMoviePoster(defaultImageUrl);
+}
+
+function loadAndRenderSwitches() {
+  loadAndRenderDisplayInBillboardSwitch();
+  loadAndRenderDisplayInCarouselSwitch();
+  loadAndRenderDisplayAsPremiereSwitch();
+}
+
+function loadAndRenderDisplayInBillboardSwitch() {
+  displayInBillboardSwitch = new SwitchComponent('display-in-billboard-switch');
+  displayInBillboardSwitch.checked = false;
+  displayInBillboardSwitch.onChange = (checked) =>
+    registerNewUnsavedMovieAttribute('displayInBillboard', checked);
+  displayInBillboardSwitch.render();
+}
+
+function loadAndRenderDisplayInCarouselSwitch() {
+  displayInCarouselSwitch = new SwitchComponent('display-in-carousel-switch');
+  displayInCarouselSwitch.checked = false;
+  displayInCarouselSwitch.onChange = (checked) =>
+    registerNewUnsavedMovieAttribute('displayInCarousel', checked);
+  displayInCarouselSwitch.render();
+}
+
+function loadAndRenderDisplayAsPremiereSwitch() {
+  displayAsPremiereSwitch = new SwitchComponent('display-as-premiere-switch');
+  displayAsPremiereSwitch.checked = false;
+  displayAsPremiereSwitch.onChange = (checked) =>
+    registerNewUnsavedMovieAttribute('isPremiere', checked);
+  displayAsPremiereSwitch.render();
 }
 
 function loadAndRenderMovieTitleInputComponent() {
@@ -127,11 +185,18 @@ function loadAndRenderMovieSinopsisInputComponent() {
   sinopsisInputComponent.render();
 }
 
+function loadAndRenderUnsavedButtonsComponent() {
+  unsavedButtonsComponent = new UnsavedChangesButtonsComponent(
+    'unsaved-buttons',
+  );
+}
+
 async function fetchAndLoadMovieData() {
   const pathname = window.location.pathname;
   const regex = /\d+/;
   const [movieId] = regex.exec(pathname);
   const movie = await fetchMovieData(movieId);
+  currentMovieData = movie;
   console.log('movie', movie);
   loadMovieDataIntoComponents(movie);
 }
@@ -159,6 +224,7 @@ async function fetchMovieData(movieId) {
  */
 function loadMovieDataIntoComponents(movie) {
   loadImagesIntoComponents(movie);
+  loadDataIntoSwitches(movie);
   loadDataIntoInputs(movie);
 }
 
@@ -188,6 +254,16 @@ function loadBannerImageIntoCarousel(movie) {
 function loadMoviePoster(movie) {
   const url = movie.imageName;
   assignImageToMoviePoster(url);
+}
+/**
+ *
+ *
+ * @param {Movie} movie
+ */
+function loadDataIntoSwitches(movie) {
+  displayInBillboardSwitch.checked = movie.displayInBillboard;
+  displayInCarouselSwitch.checked = movie.displayInCarousel;
+  displayAsPremiereSwitch.checked = movie.isPremiere;
 }
 
 /**
@@ -223,4 +299,47 @@ function assignImageToMoviePoster(url) {
   const moviePosterContainer = document.getElementById('movie-poster');
   const img = moviePosterContainer.querySelector('img');
   img.setAttribute('src', url);
+}
+
+function displayUnsavedChangesButtons() {
+  unsavedButtonsComponent.display = true;
+}
+
+function hideUnsavedChangesButtons() {
+  unsavedButtonsComponent.display = false;
+}
+
+function registerNewUnsavedMovieAttribute(attribute, value) {
+  const currentValue = currentMovieData[attribute];
+  const sameAsCurrentValue = currentValue === value;
+
+  if (sameAsCurrentValue) {
+    delete unsavedMovieData[attribute];
+    if (unsavedChanges && Object.keys(unsavedMovieData).length === 0) {
+      discardUnsavedChanges();
+    }
+    return;
+  }
+
+  if (!unsavedChanges) {
+    unsavedChanges = true;
+    displayUnsavedChangesButtons();
+  }
+  unsavedMovieData[attribute] = value;
+  console.log('nuevo cambio detectado', unsavedMovieData);
+}
+
+function discardUnsavedChanges() {
+  console.log('se descartó todos los cambios');
+  unsavedChanges = false;
+  unsavedMovieData = {};
+  hideUnsavedChangesButtons();
+  // TODO: Volver para atras todos los campos cambiados
+}
+
+function saveChanges() {
+  // TODO: Llamar al back para actualizar los datos de la pelicula
+  unsavedChanges = false;
+  unsavedMovieData = {};
+  hideUnsavedChangesButtons();
 }

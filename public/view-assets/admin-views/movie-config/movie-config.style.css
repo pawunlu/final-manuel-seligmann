@@ -1,3 +1,14 @@
+.movie-switches li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.movie-switches li p {
+  color: var(--white1);
+}
+
 .movie-data-inputs {
   display: flex;
   flex-wrap: wrap;
@@ -16,7 +27,7 @@
 #movie-poster {
   display: inline-block;
   position: absolute;
-  top: 140px;
+  top: 190px;
 }
 
 @media screen and (max-width: 700px) {
@@ -39,7 +50,6 @@
 
 .movie-switches {
   margin: 30px 0 0 250px;
-  font-weight: bold;
 }
 
 @media screen and (max-width: 700px) {
