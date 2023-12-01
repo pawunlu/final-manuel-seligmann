@@ -137,6 +137,10 @@ function loadAndRenderMovieTitleInputComponent() {
   titleInputComponent.backgroundColor = 'var(--transparent-blue1)';
   titleInputComponent.placeholderColor = 'var(--yellow1)';
   titleInputComponent.showResetButton = false;
+  titleInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('name', newText);
+  });
   titleInputComponent.render();
 }
 
@@ -146,6 +150,10 @@ function loadAndRenderMovieGenreInputComponent() {
   genreInputComponent.backgroundColor = 'var(--transparent-blue1)';
   genreInputComponent.placeholderColor = 'var(--yellow1)';
   genreInputComponent.showResetButton = false;
+  genreInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('genre', newText);
+  });
   genreInputComponent.render();
 }
 
@@ -155,6 +163,10 @@ function loadAndRenderMovieRatedInputComponent() {
   ratedInputComponent.backgroundColor = 'var(--transparent-blue1)';
   ratedInputComponent.placeholderColor = 'var(--yellow1)';
   ratedInputComponent.showResetButton = false;
+  ratedInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('rated', newText);
+  });
   ratedInputComponent.render();
 }
 
@@ -164,6 +176,14 @@ function loadAndRenderMovieCalificationInputComponent() {
   calificationInputComponent.backgroundColor = 'var(--transparent-blue1)';
   calificationInputComponent.placeholderColor = 'var(--yellow1)';
   calificationInputComponent.showResetButton = false;
+  const regex = /^(10(\.0{1,2})?|[0-9](\.\d{1,2})?)$/;
+  calificationInputComponent.validationRegex = new RegExp(regex);
+  calificationInputComponent.regexErrorMessage = 'Número no valido';
+  calificationInputComponent.onBlurEvent((event) => {
+    const newNumberString = event.target.value;
+    if (!regex.test(newNumberString)) return;
+    registerNewUnsavedMovieAttribute('calification', Number(newNumberString));
+  });
   calificationInputComponent.render();
 }
 
@@ -173,6 +193,10 @@ function loadAndRenderMovieDurationInputComponent() {
   durationInputComponent.backgroundColor = 'var(--transparent-blue1)';
   durationInputComponent.placeholderColor = 'var(--yellow1)';
   durationInputComponent.showResetButton = false;
+  durationInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('durationInMinutes', newText);
+  });
   durationInputComponent.render();
 }
 
@@ -182,6 +206,10 @@ function loadAndRenderMovieSinopsisInputComponent() {
   sinopsisInputComponent.backgroundColor = 'var(--transparent-blue1)';
   sinopsisInputComponent.placeholderColor = 'var(--yellow1)';
   sinopsisInputComponent.showResetButton = false;
+  sinopsisInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('sinopsis', newText);
+  });
   sinopsisInputComponent.render();
 }
 
@@ -189,6 +217,8 @@ function loadAndRenderUnsavedButtonsComponent() {
   unsavedButtonsComponent = new UnsavedChangesButtonsComponent(
     'unsaved-buttons',
   );
+  unsavedButtonsComponent.onDiscardButtonClick = discardUnsavedChanges;
+  unsavedButtonsComponent.onSaveButtonClick = saveChanges;
 }
 
 async function fetchAndLoadMovieData() {
@@ -326,20 +356,43 @@ function registerNewUnsavedMovieAttribute(attribute, value) {
     displayUnsavedChangesButtons();
   }
   unsavedMovieData[attribute] = value;
-  console.log('nuevo cambio detectado', unsavedMovieData);
 }
 
 function discardUnsavedChanges() {
-  console.log('se descartó todos los cambios');
   unsavedChanges = false;
   unsavedMovieData = {};
   hideUnsavedChangesButtons();
-  // TODO: Volver para atras todos los campos cambiados
+  loadMovieDataIntoComponents(currentMovieData);
 }
 
-function saveChanges() {
-  // TODO: Llamar al back para actualizar los datos de la pelicula
+async function saveChanges() {
+  const updatedMovie = await updateMovie(currentMovieData.id, unsavedMovieData);
+  currentMovieData = updatedMovie;
   unsavedChanges = false;
   unsavedMovieData = {};
   hideUnsavedChangesButtons();
+  loadMovieDataIntoComponents(updatedMovie);
+}
+
+/**
+ *
+ *
+ * @param {number} movieId
+ * @param {Partial<Movie>} params
+ * @returns {Promise<Movie>} - updated Movie object
+ */
+async function updateMovie(movieId, params) {
+  const url = `/api/admin/movies/${movieId}`;
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+
+  if (!response.ok)
+    throw new Error('Something went wrong updating the movie', response);
+
+  return response.json();
 }
