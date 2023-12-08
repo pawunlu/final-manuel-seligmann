@@ -3,18 +3,3 @@ h1 {
   text-align: center;
   margin-bottom: 10px;
 }
-
-#unsaved-changes-buttons {
-  margin-top: 40px;
-  position: sticky;
-  bottom: 40px;
-  display: flex;
-  justify-content: center;
-}
-
-@media screen and (max-width: 700px) {
-  #unsaved-changes-buttons {
-    margin-top: 80px;
-    bottom: 80px;
-  }
-}

@@ -65,8 +65,27 @@ let unsavedChanges = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadAndRenderComponents();
-  await fetchAndLoadMovieData();
+  const isEditingMovie = isEditingMovieView();
+  if (isEditingMovie) await fetchAndLoadMovieData();
 });
+
+function isEditingMovieView() {
+  const editingMovieId = getCurrentMovieIdFromUrl();
+  return editingMovieId !== null;
+}
+
+function getCurrentMovieIdFromUrl() {
+  const pathname = window.location.pathname;
+  const regex = /\d+/;
+  const regexResult = regex.exec(pathname);
+  if (regexResult === null) return null;
+
+  let [movieId] = regexResult;
+  movieId = Number(movieId);
+  if (isNaN(movieId)) return null;
+
+  return movieId;
+}
 
 function loadAndRenderComponents() {
   loadAndRenderDefaultCarouselSlide();
@@ -78,7 +97,13 @@ function loadAndRenderComponents() {
   loadAndRenderMovieCalificationInputComponent();
   loadAndRenderMovieDurationInputComponent();
   loadAndRenderMovieSinopsisInputComponent();
-  loadAndRenderUnsavedButtonsComponent();
+
+  const isEditingMovie = isEditingMovieView();
+  if (isEditingMovie) {
+    loadAndRenderUnsavedButtonsComponentForEditingMovie();
+  } else {
+    loadAndRenderUnsavedButtonsComponentForNewMovie();
+  }
 }
 
 function loadAndRenderDefaultCarouselSlide() {
@@ -86,12 +111,13 @@ function loadAndRenderDefaultCarouselSlide() {
   carousel.items = [
     {
       id: null,
-      bannerName: 'https://flowbite.com/docs/images/carousel/carousel-1.svg',
+      bannerName:
+        'https://www.executiveconnections.ie/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbGFWIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--48c45fd738da4a611c5e48fe765f9337f828d60a/banner-defau.jpg',
     },
   ];
   carousel.render();
 
-  dismemberCarousel();
+  dismemberCarousel(false);
 }
 
 function loadAndRenderDefaultMoviePoster() {
@@ -213,18 +239,26 @@ function loadAndRenderMovieSinopsisInputComponent() {
   sinopsisInputComponent.render();
 }
 
-function loadAndRenderUnsavedButtonsComponent() {
+function loadAndRenderUnsavedButtonsComponentForEditingMovie() {
   unsavedButtonsComponent = new UnsavedChangesButtonsComponent(
     'unsaved-buttons',
   );
-  unsavedButtonsComponent.onDiscardButtonClick = discardUnsavedChanges;
-  unsavedButtonsComponent.onSaveButtonClick = saveChanges;
+  unsavedButtonsComponent.onDiscardButtonClick = discardUnsavedEditingChanges;
+  unsavedButtonsComponent.onSaveButtonClick = handleUpdateMovie;
+}
+
+function loadAndRenderUnsavedButtonsComponentForNewMovie() {
+  unsavedButtonsComponent = new UnsavedChangesButtonsComponent(
+    'unsaved-buttons',
+  );
+  unsavedButtonsComponent.message = '¿Deseas crear la película?';
+  unsavedButtonsComponent.saveButtonText = 'Crear';
+  unsavedButtonsComponent.displayDiscardButton = false;
+  unsavedButtonsComponent.onSaveButtonClick = handleCreateMovie;
 }
 
 async function fetchAndLoadMovieData() {
-  const pathname = window.location.pathname;
-  const regex = /\d+/;
-  const [movieId] = regex.exec(pathname);
+  const movieId = getCurrentMovieIdFromUrl();
   const movie = await fetchMovieData(movieId);
   currentMovieData = movie;
   console.log('movie', movie);
@@ -309,7 +343,7 @@ function loadDataIntoInputs(movie) {
   sinopsisInputComponent.text = movie.sinopsis;
 }
 
-function dismemberCarousel() {
+function dismemberCarousel(keepImageGradient = true) {
   const carouselParent = document.getElementById('carousel-slide');
   const [carouselContainer] = Array.from(carouselParent.children);
   const [slider] = Array.from(carouselContainer.children);
@@ -317,6 +351,12 @@ function dismemberCarousel() {
 
   const [slide] = Array.from(slider.children);
   const [image] = Array.from(slide.children);
+  if (!keepImageGradient) {
+    const backgroundImage = image.style.backgroundImage;
+    const [gradient, imageUrl] = backgroundImage.split('url');
+    const newBackgroundImage = `url${imageUrl}`;
+    image.style.backgroundImage = newBackgroundImage;
+  }
   slide.replaceChildren(image);
 }
 
@@ -346,7 +386,7 @@ function registerNewUnsavedMovieAttribute(attribute, value) {
   if (sameAsCurrentValue) {
     delete unsavedMovieData[attribute];
     if (unsavedChanges && Object.keys(unsavedMovieData).length === 0) {
-      discardUnsavedChanges();
+      discardUnsavedEditingChanges();
     }
     return;
   }
@@ -358,14 +398,14 @@ function registerNewUnsavedMovieAttribute(attribute, value) {
   unsavedMovieData[attribute] = value;
 }
 
-function discardUnsavedChanges() {
+function discardUnsavedEditingChanges() {
   unsavedChanges = false;
   unsavedMovieData = {};
   hideUnsavedChangesButtons();
   loadMovieDataIntoComponents(currentMovieData);
 }
 
-async function saveChanges() {
+async function handleUpdateMovie() {
   const updatedMovie = await updateMovie(currentMovieData.id, unsavedMovieData);
   currentMovieData = updatedMovie;
   unsavedChanges = false;
@@ -393,6 +433,143 @@ async function updateMovie(movieId, params) {
 
   if (!response.ok)
     throw new Error('Something went wrong updating the movie', response);
+
+  return response.json();
+}
+
+async function handleCreateMovie() {
+  // Checkear que todos los inputs tengan valores
+  const errorsDisplayed = checkFormValuesAndDisplayErrorIfNecessary();
+  if (errorsDisplayed) return;
+  // Llamar al endpoint para crear la pelicula
+  console.log('unsavedChanges', getFormValues());
+  const createdMovie = await createMovie(getFormValues());
+  loadMovieDataIntoComponents(createdMovie);
+}
+
+/**
+ *
+ *
+ * @returns {boolean} indicates if errors are being displayed
+ */
+function checkFormValuesAndDisplayErrorIfNecessary() {
+  const titleText = getFormTitleValue();
+  if (!titleText) titleInputComponent.enableBorderColorAsError();
+
+  const genreText = getFormGenreValue();
+  if (!genreText) genreInputComponent.enableBorderColorAsError();
+
+  const ratedText = getFormRatedValue();
+  if (!ratedText) ratedInputComponent.enableBorderColorAsError();
+
+  const calificationText = getFormCalificationValue();
+  if (!calificationText) calificationInputComponent.enableBorderColorAsError();
+
+  const durationText = getFormDurationValue();
+  if (!durationText) durationInputComponent.enableBorderColorAsError();
+
+  const sinopsisText = getFormSinopsisValue();
+  if (!sinopsisText) sinopsisInputComponent.enableBorderColorAsError();
+
+  if (
+    !titleText ||
+    !genreText ||
+    !ratedText ||
+    !calificationText ||
+    !durationText ||
+    !sinopsisText
+  )
+    return true;
+
+  return false;
+}
+
+function getFormValues() {
+  // TODO: Add poster and banner image url
+  const title = getFormTitleValue();
+  const genre = getFormGenreValue();
+  const rated = getFormRatedValue();
+  const calification = getFormCalificationValue();
+  const durationInMinutes = getFormDurationValue();
+  const sinopsis = getFormSinopsisValue();
+  const displayInBillboard = getFormDisplayInBillboardBoolean();
+  const displayInCarousel = getFormDisplayInCarouselBoolean();
+  const displayAsPremiere = getFormDisplayAsPremiereBoolean();
+
+  console.log(displayInBillboard);
+
+  return {
+    name: title,
+    genre,
+    rated,
+    calification: Number(calification),
+    durationInMinutes: Number(durationInMinutes),
+    sinopsis,
+    bannerName: undefined,
+    imageName: undefined,
+    displayInBillboard: displayInBillboard === 'true',
+    displayInCarousel: displayInCarousel === 'true',
+    isPremiere: displayAsPremiere === 'true',
+    trailerUrl: 'foo',
+  };
+}
+
+function getFormTitleValue() {
+  return titleInputComponent.text;
+}
+
+function getFormGenreValue() {
+  return genreInputComponent.text;
+}
+
+function getFormRatedValue() {
+  return ratedInputComponent.text;
+}
+
+function getFormCalificationValue() {
+  return calificationInputComponent.text;
+}
+
+function getFormDurationValue() {
+  return durationInputComponent.text;
+}
+
+function getFormSinopsisValue() {
+  return sinopsisInputComponent.text;
+}
+
+function getFormDisplayInBillboardBoolean() {
+  return displayInBillboardSwitch.checked;
+}
+
+function getFormDisplayInCarouselBoolean() {
+  return displayInCarouselSwitch.checked;
+}
+
+function getFormDisplayAsPremiereBoolean() {
+  return displayAsPremiereSwitch.checked;
+}
+
+/**
+ *
+ *
+ * @param {Partial<Movie>} params
+ * @returns {Promise<Movie>} - Created Movie object
+ */
+async function createMovie(params) {
+  console.log(params);
+  console.log(JSON.stringify(params));
+  const url = `/api/admin/movies`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+
+  if (!response.ok)
+    throw new Error('Something went wrong creating the movie', response);
 
   return response.json();
 }

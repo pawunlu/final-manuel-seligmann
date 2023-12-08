@@ -78,7 +78,7 @@ function loadAndRenderPaginatorComponent() {
 }
 
 function handleAddRoomTypeEvent() {
-  console.log('Mostrar formulario para nueva room-type');
+  Utils.handleRedirect('/admin/tipo-salas/nueva');
 }
 
 async function fetchAndLoadRoomTypes(page, query) {
@@ -147,6 +147,7 @@ function parseRoomTypesIntoTableItems(roomTypes) {
  */
 function onEditMovieEventClick(roomType) {
   console.log('Se quiere editar este roomType', roomType);
+  Utils.handleRedirect(`/admin/tipo-sala/${roomType.id}/ver`);
 }
 
 function handlePageChange(newPage) {

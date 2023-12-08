@@ -6,7 +6,7 @@ import {
 import { PaginationQueryDto } from './pagination-query.dto';
 
 export class FindAllByDto<T> {
-  filters: FindOptionsWhere<T> = {};
+  filters: FindOptionsWhere<T> | FindOptionsWhere<T>[] = {};
 
   orderBy?: FindOptionsOrder<T>;
 

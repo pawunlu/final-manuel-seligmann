@@ -23,6 +23,10 @@ export class SwitchComponent {
     this.#inputContainerHTMLComponent.checked = checked;
   }
 
+  get checked() {
+    return this.#checked;
+  }
+
   constructor(parentContainerId) {
     this.#parentContainerHTMLComponent =
       document.getElementById(parentContainerId);

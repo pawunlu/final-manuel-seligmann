@@ -25,3 +25,18 @@ body > main {
   left: calc(var(--navbar-display-width) - 40px);
   z-index: 1;
 }
+
+.admin-unsaved-changes {
+  margin-top: 40px;
+  position: sticky;
+  bottom: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 700px) {
+  .admin-unsaved-changes {
+    margin-top: 80px;
+    bottom: 80px;
+  }
+}

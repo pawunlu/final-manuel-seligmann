@@ -7,14 +7,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ReservationScreeningSeat, Screening, ScreeningSeat } from '.';
+import { ReservationScreeningSeat, Screening } from '.';
 
 @Entity()
 export class Reservation {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
+  @Column({ default: false })
   isConfirmed: boolean;
 
   @Column()
@@ -32,12 +32,16 @@ export class Reservation {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column()
+  screeningId: number;
+
   @ManyToOne(() => Screening, (screening) => screening.reservations)
   screening: Screening;
 
   @OneToMany(
     () => ReservationScreeningSeat,
     (reservationScreeningSeat) => reservationScreeningSeat.reservation,
+    { cascade: true },
   )
   seats: ReservationScreeningSeat[];
 }

@@ -1,6 +1,5 @@
 import {
   IsBoolean,
-  IsDecimal,
   IsNumber,
   IsOptional,
   IsString,
@@ -30,10 +29,12 @@ export class CreateMovieDto {
   sinopsis: string;
 
   @IsString()
-  imageName: string;
+  @IsOptional()
+  imageName?: string = 'default-movie-poster.jpg';
 
   @IsString()
-  bannerImage: string;
+  @IsOptional()
+  bannerName?: string = 'default-movie-banner.jpg';
 
   @IsString()
   trailerUrl: string;

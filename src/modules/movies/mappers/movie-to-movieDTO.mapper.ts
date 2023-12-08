@@ -21,7 +21,6 @@ export function movieToMovieDtoMapper(
     imageName: movie.imageName,
     bannerName: movie.bannerName,
     trailerUrl: movie.trailerUrl,
-    isVisible: movie.isVisible,
     displayInBillboard: movie.displayInBillboard,
     billboardPositionIndex: movie.billboardPositionIndex,
     displayInCarousel: movie.displayInCarousel,

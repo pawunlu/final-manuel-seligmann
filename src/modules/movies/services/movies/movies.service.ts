@@ -41,7 +41,7 @@ export class MoviesService {
   ): Promise<PaginationResponseDto<MovieDto>> {
     const [movies, count] = await this.moviesRepository.findAndCount({
       where: {
-        isVisible: true,
+        displayInBillboard: true,
       },
       order: {
         billboardPositionIndex: 'ASC',

@@ -5,11 +5,71 @@ export class UnsavedChangesButtonsComponent {
   /** @type {HTMLElement} */
   #componentContainerHTMLComponent = null;
 
+  /** @type {boolean} */
+  #displayDiscardButton = true;
+
+  /** @type {boolean} */
+  #displaySaveButton = true;
+
+  /** @type {string} */
+  #message = 'Hay cambios sin guardar';
+
+  /** @type {string} */
+  #discardButtonText = 'Descartar';
+
+  /** @type {string} */
+  #saveButtonText = 'Guardar';
+
   /** @type {Function} */
   #onDiscardButtonClick = null;
 
   /** @type {Function} */
   #onSaveButtonClick = null;
+
+  /**
+   *
+   * @param {boolean} shouldDisplay
+   */
+  set displayDiscardButton(shouldDisplay) {
+    this.#displayDiscardButton = shouldDisplay;
+    this.#createAndAppendComponent();
+  }
+
+  /**
+   *
+   * @param {boolean} shouldDisplay
+   */
+  set displaySaveButton(shouldDisplay) {
+    this.#displaySaveButton = shouldDisplay;
+    this.#createAndAppendComponent();
+  }
+
+  /**
+   *
+   * @param {string} message
+   */
+  set message(message) {
+    this.#message = message;
+    this.#createAndAppendComponent();
+  }
+
+  /**
+   *
+   * @param {string} text
+   */
+  set discardButtonText(text) {
+    this.#discardButtonText = text;
+    this.#createAndAppendComponent();
+  }
+
+  /**
+   *
+   * @param {string} text
+   */
+  set saveButtonText(text) {
+    this.#saveButtonText = text;
+    this.#createAndAppendComponent();
+  }
 
   /**
    *
@@ -45,10 +105,14 @@ export class UnsavedChangesButtonsComponent {
     if (!this.#parentContainerHTMLComponent)
       throw new Error(`Element with ID "${parentContainerId}" was not found`);
 
-    const componentContainer = this.#createComponent();
-    this.#parentContainerHTMLComponent.appendChild(componentContainer);
-    this.#componentContainerHTMLComponent = componentContainer;
+    this.#createAndAppendComponent();
     this.#hideComponent();
+  }
+
+  #createAndAppendComponent() {
+    const componentContainer = this.#createComponent();
+    this.#parentContainerHTMLComponent.replaceChildren(componentContainer);
+    this.#componentContainerHTMLComponent = componentContainer;
   }
 
   #createComponent() {
@@ -56,23 +120,28 @@ export class UnsavedChangesButtonsComponent {
     container.classList.add('unsaved-changes-buttons');
 
     const text = document.createElement('p');
-    text.innerHTML = 'Hay cambios sin guardar';
+    text.innerHTML = this.#message;
+    container.append(text);
 
-    const discardButton = document.createElement('button');
-    discardButton.innerHTML = 'Descartar';
-    discardButton.classList.add('button', 'small-button', 'button-2');
-    discardButton.addEventListener('click', () => {
-      if (this.#onDiscardButtonClick) this.#onDiscardButtonClick();
-    });
+    if (this.#displayDiscardButton) {
+      const discardButton = document.createElement('button');
+      discardButton.innerHTML = this.#discardButtonText;
+      discardButton.classList.add('button', 'small-button', 'button-2');
+      discardButton.addEventListener('click', () => {
+        if (this.#onDiscardButtonClick) this.#onDiscardButtonClick();
+      });
+      container.append(discardButton);
+    }
 
-    const saveButton = document.createElement('button');
-    saveButton.innerHTML = 'Guardar';
-    saveButton.classList.add('button', 'small-button', 'button-3');
-    saveButton.addEventListener('click', () => {
-      if (this.#onSaveButtonClick) this.#onSaveButtonClick();
-    });
-
-    container.append(text, discardButton, saveButton);
+    if (this.#displaySaveButton) {
+      const saveButton = document.createElement('button');
+      saveButton.innerHTML = this.#saveButtonText;
+      saveButton.classList.add('button', 'small-button', 'button-3');
+      saveButton.addEventListener('click', () => {
+        if (this.#onSaveButtonClick) this.#onSaveButtonClick();
+      });
+      container.append(saveButton);
+    }
 
     return container;
   }

@@ -16,6 +16,7 @@ import { LanguagesModule } from './modules/languages/languages.module';
 import { ReservationSeatsModule } from './modules/reservation-seats/reservation-seats.module';
 import { ScreeningSeatsRepository } from './modules/screening-seats/repositories/screening-seats/screening-seats.repository';
 import { ScreeningSeatsModule } from './modules/screening-seats/screening-seats.module';
+import { MercadoPagoModule } from './modules/mercado-pago/mercado-pago.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ScreeningSeatsModule } from './modules/screening-seats/screening-seats.
     LanguagesModule,
     ReservationSeatsModule,
     ScreeningSeatsModule,
+    MercadoPagoModule,
   ],
   controllers: [],
   providers: [ScreeningSeatsRepository],

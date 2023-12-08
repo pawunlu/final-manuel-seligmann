@@ -19,8 +19,6 @@ export class MovieDto {
 
   trailerUrl: string;
 
-  isVisible: boolean;
-
   displayInBillboard: boolean;
 
   billboardPositionIndex?: number;

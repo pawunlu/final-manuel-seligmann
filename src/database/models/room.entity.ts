@@ -17,20 +17,20 @@ export class Room {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: false })
   isVisible: boolean;
 
   @Column()
   roomTypeId: string;
+
+  @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
+  roomType: RoomType;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
-  roomType: RoomType;
 
   @OneToMany(() => RoomSeat, (roomSeat) => roomSeat.room, { cascade: true })
   seats: RoomSeat[];

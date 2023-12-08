@@ -18,7 +18,7 @@ export class RoomType {
   @Column({ type: 'decimal' })
   price: number;
 
-  @Column()
+  @Column({ default: false })
   isVisible: boolean;
 
   @CreateDateColumn()

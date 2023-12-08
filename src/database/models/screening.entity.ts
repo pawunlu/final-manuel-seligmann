@@ -17,7 +17,7 @@ export class Screening {
   @Column()
   startsAt: Date;
 
-  @Column()
+  @Column({ default: false })
   isVisible: boolean;
 
   @Column({ nullable: true })

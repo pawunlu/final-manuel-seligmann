@@ -40,22 +40,19 @@ export class Movie {
   @Column()
   trailerUrl: string;
 
-  @Column()
-  isVisible: boolean;
-
-  @Column()
+  @Column({ default: false })
   displayInBillboard: boolean;
 
   @Column({ nullable: true })
   billboardPositionIndex?: number;
 
-  @Column()
+  @Column({ default: false })
   displayInCarousel: boolean;
 
   @Column({ nullable: true })
   carouselPositionIndex?: number;
 
-  @Column()
+  @Column({ default: false })
   isPremiere: boolean;
 
   @CreateDateColumn()

@@ -35,7 +35,7 @@ export class AdminViewsController {
   }
 
   @Get('peliculas/nueva')
-  @Render('admin/new-movie')
+  @Render('admin/movie-config')
   handleNewMovieView() {
     // Handle the movie config view
   }
@@ -58,7 +58,7 @@ export class AdminViewsController {
     // Handle the new room-type config view
   }
 
-  @Get('tipo-sala/:roomTypeId')
+  @Get('tipo-sala/:roomTypeId/ver')
   @Render('admin/room-type-config')
   handleRoomTypeConfigView() {
     // Handle the room-type config view

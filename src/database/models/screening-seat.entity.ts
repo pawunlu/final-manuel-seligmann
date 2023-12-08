@@ -24,7 +24,7 @@ export class ScreeningSeat {
   @Column()
   row: string;
 
-  @Column()
+  @Column({ default: false })
   isVisible: boolean;
 
   @Column()
@@ -35,7 +35,7 @@ export class ScreeningSeat {
 
   @OneToMany(
     () => ReservationScreeningSeat,
-    (reservationScreeningSeat) => reservationScreeningSeat.seats,
+    (reservationScreeningSeat) => reservationScreeningSeat.seat,
   )
   reservations: ReservationScreeningSeat[];
 }

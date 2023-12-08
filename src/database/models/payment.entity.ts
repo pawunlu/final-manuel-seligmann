@@ -19,8 +19,8 @@ export class Payment {
   @Column({ type: 'decimal' })
   amount: number;
 
-  @Column()
-  paidAt: Date;
+  @Column({ nullable: true })
+  paidAt?: Date;
 
   @Column({ nullable: true })
   refundedAt?: Date;

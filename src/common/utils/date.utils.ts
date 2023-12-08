@@ -7,3 +7,14 @@ export function setMomentToBeginning(moment: moment.Moment) {
 export function setMomentToEnd(moment: moment.Moment) {
   return moment.hours(23).minutes(59).second(59).milliseconds(999).clone();
 }
+
+export function getReadableDateFormat(date: Date) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return `${hours}:${minutes} ${day}-${month}-${year}`;
+}

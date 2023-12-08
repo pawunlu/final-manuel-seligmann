@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Render } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Render } from '@nestjs/common';
 import { PublicViewsService } from '../services/public-views.service';
 
 @Controller()
@@ -19,7 +19,7 @@ export class PublicViewsController {
 
   @Get('pelicula/:movieId')
   @Render('public/movie-info')
-  handleMovieInformationView(@Param('movieId') movieId: number) {
+  handleMovieInformationView(@Param('movieId', ParseIntPipe) movieId: number) {
     return this.publicViewsService.handleMovieinformationView(movieId);
   }
 

@@ -1,3 +1,45 @@
+#carousel-slide .slide:hover,
+#movie-poster:hover {
+  cursor: pointer;
+}
+
+#movie-poster {
+  display: inline-block;
+  position: absolute;
+  top: 190px;
+}
+
+#carousel-slide .slide::after,
+#movie-poster::after {
+  content: "Cambiar imagen";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--white1);
+  color: var(--blue3);
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+#carousel-slide .slide::after {
+  height: 100%;
+}
+
+#movie-poster::after {
+  height: 350px;
+  border-radius: 20px;
+}
+
+#carousel-slide .slide:hover::after,
+#movie-poster:hover::after {
+  opacity: 0.7;
+}
+
 .movie-switches li {
   display: flex;
   justify-content: space-between;
@@ -23,12 +65,6 @@
 #movie-duration-input {
   width: 100%;
   margin-bottom: 15px;
-}
-
-#movie-poster {
-  display: inline-block;
-  position: absolute;
-  top: 190px;
 }
 
 @media screen and (max-width: 700px) {

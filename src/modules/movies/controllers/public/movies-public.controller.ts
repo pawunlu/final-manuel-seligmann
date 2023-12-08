@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { CarouselMoviesService, MoviesService } from '../../services';
 import { MovieDto, MovieExtraDataDto } from '../../dtos';
 
@@ -11,7 +11,7 @@ export class MoviesPublicController {
 
   @Get(':movieId/extra-data')
   findMovieExtraData(
-    @Param('movieId') movieId: number,
+    @Param('movieId', ParseIntPipe) movieId: number,
   ): Promise<MovieExtraDataDto> {
     return this.moviesService.findMovieExtraData(movieId);
   }
