@@ -45,7 +45,7 @@ export class RoomsService {
 
     return this.findAllBy({
       filters: { name: ILike(`%${query || ''}%`) },
-      orderBy: { createdAt: 'DESC', name: 'ASC' },
+      orderBy: { id: 'ASC' },
       relations: { roomType: true },
       paginated: {
         page: page ? page : 1,

@@ -1,7 +1,7 @@
 {{> fragments/public/base}}
 
   {{#*inline "head-block"}}
-      <title> Reservar | PAW Cine </title>
+      <title> Reservar | Flash Cines </title>
       {{!-- Reservation Step Info Component & Style --}}
       <script src="/view-assets/reservation-views/components/step-info/reservation-step-info.component.js" type="module"></script>
       <link href="/view-assets/reservation-views/components/step-info/reservation-step-info.style.css" rel="stylesheet" type="text/css">
@@ -84,8 +84,9 @@
                 </section>
                 <section class="selected-seats-info">
                   <button tabindex="-1"></button>
-                  <p>Asientos seleccionado</p>
-                  <p>(2/3)</p>
+                  <p>Asientos seleccionados:</p>
+                  <p id="selected-seats-counter">0</p>
+                  <p>(max. 10)</p>
                 </section>
                 <section class="occupied-seats-info">
                   <button tabindex="-1"></button>
@@ -102,7 +103,6 @@
         <section id="user-data-form-step" class="reservation-step user-data-form-step">
           <h2>Datos personales</h2>
           <section class="body-content-container">
-            <h3>Ingrese sus datos</h3>
             <form class="user-data-form" hide-when-not-displaying="true">
               <section id="name-input"></section>
               <section id="email-input"></section>

@@ -85,6 +85,7 @@ h1, #step-info {
   text-align: center;
   margin: 10px 0;
   color:var(--yellow1);
+  font-weight: bold;
 }
 
 

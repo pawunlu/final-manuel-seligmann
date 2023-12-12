@@ -40,7 +40,6 @@ export class RoomSeatsSelectorComponent {
 
   set numberOfSelectableSeats(number) {
     this.#numberOfSelectableSeats = number;
-    // TODO: Reset selected seats
   }
 
   /** @type {Seat[]} */
@@ -91,12 +90,21 @@ export class RoomSeatsSelectorComponent {
 
   #createRoomSeatsSelectorComponentContainer() {
     const roomContainer = document.createElement('section');
-    roomContainer.classList.add('room-container');
+
+    const screenContainer = this.#createScreenContainer();
+    roomContainer.appendChild(screenContainer);
 
     const seatsContainer = this.#createSeatsContainer();
     roomContainer.appendChild(seatsContainer);
 
     return roomContainer;
+  }
+
+  #createScreenContainer() {
+    const container = document.createElement('section');
+    container.classList.add('screen-container');
+
+    return container;
   }
 
   #createSeatsContainer() {
@@ -172,6 +180,12 @@ export class RoomSeatsSelectorComponent {
         (se) => se.id !== seatId,
       );
     } else {
+      if (
+        this.#numberOfSelectableSeats &&
+        this.#selectedSeats.length >= this.#numberOfSelectableSeats
+      )
+        return;
+
       this.#selectHTMLSeat(htmlSeatElement);
       this.#selectedSeats.push(this.#seats.find((s) => s.id === seatId));
     }

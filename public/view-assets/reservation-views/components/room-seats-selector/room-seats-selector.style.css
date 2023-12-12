@@ -1,3 +1,11 @@
+.screen-container {
+  width: 90%;
+  height: 10px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 0 auto 30px auto;
+}
+
 .room-seats-selector-container {
   background-color: rgb(25, 48, 129);
   padding: 10px;
@@ -61,6 +69,14 @@
   border-radius: 25px;
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 700px) {
+  .room-container {
+    overflow: scroll;
+    white-space: nowrap;
+    justify-content: flex-start;
+  }
 }
 
 .room-seats .empty-room-space {

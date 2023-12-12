@@ -106,9 +106,6 @@ let selectedDate = null;
 /** @type {Screening} */
 let selectedMovieScreening = null;
 
-/** @type {number} */
-let selectedSeatsAmount = null;
-
 /** @type {object[]} */
 let selectedRoomSeats = [];
 
@@ -178,9 +175,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Display the corresponding reservation step based on the loaded url params
   await displayInitialReservationStep();
-
-  // Load current reservation step
-  // await loadCurrentReservationStep();
 });
 
 function coverAllHideableHTMLElements() {
@@ -560,8 +554,10 @@ function loadAndRenderRoomSeatsSelectorComponent() {
   roomSeatsSelectorComponent = new RoomSeatsSelectorComponent(
     'room-seats-selection',
   );
+  roomSeatsSelectorComponent.numberOfSelectableSeats = 10;
   roomSeatsSelectorComponent.onSeatClick = (event) => {
     selectedRoomSeats = event.selectedSeats;
+    changeSelectedSeatsDisplayerNumber(selectedRoomSeats.length);
   };
   roomSeatsSelectorComponent.render();
 }
@@ -571,6 +567,7 @@ function loadAndRenderUserNameInput() {
   userNameInputComponent.placeholder = 'Nombre y apellido';
   userNameInputComponent.backgroundColor = 'var(--transparent-blue1)';
   userNameInputComponent.placeholderColor = 'var(--yellow1)';
+  userNameInputComponent.showResetButton = false;
   userNameInputComponent.render();
 }
 
@@ -582,6 +579,7 @@ function loadAndRenderUserEmailInput() {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   userEmailInputComponent.validationRegex = emailRegex;
   userEmailInputComponent.regexErrorMessage = 'El E-Mail no es válido';
+  userEmailInputComponent.showResetButton = false;
   userEmailInputComponent.render();
 }
 
@@ -590,6 +588,8 @@ function loadAndRenderUserPhoneInput() {
   userPhoneInputComponent.placeholder = 'Teléfono';
   userPhoneInputComponent.backgroundColor = 'var(--transparent-blue1)';
   userPhoneInputComponent.placeholderColor = 'var(--yellow1)';
+  userPhoneInputComponent.showResetButton = false;
+  userPhoneInputComponent.HTMLComponents.inputHTMLComponent.type = 'number';
   userPhoneInputComponent.render();
 }
 
@@ -692,6 +692,10 @@ function addEventListenersToNavigationButtons() {
 
     await loadCurrentReservationStep();
   };
+}
+
+function changeSelectedSeatsDisplayerNumber(newNumber) {
+  document.getElementById('selected-seats-counter').innerHTML = newNumber;
 }
 
 function getUrlParams() {
@@ -912,10 +916,9 @@ function updateStepSlider(currentSlide) {
 function getSelectedSeatsOutput() {
   let str = '';
   for (const seat of selectedRoomSeats) {
-    str += `Asiento ${seat.column}-${seat.row} (Sala ${selectedMovieScreening.roomType.name}) - $${selectedMovieScreening.roomType.price}.<br>`;
+    str += `Asiento ${seat.column}-${seat.row} ($${selectedMovieScreening.roomType.price})<br>`;
   }
   return str;
-  return `Asiento 3A (MOCK)`;
 }
 
 function getReservationTotalPrice() {
