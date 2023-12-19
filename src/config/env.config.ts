@@ -9,6 +9,6 @@ export default Joi.object({
   POSTGRES_PASSWORD: Joi.string().required(),
   POSTGRES_DB: Joi.string().required(),
   POSTGRES_LOGGING: Joi.boolean().optional(),
-  MP_PUBLIC_KEY: Joi.string().optional(),
-  MP_ACCESS_TOKEN: Joi.string().optional(),
+  MP_PUBLIC_KEY: Joi.string().allow(''),
+  MP_ACCESS_TOKEN: Joi.string().allow(''),
 });
