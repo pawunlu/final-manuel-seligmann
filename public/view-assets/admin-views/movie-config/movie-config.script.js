@@ -34,6 +34,12 @@ let displayInCarouselSwitch = null;
 let displayAsPremiereSwitch = null;
 
 /** @type {InputComponent} */
+let imagePosterInputComponent = null;
+
+/** @type {InputComponent} */
+let imageBannerInputComponent = null;
+
+/** @type {InputComponent} */
 let titleInputComponent = null;
 
 /** @type {InputComponent} */
@@ -91,6 +97,8 @@ function loadAndRenderComponents() {
   loadAndRenderDefaultCarouselSlide();
   loadAndRenderDefaultMoviePoster();
   loadAndRenderSwitches();
+  loadAndRenderMovieImagePosterInputComponent();
+  loadAndRenderMovieImageBannerInputComponent();
   loadAndRenderMovieTitleInputComponent();
   loadAndRenderMovieGenreInputComponent();
   loadAndRenderMovieRatedInputComponent();
@@ -155,6 +163,32 @@ function loadAndRenderDisplayAsPremiereSwitch() {
   displayAsPremiereSwitch.onChange = (checked) =>
     registerNewUnsavedMovieAttribute('isPremiere', checked);
   displayAsPremiereSwitch.render();
+}
+
+function loadAndRenderMovieImagePosterInputComponent() {
+  imagePosterInputComponent = new InputComponent('image-poster-input');
+  imagePosterInputComponent.placeholder = 'URL del poster';
+  imagePosterInputComponent.backgroundColor = 'var(--transparent-blue1)';
+  imagePosterInputComponent.placeholderColor = 'var(--yellow1)';
+  imagePosterInputComponent.showResetButton = false;
+  imagePosterInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('imageName', newText);
+  });
+  imagePosterInputComponent.render();
+}
+
+function loadAndRenderMovieImageBannerInputComponent() {
+  imageBannerInputComponent = new InputComponent('image-banner-input');
+  imageBannerInputComponent.placeholder = 'URL del banner';
+  imageBannerInputComponent.backgroundColor = 'var(--transparent-blue1)';
+  imageBannerInputComponent.placeholderColor = 'var(--yellow1)';
+  imageBannerInputComponent.showResetButton = false;
+  imageBannerInputComponent.onBlurEvent((event) => {
+    const newText = event.target.value;
+    registerNewUnsavedMovieAttribute('bannerName', newText);
+  });
+  imageBannerInputComponent.render();
 }
 
 function loadAndRenderMovieTitleInputComponent() {
@@ -335,6 +369,8 @@ function loadDataIntoSwitches(movie) {
  * @param {Movie} movie
  */
 function loadDataIntoInputs(movie) {
+  imagePosterInputComponent.text = movie.imageName;
+  imageBannerInputComponent.text = movie.bannerName;
   titleInputComponent.text = movie.name;
   genreInputComponent.text = movie.genre;
   ratedInputComponent.text = movie.rated;

@@ -30,11 +30,11 @@ export class CreateMovieDto {
 
   @IsString()
   @IsOptional()
-  imageName?: string = 'default-movie-poster.jpg';
+  imageName?: string;
 
   @IsString()
   @IsOptional()
-  bannerName?: string = 'default-movie-banner.jpg';
+  bannerName?: string;
 
   @IsString()
   trailerUrl: string;

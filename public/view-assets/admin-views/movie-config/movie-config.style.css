@@ -57,6 +57,8 @@
   justify-content: space-between;
 }
 
+#image-poster-input,
+#image-banner-input,
 #movie-title-input,
 #movie-genre-input,
 #movie-rated-input,

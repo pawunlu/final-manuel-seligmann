@@ -1,6 +1,7 @@
 import * as Joi from '@hapi/joi';
 
 export default Joi.object({
+  BASE_URL: Joi.string().required(),
   PORT: Joi.number().required(),
   STAGE: Joi.string().valid('DEV', 'PROD').required(),
   POSTGRES_HOST: Joi.string().required(),

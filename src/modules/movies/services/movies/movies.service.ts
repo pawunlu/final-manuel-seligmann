@@ -86,6 +86,10 @@ export class MoviesService {
 
   async createOne(values: CreateMovieDto): Promise<MovieDto> {
     const movieToCreate: Movie = Object.assign(new Movie(), values);
+    if (!movieToCreate.imageName)
+      movieToCreate.imageName = process.env.DEFAULT_MOVIE_POSTER_IMAGE;
+    if (!movieToCreate.bannerName)
+      movieToCreate.bannerName = process.env.DEFAULT_MOVIE_BANNER_IMAGE;
     const createdMovie: Movie = await this.moviesRepository.save(movieToCreate);
     return movieToMovieDtoMapper(createdMovie);
   }
