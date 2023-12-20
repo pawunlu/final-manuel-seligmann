@@ -11,6 +11,13 @@ const config = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
+  ...(process.env.POSTGRES_SSL === 'true' && {
+    extra: {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
+  }),
   logging:
     process.env.POSTGRES_LOGGING?.toLocaleLowerCase() === 'true' ?? false,
   entities: [`${__dirname}/../database/models/*.entity{.ts,.js}`],
