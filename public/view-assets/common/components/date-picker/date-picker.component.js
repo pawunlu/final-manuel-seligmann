@@ -1,4 +1,4 @@
-import { InputComponent } from '../input/Input.component.js';
+import { InputComponent } from '../input/input.component.js';
 
 export class DatePickerComponent {
   /** @type {HTMLElement} */

@@ -1,5 +1,5 @@
 import { CarouselComponent } from '../../common/components/carousel/carousel.component.js';
-import { InputComponent } from '../../common/components/input/Input.component.js';
+import { InputComponent } from '../../common/components/input/input.component.js';
 import { SwitchComponent } from '../../common/components/switch/switch.component.js';
 import { UnsavedChangesButtonsComponent } from '../../admin-views/common/components/unsaved-changes/unsaved-changes.component.js';
 

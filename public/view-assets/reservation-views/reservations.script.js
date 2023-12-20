@@ -3,7 +3,7 @@ import { ReservationNavigationButtons } from '../reservation-views/components/na
 import { SelectComponent } from '../common/components/select/select.component.js';
 import { DatePickerComponent } from '../common/components/date-picker/date-picker.component.js';
 import { MovieScreeningSelectorComponent } from '../reservation-views/components/movie-screening-selector/movie-screening-selector.component.js';
-import { InputComponent } from '../common/components/input/Input.component.js';
+import { InputComponent } from '../common/components/input/input.component.js';
 import { RoomSeatsSelectorComponent } from './components/room-seats-selector/room-seats-selector.component.js';
 
 /**

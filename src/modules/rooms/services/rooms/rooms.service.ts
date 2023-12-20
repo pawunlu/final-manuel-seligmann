@@ -41,7 +41,6 @@ export class RoomsService {
 
   async findAllRoomsPaginated(params?: QuerySearch) {
     const { query, page, items } = params || {};
-    console.log(params);
 
     return this.findAllBy({
       filters: { name: ILike(`%${query || ''}%`) },

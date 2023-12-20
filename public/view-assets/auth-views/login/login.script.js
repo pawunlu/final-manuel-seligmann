@@ -1,4 +1,4 @@
-import { InputComponent } from '../../common/components/input/Input.component.js';
+import { InputComponent } from '../../common/components/input/input.component.js';
 
 /** @type {InputComponent} */
 let emailInputComponent = null;
