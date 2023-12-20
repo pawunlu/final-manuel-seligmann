@@ -41,7 +41,7 @@ export default class InitialDatabaseSeed implements Seeder {
     const insertedMovies = await moviesRepository.insert([
       {
         name: 'Top Gun: Maverick',
-        genre: 'Action,Drama',
+        genre: 'Action, Drama',
         durationInMinutes: 130,
         rated: 'PG-13',
         calification: 8.3,
@@ -49,7 +49,8 @@ export default class InitialDatabaseSeed implements Seeder {
           'Después de más de treinta años de servicio como uno de los mejores aviadores de la Armada, Pete Mitchell vuelve donde pertenece, siendo un valiente piloto de pruebas y esquivando un avance de rango que lo castigaría.',
         imageName:
           'https://es.web.img2.acsta.net/pictures/22/03/29/15/57/1533124.jpg',
-        bannerName: 'foo',
+        bannerName:
+          'https://www.themoviedb.org/t/p/original/7AYpRimYUlVEIl1vC26U2ZDfz5f.jpg',
         trailerUrl: 'foo',
         displayInBillboard: true,
         billboardPositionIndex: 0,
@@ -59,7 +60,7 @@ export default class InitialDatabaseSeed implements Seeder {
       },
       {
         name: 'Barbie',
-        genre: 'Aventura,Comedia,Fantasia',
+        genre: 'Aventura, Comedia, Fantasia',
         durationInMinutes: 113,
         rated: 'B',
         calification: 7.1,
@@ -67,7 +68,8 @@ export default class InitialDatabaseSeed implements Seeder {
           'Vivir en Barbie Land es ser un ser perfecto en un lugar perfecto. A menos que tengas una crisis existencial completa. O seas Ken.',
         imageName:
           'https://www.themoviedb.org/t/p/original/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg',
-        bannerName: 'foo',
+        bannerName:
+          'https://www.thebanner.org/sites/default/files/styles/article_detail_header/public/2023-08/MM-1197%20Barbie.jpg',
         trailerUrl: 'foo',
         displayInBillboard: true,
         billboardPositionIndex: 1,
@@ -77,7 +79,7 @@ export default class InitialDatabaseSeed implements Seeder {
       },
       {
         name: 'Oppenheimer',
-        genre: 'Biografía,Drama,Historia',
+        genre: 'Biografía, Drama, Historia',
         durationInMinutes: 180,
         rated: 'B-15',
         calification: 8.5,
@@ -85,7 +87,8 @@ export default class InitialDatabaseSeed implements Seeder {
           'La historia del científico estadounidense J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica.',
         imageName:
           'https://www.infobae.com/new-resizer/wJf5_q6HZudWLt0ZNPo-ryV0O2s=/992x1488/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/H2DVBWCFAZGYDFWWN4TEASWRZI.jpg',
-        bannerName: 'foo',
+        bannerName:
+          'https://www.themoviedb.org/t/p/original/rLb2cwF3Pazuxaj0sRXQ037tGI1.jpg',
         trailerUrl: 'foo',
         displayInBillboard: true,
         billboardPositionIndex: 2,
