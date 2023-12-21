@@ -557,6 +557,7 @@ function loadAndRenderRoomSeatsSelectorComponent() {
   roomSeatsSelectorComponent.onSeatClick = (event) => {
     selectedRoomSeats = event.selectedSeats;
     changeSelectedSeatsDisplayerNumber(selectedRoomSeats.length);
+    enableOrDisableNavigationButtons();
   };
   roomSeatsSelectorComponent.render();
 }
@@ -818,11 +819,10 @@ function nextButtonValidationForMovieScreeningSelectionStep() {
 }
 
 function nextButtonValidationForMovieSeatsSelectionStep() {
-  return true;
+  return selectedRoomSeats.length > 0;
 }
 
 function nextButtonValidationForUserDataFormStep() {
-  // TODO: Checkear que sean validos tambien
   return clientName && clientEmail && clientPhone;
 }
 

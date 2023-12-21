@@ -36,7 +36,7 @@ h1, #step-info {
 
 
 .reservation-step.room-seats-selection-step {
-  
+  padding-bottom: 100px;
 }
 
 .reservation-step.user-data-form-step {

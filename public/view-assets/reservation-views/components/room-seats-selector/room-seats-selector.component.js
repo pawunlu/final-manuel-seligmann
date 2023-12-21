@@ -173,6 +173,8 @@ export class RoomSeatsSelectorComponent {
       `[reservation-seat-id="${seatId}"]`,
     );
 
+    if (this.#isHTMLSeatOccupied(htmlSeatElement)) return;
+
     const htmlSeatElementSelected = this.#isHTMLSeatSelected(htmlSeatElement);
     if (htmlSeatElementSelected) {
       this.#unselectHTMLSeat(htmlSeatElement);
@@ -196,6 +198,10 @@ export class RoomSeatsSelectorComponent {
         seat: this.#seats.find((seat) => seat.id === seatId),
         selectedSeats: this.#selectedSeats,
       });
+  }
+
+  #isHTMLSeatOccupied(seat) {
+    return seat.classList.contains('occupied-seat');
   }
 
   #isHTMLSeatSelected(seat) {
