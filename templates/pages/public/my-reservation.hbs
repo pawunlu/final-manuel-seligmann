@@ -12,7 +12,13 @@
 
     <p>ID: {{ id }}</p>
     <p>ID Largo: {{ uuid }}</p>
-    <p>Estado de Reserva: {{ isConfirmed }}</p>
+    <p>Estado de Reserva:
+      {{#if isConfirmed}}
+        Confirmado
+      {{else}}
+        Pendiente
+      {{/if}}
+    </p>
     <p>Pelicula: {{ screening.movie.name }}</p>
     <p>Formato: {{ screening.roomType.name }}</p>
     <p>Idioma: {{ screening.language.name }}</p>

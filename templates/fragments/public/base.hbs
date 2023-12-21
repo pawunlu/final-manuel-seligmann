@@ -6,20 +6,20 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link href="/view-assets/common/reset.style.css" rel="stylesheet" type="text/css">
     <link href="/view-assets/common/index.style.css" rel="stylesheet" type="text/css">
+    <link href="/view-assets/public-views/fragments/header/header.style.css" rel="stylesheet" type="text/css">
     <script src="/view-assets/common/utils.script.js"></script>
     {{#> head-block}}
     {{/head-block}}
 </head>
 <body>
     <nav>
-        {{!-- {{> parts/nav}} --}}
+        {{> fragments/public/header}}
     </nav>
     <main>
         {{#> main-block}}
         {{/main-block}}
     </main>
     <footer>
-        {{!-- {{> parts/footer}} --}}
     </footer>
 </body>
 </html>
