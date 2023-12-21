@@ -7,7 +7,7 @@ export class AdminViewsController {
 
   @Get('')
   handleAdminHomeView(@Res() res) {
-    return res.redirect('admin/tablero');
+    return res.redirect('admin/peliculas');
   }
 
   @Get('tablero')
@@ -70,13 +70,13 @@ export class AdminViewsController {
     // Handle the rooms-config view
   }
 
-  @Get('sala/:roomId')
+  @Get('salas/nueva')
   @Render('admin/room-config')
   handleNewRoomConfigView() {
     // Handle the new room-config view
   }
 
-  @Get('salas/:roomId')
+  @Get('salas/:roomId/ver')
   @Render('admin/room-config')
   handleRoomConfigView() {
     // Handle the room-config view

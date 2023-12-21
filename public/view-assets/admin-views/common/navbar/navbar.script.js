@@ -18,12 +18,12 @@
 let isNavBarOpen = null;
 
 const bodyItemsList = [
-  {
-    name: 'Tablero',
-    url: '/admin/tablero',
-    isCollapsibleOpen: null,
-    children: [],
-  },
+  // {
+  //   name: 'Tablero',
+  //   url: '/admin/tablero',
+  //   isCollapsibleOpen: null,
+  //   children: [],
+  // },
   {
     name: 'Peliculas',
     url: null,
