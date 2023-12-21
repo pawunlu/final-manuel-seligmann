@@ -1,3 +1,4 @@
+import { ReservationsService } from './../../../reservations/services/reservations/reservations.service';
 import { RoomTypesService } from './../../../room-types/services/room-types/room-types.service';
 import { Injectable } from '@nestjs/common';
 import { MoviesService } from '../../../movies/services';
@@ -8,6 +9,7 @@ export class PublicViewsService {
   constructor(
     private moviesService: MoviesService,
     private roomTypesService: RoomTypesService,
+    private reservationsService: ReservationsService,
   ) {}
 
   async handleHomeView() {
@@ -39,5 +41,13 @@ export class PublicViewsService {
   async handleMovieinformationView(movieId: number) {
     const movie = await this.moviesService.findOneById(movieId);
     return movie;
+  }
+
+  async handleMyReservationView(reservationUuid: string) {
+    return this.reservationsService.findOneByUuid(reservationUuid, {
+      relations: {
+        screening: { movie: true, language: true, roomType: true },
+      },
+    });
   }
 }

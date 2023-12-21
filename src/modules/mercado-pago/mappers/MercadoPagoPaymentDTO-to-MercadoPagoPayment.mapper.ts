@@ -1,7 +1,7 @@
 import { MercadoPagoPayment } from '../../../database/models';
 import { MercadoPagoPaymentDto } from './../dtos/mercado-pago-payment.dto';
 
-export function MercadoPagoPaymentDtoToMercadoPagoPayment(
+export function MercadoPagoPaymentDtoToMercadoPagoPaymentMapper(
   mercadoPagoPaymentDto: MercadoPagoPaymentDto,
 ): MercadoPagoPayment {
   return {

@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MercadoPagoPayment } from '.';
+import { MercadoPagoPayment, Reservation } from '.';
 
 @Entity()
 export class Payment {
@@ -30,6 +30,11 @@ export class Payment {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToOne(() => Reservation, (reservation) => reservation.payment, {
+    cascade: true,
+  })
+  reservation?: Reservation;
 
   @OneToOne(
     () => MercadoPagoPayment,

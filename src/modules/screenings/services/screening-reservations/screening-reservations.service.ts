@@ -4,12 +4,12 @@ import { ScreeningSeatsService, ScreeningsService } from '..';
 import { ReservationsService } from '../../../reservations/services';
 import { ScreeningNotFoundException } from '../../errors';
 import { ScreeningSeatNotFoundException } from '../../../screening-seats/errors/screening-seat-not-found.exception';
-import { CreateReservationDto } from '../../../reservations/dtos';
 import {
-  MercadoPagoApiService,
-  MercadoPagoService,
-} from '../../../mercado-pago/services';
+  CreateReservationDto,
+  ReservationDto,
+} from '../../../reservations/dtos';
 import { PaymentTypes } from '../../../payments/enums';
+import { PaymentsService } from '../../../payments/services';
 
 @Injectable()
 export class ScreeningReservationsService {
@@ -17,14 +17,13 @@ export class ScreeningReservationsService {
     private screeningsService: ScreeningsService,
     private reservationsService: ReservationsService,
     private screeningSeatsService: ScreeningSeatsService,
-    private mercadoPagoApiService: MercadoPagoApiService,
-    private mercadoPagoService: MercadoPagoService,
+    private paymentsService: PaymentsService,
   ) {}
 
   async confirmScreeningReservation(
     screeningId: number,
     params: ConfirmScreeningReservationDto,
-  ) {
+  ): Promise<ReservationDto> {
     console.log(screeningId, params);
     // Check if screening exists
     const screening = await this.screeningsService.findOneById(screeningId);
@@ -95,19 +94,17 @@ export class ScreeningReservationsService {
       },
     );
 
-    const mercadoPagoApiPayment =
-      await this.mercadoPagoApiService.createPayment(createdReservation);
+    const payment = await this.paymentsService.createOneByType(
+      PaymentTypes.MERCADO_PAGO,
+      {
+        amount:
+          createdReservation.seats.length *
+          Number(createdReservation.screening.roomType.price),
+      },
+      createdReservation,
+    );
 
-    console.log(mercadoPagoApiPayment);
-
-    const mercadoPagoPayment = await this.mercadoPagoService.createOne({
-      type: PaymentTypes.MERCADO_PAGO,
-      amount:
-        createdReservation.seats.length *
-        Number(createdReservation.screening.roomType.price),
-      externalId: mercadoPagoApiPayment.id,
-      url: mercadoPagoApiPayment.sandbox_init_point,
-    });
+    createdReservation.payment = payment;
 
     return createdReservation;
   }

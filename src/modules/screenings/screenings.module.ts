@@ -9,10 +9,10 @@ import {
 import { ScreeningSeatsService } from './services/screening-seats/screening-seats.service';
 import { ScreeningSeatsModule } from '../screening-seats/screening-seats.module';
 import { ScreeningReservationsService } from './services/screening-reservations/screening-reservations.service';
-import { MercadoPagoModule } from '../mercado-pago/mercado-pago.module';
+import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
-  imports: [ScreeningSeatsModule, ReservationsModule, MercadoPagoModule],
+  imports: [ScreeningSeatsModule, ReservationsModule, PaymentsModule],
   providers: [
     ScreeningsRepository,
     ScreeningsService,

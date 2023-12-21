@@ -4,6 +4,7 @@ export class ReservationNavigationButtons {
 
   /** @type {boolean} */
   #enablePreviousButton = true;
+
   /** @type {boolean} */
   #enableNextButton = true;
 
@@ -13,12 +14,20 @@ export class ReservationNavigationButtons {
   /** @type {Function} */
   #onNextButtonClickCallbackFn = null;
 
+  /** @type {string} */
+  #nextButtonText = 'Siguiente';
+
   set onPreviousButtonClick(callbackFn) {
     this.#onPreviousButtonClickCallbackFn = callbackFn;
   }
 
   set onNextButtonClick(callbackFn) {
     this.#onNextButtonClickCallbackFn = callbackFn;
+  }
+
+  set nextButtonText(text) {
+    this.#nextButtonText = text;
+    this.render();
   }
 
   constructor(parentContainerId) {
@@ -72,7 +81,7 @@ export class ReservationNavigationButtons {
 
     const nextButton = document.createElement('button');
     buttonsContainer.appendChild(nextButton);
-    nextButton.innerHTML = 'Siguiente';
+    nextButton.innerHTML = this.#nextButtonText ?? 'Siguiente';
     nextButton.className = `next-button ${
       this.#enableNextButton ? '' : 'disabled-button'
     }`;

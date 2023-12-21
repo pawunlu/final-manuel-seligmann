@@ -14,18 +14,26 @@ export class MercadoPagoApiService {
     });
   }
 
+  async getPayment(id: string) {
+    const payment = new Payment(this.client);
+
+    return payment.get({
+      id,
+    });
+  }
+
   async createPayment(reservation: ReservationDto) {
     const preference = new Preference(this.client);
     return preference.create({
       body: {
         back_urls: {
-          success: '',
+          success: `${process.env.BASE_URL}/reservas/${reservation.uuid}`,
         },
         payer: {
           email: reservation.client.email,
           name: reservation.client.name,
         },
-        notification_url: '',
+        notification_url: `${process.env.BASE_URL}/api/mercado-pago-webhooks`,
         items: [
           {
             id: '1',

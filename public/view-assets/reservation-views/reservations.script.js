@@ -225,7 +225,7 @@ function loadEventListeners() {
   addEventListenerToReservationStepsSlider();
 
   // Add events to the "previous" and "next" buttons
-  addEventListenersToNavigationButtons();
+  addDefaultEventListenersToNavigationButtons();
 }
 
 function fetchAndLoadURLParams() {
@@ -267,7 +267,6 @@ function resetSelectedAttributes() {
   selectedRoomType = null;
   selectedDate = null;
   selectedMovieScreening = null;
-  selectedSeatsAmount = null;
   selectedRoomSeats = [];
 }
 
@@ -568,6 +567,11 @@ function loadAndRenderUserNameInput() {
   userNameInputComponent.backgroundColor = 'var(--transparent-blue1)';
   userNameInputComponent.placeholderColor = 'var(--yellow1)';
   userNameInputComponent.showResetButton = false;
+  userNameInputComponent.onBlurEvent((event) => {
+    const name = event.target.value;
+    clientName = name;
+    enableOrDisableNavigationButtons();
+  });
   userNameInputComponent.render();
 }
 
@@ -580,6 +584,12 @@ function loadAndRenderUserEmailInput() {
   userEmailInputComponent.validationRegex = emailRegex;
   userEmailInputComponent.regexErrorMessage = 'El E-Mail no es válido';
   userEmailInputComponent.showResetButton = false;
+  userEmailInputComponent.onBlurEvent((event) => {
+    const email = event.target.value;
+    if (!emailRegex.test(email)) return;
+    clientEmail = email;
+    enableOrDisableNavigationButtons();
+  });
   userEmailInputComponent.render();
 }
 
@@ -590,6 +600,11 @@ function loadAndRenderUserPhoneInput() {
   userPhoneInputComponent.placeholderColor = 'var(--yellow1)';
   userPhoneInputComponent.showResetButton = false;
   userPhoneInputComponent.HTMLComponents.inputHTMLComponent.type = 'number';
+  userPhoneInputComponent.onBlurEvent((event) => {
+    const phoneNumber = event.target.value;
+    clientPhone = phoneNumber;
+    enableOrDisableNavigationButtons();
+  });
   userPhoneInputComponent.render();
 }
 
@@ -657,41 +672,45 @@ function addEventListenerToReservationStepsSlider() {
   });
 }
 
-function addEventListenersToNavigationButtons() {
+function addDefaultEventListenersToNavigationButtons() {
   // Go back to the previous step event
-  navigationButtonsComponent.onPreviousButtonClick = async () => {
-    const currentStepIndex = RESERVATION_STEPS.findIndex(
-      (RESERVATION_STEP) =>
-        RESERVATION_STEP === currentDisplayingReservationStep,
-    );
-
-    const previousStepIndex = currentStepIndex === 0 ? 0 : currentStepIndex - 1;
-    currentDisplayingReservationStep = RESERVATION_STEPS[previousStepIndex];
-
-    updateStepSlider(previousStepIndex);
-
-    await loadCurrentReservationStep();
-  };
+  navigationButtonsComponent.onPreviousButtonClick =
+    handleOnPreviousNavigationButtonClick;
 
   // Go to the next step event
-  navigationButtonsComponent.onNextButtonClick = async () => {
-    const currentStepIndex = RESERVATION_STEPS.findIndex(
-      (RESERVATION_STEP) =>
-        RESERVATION_STEP === currentDisplayingReservationStep,
-    );
+  navigationButtonsComponent.onNextButtonClick =
+    handleOnNextNavigationButtonClick;
+}
 
-    const nextStepIndex =
-      currentStepIndex === RESERVATION_STEPS.length - 1
-        ? RESERVATION_STEPS.length - 1
-        : currentStepIndex + 1;
+async function handleOnPreviousNavigationButtonClick() {
+  const currentStepIndex = RESERVATION_STEPS.findIndex(
+    (RESERVATION_STEP) => RESERVATION_STEP === currentDisplayingReservationStep,
+  );
 
-    // - Setear el siguient step en la variable global
-    currentDisplayingReservationStep = RESERVATION_STEPS[nextStepIndex];
+  const previousStepIndex = currentStepIndex === 0 ? 0 : currentStepIndex - 1;
+  currentDisplayingReservationStep = RESERVATION_STEPS[previousStepIndex];
 
-    updateStepSlider(nextStepIndex);
+  updateStepSlider(previousStepIndex);
 
-    await loadCurrentReservationStep();
-  };
+  await loadCurrentReservationStep();
+}
+
+async function handleOnNextNavigationButtonClick() {
+  const currentStepIndex = RESERVATION_STEPS.findIndex(
+    (RESERVATION_STEP) => RESERVATION_STEP === currentDisplayingReservationStep,
+  );
+
+  const nextStepIndex =
+    currentStepIndex === RESERVATION_STEPS.length - 1
+      ? RESERVATION_STEPS.length - 1
+      : currentStepIndex + 1;
+
+  // - Setear el siguient step en la variable global
+  currentDisplayingReservationStep = RESERVATION_STEPS[nextStepIndex];
+
+  updateStepSlider(nextStepIndex);
+
+  await loadCurrentReservationStep();
 }
 
 function changeSelectedSeatsDisplayerNumber(newNumber) {
@@ -743,14 +762,14 @@ function unselectMovieCard() {
 }
 
 function enableOrDisableNavigationButtons() {
-  const isPreviousButtonBeActive = shouldPreviousButtonBeActive();
-  const isNextButtonBeActive = shouldNextButtonBeActive();
+  const previousButtonShouldBeActive = shouldPreviousButtonBeActive();
+  const nextButtonBeShouldActive = shouldNextButtonBeActive();
 
-  isPreviousButtonBeActive
+  previousButtonShouldBeActive
     ? navigationButtonsComponent.enablePreviousButton()
     : navigationButtonsComponent.disablePreviousButton();
 
-  isNextButtonBeActive
+  nextButtonBeShouldActive
     ? navigationButtonsComponent.enableNextButton()
     : navigationButtonsComponent.disableNextButton();
 }
@@ -803,14 +822,12 @@ function nextButtonValidationForMovieSeatsSelectionStep() {
 }
 
 function nextButtonValidationForUserDataFormStep() {
-  return true;
   // TODO: Checkear que sean validos tambien
   return clientName && clientEmail && clientPhone;
 }
 
 function nextButtonValidationForReservationSummaryStep() {
-  // return true;
-  return false;
+  return true;
 }
 
 function getActionsForStepWhenLoaded(step) {
@@ -827,11 +844,15 @@ function getActionsForStepWhenLoaded(step) {
 
 function onMovieSelectionStepLoads() {
   console.log('movie-selection step loaded');
+  setNavigationButtonsDefaultBehavior();
   if (selectedMovieId) selectMovie(selectedMovieId);
 }
 
 async function onMovieScreeningSelectionStepLoads() {
   console.log('movie-screening-selection step loaded');
+
+  setNavigationButtonsDefaultBehavior();
+
   resetMovieLanguagesSelectInput();
   resetMovieRoomTypesSelectInput();
   resetMovieScreeningComponent();
@@ -845,6 +866,8 @@ async function onMovieScreeningSelectionStepLoads() {
 
 async function onRoomSeatsSelectionStepLoads() {
   console.log('room-seats-selection step loaded');
+
+  setNavigationButtonsDefaultBehavior();
 
   const selectedScreeningOutput = document.getElementById(
     'selected-screening-data',
@@ -881,12 +904,13 @@ async function fetchScreeningSeats(screeningId) {
 
 function onUserDataFromStepLoads() {
   console.log('user-data-form step loaded');
+  setNavigationButtonsDefaultBehavior();
 }
 
 function onReservationSummaryStepLoads() {
   console.log('user-data-form step loaded');
-  // TODO: Get movie's data
-  // const selectedMovieCard = document.getElementById()
+
+  setNavigationButtonsFinalBehavior();
 
   const clientNameOutput = document.getElementById('name-input-summary');
   const clientEmailOutput = document.getElementById('email-input-summary');
@@ -924,4 +948,66 @@ function getSelectedSeatsOutput() {
 function getReservationTotalPrice() {
   const unitPrice = Number(selectedMovieScreening.roomType.price);
   return `$${unitPrice * selectedRoomSeats.length}`;
+}
+
+function setNavigationButtonsDefaultBehavior() {
+  navigationButtonsComponent.nextButtonText = 'Siguiente';
+  addDefaultEventListenersToNavigationButtons();
+}
+
+function setNavigationButtonsFinalBehavior() {
+  navigationButtonsComponent.nextButtonText = 'Finalizar';
+  navigationButtonsComponent.onNextButtonClick = handleReservationConfirmation;
+}
+
+async function handleReservationConfirmation() {
+  const params = {
+    screeningId: selectedMovieScreening.id,
+    seatIds: selectedRoomSeats.map((seat) => Number(seat.id)),
+    clientName,
+    clientEmail,
+    clientPhone,
+  };
+
+  const response = await confirmReservation(params);
+
+  const paymentURL = response.payment.url;
+  Utils.handleRedirect(paymentURL);
+}
+
+/**
+ *
+ *
+ * @param {Object} params
+ * @param {number} params.screeningId
+ * @param {number[]} params.seatIds
+ * @param {string} params.clientName
+ * @param {string} params.clientEmail
+ * @param {string} params.clientPhone
+ */
+async function confirmReservation(params) {
+  console.log(params);
+  const url = `/api/reservation/screenings/${params.screeningId}/confirm`;
+  const body = {
+    seatIds: params.seatIds,
+    clientName: params.clientName,
+    clientEmail: params.clientEmail,
+    clientPhone: params.clientPhone,
+  };
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok)
+    throw new Error(
+      'Something went wrong confirming the reservation',
+      response,
+    );
+
+  return response.json();
 }

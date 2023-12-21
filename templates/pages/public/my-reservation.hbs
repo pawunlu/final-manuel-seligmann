@@ -1,0 +1,22 @@
+{{> fragments/public/base}}
+
+  {{#*inline "head-block"}}
+      <title>Mi reserva | Flash Cines</title>
+  {{/inline}}
+
+
+  {{#*inline "main-block"}}
+    <h1>
+      Información de tu reserva
+    </h1>
+
+    <p>ID: {{ id }}</p>
+    <p>ID Largo: {{ uuid }}</p>
+    <p>Estado de Reserva: {{ isConfirmed }}</p>
+    <p>Pelicula: {{ screening.movie.name }}</p>
+    <p>Formato: {{ screening.roomType.name }}</p>
+    <p>Idioma: {{ screening.language.name }}</p>
+    <p>Horario: {{ screening.startsAt }}</p>
+  {{/inline}}
+
+{{fragments/public/base}}

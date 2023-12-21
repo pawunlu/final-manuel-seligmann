@@ -17,6 +17,8 @@ import { ReservationSeatsModule } from './modules/reservation-seats/reservation-
 import { ScreeningSeatsRepository } from './modules/screening-seats/repositories/screening-seats/screening-seats.repository';
 import { ScreeningSeatsModule } from './modules/screening-seats/screening-seats.module';
 import { MercadoPagoModule } from './modules/mercado-pago/mercado-pago.module';
+import { PaymentsService } from './modules/payments/services/payments/payments.service';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -43,8 +45,9 @@ import { MercadoPagoModule } from './modules/mercado-pago/mercado-pago.module';
     ReservationSeatsModule,
     ScreeningSeatsModule,
     MercadoPagoModule,
+    PaymentsModule,
   ],
   controllers: [],
-  providers: [ScreeningSeatsRepository],
+  providers: [ScreeningSeatsRepository, PaymentsService],
 })
 export class AppModule {}

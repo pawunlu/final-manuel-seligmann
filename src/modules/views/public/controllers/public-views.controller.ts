@@ -34,4 +34,10 @@ export class PublicViewsController {
   handleAboutUsView() {
     // Sobre nosotros
   }
+
+  @Get('reservas/:uuid')
+  @Render('public/my-reservation')
+  handleMyReservationView(@Param('uuid') uuid: string) {
+    return this.publicViewsService.handleMyReservationView(uuid);
+  }
 }

@@ -6,4 +6,6 @@ export class CreatePaymentDto {
   paidAt?: Date;
 
   refundedAt?: Date;
+
+  reservationId: number;
 }

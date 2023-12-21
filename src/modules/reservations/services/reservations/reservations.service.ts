@@ -4,6 +4,7 @@ import { ReservationsRepository } from '../../repositories';
 import { reservationToReservationDtoMapper } from '../../mappers';
 import { CreateReservationDto, ReservationDto } from '../../dtos';
 import { FindOneByDto } from '../../../../common/dtos/find-one-by.dto';
+import { ReservationNotFoundException } from '../../errors';
 
 @Injectable()
 export class ReservationsService {
@@ -14,8 +15,23 @@ export class ReservationsService {
       where: {
         id,
       },
-      ...(findOneByDto.relations && { relations: findOneByDto.relations }),
+      ...(findOneByDto?.relations && { relations: findOneByDto.relations }),
     });
+
+    if (!first) throw new ReservationNotFoundException(id);
+
+    return reservationToReservationDtoMapper(first);
+  }
+
+  async findOneByUuid(uuid: string, findOneByDto?: FindOneByDto<Reservation>) {
+    const [first] = await this.reservationsRepository.find({
+      where: {
+        uuid,
+      },
+      ...(findOneByDto?.relations && { relations: findOneByDto.relations }),
+    });
+
+    if (!first) throw new ReservationNotFoundException(uuid);
 
     return reservationToReservationDtoMapper(first);
   }
@@ -31,6 +47,10 @@ export class ReservationsService {
     return reservationToReservationDtoMapper(createdReservation, {
       includeSeatsInfo: false,
     });
+  }
+
+  async confirmOneById(id: number) {
+    return this.reservationsRepository.update({ id }, { isConfirmed: true });
   }
 
   // async findAllBy({

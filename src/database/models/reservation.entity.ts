@@ -2,17 +2,23 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ReservationScreeningSeat, Screening } from '.';
+import { Payment, ReservationScreeningSeat, Screening } from '.';
 
 @Entity()
 export class Reservation {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
+
+  @Column({ type: 'uuid' })
+  @Generated('uuid')
+  uuid: string;
 
   @Column({ default: false })
   isConfirmed: boolean;
@@ -44,4 +50,10 @@ export class Reservation {
     { cascade: true },
   )
   seats: ReservationScreeningSeat[];
+
+  @Column({ unique: true, nullable: true })
+  paymentId: number;
+
+  @OneToOne(() => Payment, (Payment) => Payment.reservation)
+  payment?: Payment;
 }

@@ -2,7 +2,7 @@ import { MercadoPagoPaymentDto } from './../../dtos/mercado-pago-payment.dto';
 import { Injectable } from '@nestjs/common';
 import { MercadoPagoRepository } from '../../repositories';
 import { MercadoPagoPayment } from '../../../../database/models';
-import { MercadoPagoPaymentDtoToMercadoPagoPayment } from '../../mappers/MercadoPagoPaymentDTO-to-MercadoPagoPayment.mapper';
+import { MercadoPagoPaymentDtoToMercadoPagoPaymentMapper } from '../../mappers/MercadoPagoPaymentDTO-to-MercadoPagoPayment.mapper';
 import { MercadoPagoPaymentToMercadoPagoPaymentDTOMapper } from '../../mappers';
 import { CreateMercadoPagoPaymentDto } from '../../dtos';
 
@@ -13,8 +13,8 @@ export class MercadoPagoService {
   async createOne(values: CreateMercadoPagoPaymentDto) {
     const paymentToCreate: MercadoPagoPayment = Object.assign(
       new MercadoPagoPayment(),
-      MercadoPagoPaymentDtoToMercadoPagoPayment(
-        values as MercadoPagoPaymentDto,
+      MercadoPagoPaymentDtoToMercadoPagoPaymentMapper(
+        values as any as MercadoPagoPaymentDto,
       ),
     );
     const createdPayment: MercadoPagoPayment =
