@@ -1,5 +1,11 @@
 # Proyecto Final - Flash Cines
 
+## Enlaces
+- [Cliente y Caracteristicas del sistema](https://docs.google.com/document/d/1d-4UqKOxYfXGjPnMMED2uWi18noOo9If8QMAWzwWIyo/edit)
+- [Figma](https://www.figma.com/file/oVkJosToinwhV5cgpEO4k1/PaW---TP-Integrador?type=design&node-id=0%3A1&mode=design&t=I5wbagPDc2Hdc97w-1)
+- [Diagrama de Entidad Relación](https://drive.google.com/file/d/1f0dSa205ZeVMa6eZXVloezfqCtiv4dH8/view)
+
+
 ## Instalación
 
 ### Docker
